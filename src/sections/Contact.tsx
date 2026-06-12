@@ -76,7 +76,7 @@ const Contact: React.FC = () => {
     try {
       await emailjs.send(
         'service_ovf6rcc',
-        'template_72phg5b', // Utilisation de ton ID de template mis à jour
+        'template_jkbuqsh',// Utilisation de ton ID de template mis à jour
         templateParams,
         'VE2_0tYpBEhijm8gY'
       );
