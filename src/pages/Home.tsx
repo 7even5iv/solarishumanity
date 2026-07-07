@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
@@ -7,12 +7,14 @@ import Hero from '../sections/Hero';
 import { SectionTitle } from '../components/SectionTitle';
 import { Button } from '../components/Button';
 import { Card } from '../components/Card';
+import { client, urlFor } from '../lib/sanity'; // Import Sanity
 import {
   Droplets, HeartPulse, GraduationCap,
-  Sparkles, Users, Globe, Shield, TrendingUp
+  Sparkles, Users, Globe, Shield, TrendingUp, Heart, Camera
 } from 'lucide-react';
 import { Badge } from '../components/Badge';
 
+// --- COMPOSANT STATISTIQUE ---
 const StatDigit = ({ value }: { value: string }) => {
   const { ref, inView } = useInView({ triggerOnce: true, threshold: 0.5 });
   return (
@@ -35,19 +37,32 @@ const containerVariants = {
 
 const itemVariants = {
   hidden: { opacity: 0, y: 30 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.6 }
-  }
+  visible: { opacity: 1, y: 0, transition: { duration: 0.6 } }
 };
 
 const Home: React.FC = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const navigate = useNavigate();
+  const [latestMedia, setLatestMedia] = useState<any[]>([]);
+  const isFr = i18n.language.startsWith('fr');
 
+  // 1. CHARGEMENT DYNAMIQUE DES DERNIERS MÉDIAS DEPUIS SANITY
   useEffect(() => {
     window.scrollTo(0, 0);
+
+    const query = `*[_type == "gallery"] | order(_createdAt desc) [0...4] {
+      _id,
+      image,
+      thumbnail,
+      captionFr,
+      captionEn,
+      locationFr,
+      locationEn
+    }`;
+
+    client.fetch(query)
+      .then(data => setLatestMedia(data))
+      .catch(err => console.error("Erreur chargement accueil:", err));
   }, []);
 
   const keyStats = useMemo(() => [
@@ -63,24 +78,18 @@ const Home: React.FC = () => {
     { icon: <GraduationCap size={32} />, title: t('missions.p3.title'), stats: "2000+ Kits" }
   ], [t]);
 
-  const teaserActions = useMemo(() => [
-    { id: 1, src: '/images/noel.jpeg', title: t('home_gallery.card1.title'), loc: t('home_gallery.card1.loc') },
-    { id: 2, src: '/images/eau.jpeg', title: t('home_gallery.card2.title'), loc: t('home_gallery.card2.loc') },
-    { id: 3, src: '/images/school.jpeg', title: t('home_gallery.card3.title'), loc: t('home_gallery.card3.loc') },
-    { id: 4, src: '/images/santé.jpeg', title: t('home_gallery.card4.title'), loc: t('home_gallery.card4.loc') }
-  ], [t]);
-
   return (
     <main className="overflow-hidden bg-white">
       <Hero />
 
+      {/* 1. SECTION STATISTIQUES */}
       <section className="py-20 relative z-20 border-b border-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div className="grid grid-cols-2 md:grid-cols-4 gap-8" variants={containerVariants} initial="hidden" whileInView="visible" viewport={{ once: true }}>
             {keyStats.map((stat, i) => (
               <motion.div key={i} variants={itemVariants}>
                 <Card variant="gradient" className="text-center group h-full">
-                  <div className="w-14 h-14 mx-auto mb-4 bg-blue-50 rounded-2xl flex items-center justify-center text-blue-500 group-hover:rotate-6 transition-transform">
+                  <div className={`w-14 h-14 mx-auto mb-4 bg-blue-50 rounded-2xl flex items-center justify-center text-blue-500 group-hover:rotate-6 transition-transform`}>
                     <stat.icon size={28} />
                   </div>
                   <p className="text-4xl font-black text-gray-900 mb-1"><StatDigit value={stat.value} /></p>
@@ -92,6 +101,7 @@ const Home: React.FC = () => {
         </div>
       </section>
 
+      {/* 2. RÉSUMÉ MISSIONS */}
       <section className="py-32 bg-gray-50/50">
         <div className="max-w-7xl mx-auto px-4">
           <SectionTitle subtitle={t('missions.badge')} title={t('missions.title')} description={t('missions.description')} />
@@ -113,6 +123,7 @@ const Home: React.FC = () => {
         </div>
       </section>
 
+      {/* 3. GALERIE D'IMPACT DYNAMIQUE (Depuis Sanity) */}
       <section className="py-32 bg-white">
         <div className="max-w-7xl mx-auto px-4">
           <div className="grid lg:grid-cols-2 gap-16 items-center">
@@ -121,44 +132,51 @@ const Home: React.FC = () => {
               <h2 className="text-4xl md:text-5xl font-black text-gray-900 mb-8 leading-tight uppercase">
                 {t('about.title')}
               </h2>
-              <p className="text-gray-500 text-lg mb-10 leading-relaxed italic">
+              <p className="text-gray-500 text-lg mb-10 leading-relaxed italic text-balance">
                 {t('about.vision_text')}
               </p>
-              <Button onClick={() => navigate('/Galerie')}>Voir la galerie</Button>
+              <Button onClick={() => navigate('/Galerie')} icon={<Camera size={20} />}>{t('nav.gallery')}</Button>
             </motion.div>
 
+            {/* GRILLE DYNAMIQUE */}
             <div className="grid grid-cols-2 gap-4">
-              {teaserActions.map((action) => (
-                <motion.div
-                  key={action.id}
-                  whileHover={{ scale: 0.98, rotate: action.id % 2 === 0 ? 1 : -1 }}
-                  className="group relative aspect-square bg-gray-100 rounded-[2.5rem] overflow-hidden shadow-lg cursor-pointer"
-                  onClick={() => navigate('/Galerie')}
-                >
-                  <img
-                    src={action.src}
-                    className="w-full h-full object-cover transition-all duration-700 group-hover:scale-110"
-                    alt={action.title}
-                    onError={(e) => { e.currentTarget.src = `https://placehold.co/600x600/003366/white?text=${action.title}` }}
-                  />
-
-                  <div className="absolute inset-0 bg-gradient-to-t from-blue-900/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex flex-col justify-end p-6">
-                    <p className="text-white font-black text-xs uppercase tracking-widest leading-tight">{action.title}</p>
-                    <p className="text-yellow-400 text-[10px] font-bold uppercase mt-1">{action.loc}</p>
-                  </div>
-                </motion.div>
-              ))}
+              {latestMedia.length > 0 ? (
+                latestMedia.map((media, index) => (
+                  <motion.div
+                    key={media._id}
+                    whileHover={{ scale: 0.98, rotate: index % 2 === 0 ? 1 : -1 }}
+                    className="group relative aspect-square bg-gray-100 rounded-[2.5rem] overflow-hidden shadow-lg cursor-pointer"
+                    onClick={() => navigate('/Galerie')}
+                  >
+                    <img
+                      src={urlFor(media.image || media.thumbnail).width(400).url()}
+                      className="w-full h-full object-cover transition-all duration-700 group-hover:scale-110"
+                      alt={isFr ? media.captionFr : media.captionEn}
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-blue-900/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex flex-col justify-end p-6">
+                      <p className="text-white font-black text-[10px] uppercase tracking-widest leading-tight">
+                        {isFr ? media.captionFr : media.captionEn}
+                      </p>
+                      <p className="text-yellow-400 text-[8px] font-bold uppercase mt-1">
+                        {isFr ? media.locationFr : media.locationEn}
+                      </p>
+                    </div>
+                  </motion.div>
+                ))
+              ) : (
+                // Fallback (Squelettes si pas encore de données)
+                [1, 2, 3, 4].map((i) => (
+                  <div key={i} className="aspect-square bg-gray-50 rounded-[2.5rem] border border-dashed border-gray-200 animate-pulse" />
+                ))
+              )}
             </div>
           </div>
         </div>
       </section>
 
+      {/* 4. CTA FINAL */}
       <section className="py-32 bg-gradient-to-br from-blue-900 via-blue-800 to-gray-900 relative overflow-hidden">
-        <motion.div
-          animate={{ scale: [1, 1.2, 1], opacity: [0.1, 0.2, 0.1] }}
-          transition={{ duration: 10, repeat: Infinity }}
-          className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-yellow-500 rounded-full blur-[120px]"
-        />
+        <motion.div animate={{ scale: [1, 1.2, 1], opacity: [0.1, 0.2, 0.1] }} transition={{ duration: 10, repeat: Infinity }} className="absolute top-0 right-0 w-[500px] h-[500px] bg-yellow-500 rounded-full blur-[120px]" />
         <div className="max-w-4xl mx-auto px-4 text-center relative z-10">
           <motion.div initial={{ opacity: 0, scale: 0.9 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }}>
             <div className="mb-10 inline-flex p-5 bg-white/10 rounded-3xl backdrop-blur-xl border border-white/20">
