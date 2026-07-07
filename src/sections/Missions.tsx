@@ -109,16 +109,6 @@ const Missions: React.FC = () => {
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-
-        <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} className="mb-12">
-          <Link to="/" className="inline-flex items-center gap-3 text-[10px] font-black text-gray-500 hover:text-blue-500 transition-all uppercase tracking-widest group">
-            <div className="p-2.5 bg-gray-100 rounded-full group-hover:bg-blue-50 transition-colors shadow-sm">
-              <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" />
-            </div>
-            {t('nav.back')}
-          </Link>
-        </motion.div>
-
         <SectionTitle
           subtitle={t('missions.badge')}
           title={t('missions.title')}

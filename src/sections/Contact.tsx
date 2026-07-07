@@ -97,17 +97,6 @@ const Contact: React.FC = () => {
 
   return (
     <section id="contact" className="relative py-12 bg-white overflow-hidden min-h-screen">
-
-      {/* BOUTON RETOUR BILINGUE */}
-      <div className="max-w-7xl mx-auto px-4 mb-12 relative z-10">
-        <Link to="/" className="inline-flex items-center gap-3 text-[10px] font-black text-gray-500 hover:text-blue-500 transition-all uppercase tracking-[0.2em] group">
-          <div className="p-2.5 bg-gray-100 rounded-full group-hover:bg-blue-50 transition-colors shadow-sm">
-            <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" />
-          </div>
-          <span className="mt-0.5">{t('nav.back')}</span>
-        </Link>
-      </div>
-
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="grid lg:grid-cols-2 gap-16">
 

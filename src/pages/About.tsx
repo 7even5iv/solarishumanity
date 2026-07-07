@@ -48,23 +48,6 @@ const About: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-white pt-24 overflow-hidden font-sans">
-
-      <motion.div
-        initial={{ opacity: 0, x: -20 }}
-        animate={{ opacity: 1, x: 0 }}
-        className="max-w-7xl mx-auto px-4 pt-8"
-      >
-        <Link
-          to="/"
-          className="inline-flex items-center gap-3 text-[10px] font-black text-gray-500 hover:text-blue-500 transition-all uppercase tracking-[0.2em] group"
-        >
-          <div className="p-2.5 bg-gray-100 rounded-full group-hover:bg-blue-50 transition-colors shadow-sm">
-            <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" />
-          </div>
-          <span className="mt-0.5">{t('nav.back')}</span>
-        </Link>
-      </motion.div>
-
       <section className="relative py-16 flex items-center justify-center bg-blue-50/50 mt-8">
         <div className="max-w-7xl mx-auto px-4 relative z-10 text-center">
           <motion.div
@@ -266,7 +249,7 @@ const About: React.FC = () => {
                 className="absolute -bottom-6 -left-6 bg-gray-900 text-white p-8 rounded-[2.5rem] shadow-2xl max-w-xs border border-white/10"
               >
                 <p className="text-[10px] font-black text-blue-400 uppercase tracking-widest mb-2">{t('about.founder_label')}</p>
-                <p className="text-lg font-black leading-tight uppercase tracking-tighter">Mme Nelly NDOH NGUELET</p>
+                <p className="text-lg font-black leading-tight uppercase tracking-tighter">Nelly NDOH NGUELET</p>
               </motion.div>
             </motion.div>
           </div>

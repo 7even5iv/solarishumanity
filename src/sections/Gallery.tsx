@@ -67,16 +67,6 @@ const Gallery: React.FC = () => {
   return (
     <section id="galerie" className="relative py-12 bg-white min-h-screen">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-
-        <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }}>
-          <Link to="/" className="inline-flex items-center gap-3 text-[10px] font-black text-gray-500 hover:text-blue-500 transition-all uppercase mb-12 group">
-            <div className="p-2 bg-gray-100 rounded-full group-hover:bg-blue-50 transition-colors shadow-sm">
-              <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" />
-            </div>
-            {t('nav.back')}
-          </Link>
-        </motion.div>
-
         <SectionTitle
           subtitle={t('nav.gallery')}
           title={t('gallery.title')}

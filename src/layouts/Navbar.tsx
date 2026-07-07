@@ -1,6 +1,6 @@
-import React, { useState, useEffect, memo } from 'react'; // ✅ Supprimé useCallback inutilisé
+import React, { useState, useEffect, memo } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { Menu, X, Heart, Globe, ChevronRight } from 'lucide-react';
+import { Menu, X, Heart, Globe, ChevronRight, ArrowLeft } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { Button } from '../components/Button';
 
@@ -23,6 +23,9 @@ const Navbar: React.FC = memo(() => {
   const [navbarHeight, setNavbarHeight] = useState(0);
   const navigate = useNavigate();
   const location = useLocation();
+
+  // Vérifier si on est sur la page d'accueil
+  const isHomePage = location.pathname === '/';
 
   // Calculer et partager la hauteur de la navbar
   useEffect(() => {
@@ -95,35 +98,51 @@ const Navbar: React.FC = memo(() => {
     setIsMenuOpen(false);
   };
 
+  const handleGoBack = () => {
+    navigate(-1);
+  };
+
   return (
     <>
       {/* Spacer pour compenser la navbar fixe */}
       <div style={{ height: `${navbarHeight}px` }} className="w-full" />
 
       <nav className={`fixed w-full top-0 z-50 transition-all duration-500 ${scrolled
-          ? 'bg-white/70 backdrop-blur-xl shadow-lg py-2'
-          : 'bg-white/50 backdrop-blur-md py-3 md:py-4 border-b border-white/20'
+        ? 'bg-white/70 backdrop-blur-xl shadow-lg py-2'
+        : 'bg-white/50 backdrop-blur-md py-3 md:py-4 border-b border-white/20'
         }`}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 lg:px-10">
           <div className="flex justify-between items-center">
-            {/* LOGO */}
-            <Link to="/" className="flex items-center gap-2 md:gap-3 group flex-shrink-0">
-              <div className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 rounded-xl bg-gradient-to-br from-blue-500 to-blue-600 p-0.5 shadow-lg group-hover:rotate-6 transition-transform">
-                <div className="w-full h-full bg-white backdrop-blur-sm rounded-[10px] flex items-center justify-center overflow-hidden">
-                  <img
-                    src="/logo-solaris.png"
-                    alt="Solaris Logo"
-                    className="w-6 h-6 sm:w-8 sm:h-8 object-contain"
-                    loading="lazy"
-                  />
+            {/* LOGO - Avec flèche retour sur les pages internes */}
+            <div className="flex items-center gap-2 md:gap-3 flex-shrink-0">
+              {!isHomePage && (
+                <button
+                  onClick={handleGoBack}
+                  className="p-2 rounded-lg hover:bg-white/30 text-gray-600 hover:text-blue-600 transition-all backdrop-blur-sm group"
+                  aria-label="Retour"
+                  title="Retour"
+                >
+                  <ArrowLeft size={20} className="group-hover:-translate-x-0.5 transition-transform" />
+                </button>
+              )}
+              <Link to="/" className="flex items-center gap-2 md:gap-3 group">
+                <div className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 rounded-xl bg-gradient-to-br from-blue-500 to-blue-600 p-0.5 shadow-lg group-hover:rotate-6 transition-transform">
+                  <div className="w-full h-full bg-white backdrop-blur-sm rounded-[10px] flex items-center justify-center overflow-hidden">
+                    <img
+                      src="/logo-solaris.png"
+                      alt="Solaris Logo"
+                      className="w-6 h-6 sm:w-8 sm:h-8 object-contain"
+                      loading="lazy"
+                    />
+                  </div>
                 </div>
-              </div>
-              <div className="flex flex-col">
-                <span className="font-black text-xs sm:text-sm md:text-base lg:text-xl tracking-tighter uppercase bg-gradient-to-r from-blue-800 to-gray-700 bg-clip-text text-transparent">
-                  SOLARIS <span className="text-yellow-500">HUMANITY</span>
-                </span>
-              </div>
-            </Link>
+                <div className="flex flex-col">
+                  <span className="font-black text-xs sm:text-sm md:text-base lg:text-xl tracking-tighter uppercase bg-gradient-to-r from-blue-800 to-gray-700 bg-clip-text text-transparent">
+                    SOLARIS <span className="text-yellow-500">HUMANITY</span>
+                  </span>
+                </div>
+              </Link>
+            </div>
 
             {/* DESKTOP NAV - Uniquement visible sur desktop (lg et plus) */}
             <div className="hidden lg:flex items-center space-x-0 xl:space-x-1">
@@ -226,8 +245,8 @@ const NavLinkItem: React.FC<{ link: NavLink }> = memo(({ link }) => {
     <Link
       to={link.href}
       className={`relative px-2 xl:px-3 py-2 text-[10px] xl:text-[11px] font-black tracking-widest transition-all duration-300 rounded-lg whitespace-nowrap backdrop-blur-sm ${isActive
-          ? 'text-blue-600 bg-blue-500/20'
-          : 'text-gray-600 hover:text-blue-600 hover:bg-white/20'
+        ? 'text-blue-600 bg-blue-500/20'
+        : 'text-gray-600 hover:text-blue-600 hover:bg-white/20'
         }`}
     >
       {link.name.toUpperCase()}
