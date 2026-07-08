@@ -69,6 +69,7 @@ i18n
             gallery: {
             title: "L'impact de vos dons en images",
             description: "Chaque moment documenté est une preuve de la transformation sur le terrain.",
+            loading: "Chargement de la médiathèque...",
             all: "TOUS",
             photo_title: "Galerie Photos",
             video_title: "Rapports Vidéos",
@@ -253,6 +254,7 @@ i18n
             gallery: {
             title: "Our Impact in Pictures",
             description: "Every documented moment is proof of the transformation on the ground.",
+            loading: "Loading media library...",
             all: "ALL",
             photo_title: "Photo Gallery",
             video_title: "Video Reports",

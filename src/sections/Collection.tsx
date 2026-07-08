@@ -139,8 +139,8 @@ const Collection: React.FC = () => {
             </Button>
             <div className="flex flex-col items-center gap-3">
               <div className="flex gap-4 items-center opacity-60">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/5/5e/Visa_Inc._logo.svg" alt="Visa" className="h-4" />
-                <img src="https://upload.wikimedia.org/wikipedia/commons/2/2a/Mastercard-logo.svg" alt="Mastercard" className="h-6" />
+                <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/visa.svg" alt="Visa" className="h-4" />
+                <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/mastercard.svg" alt="Mastercard" className="h-6" />
                 <div className="flex items-center gap-1 text-[10px] font-bold text-gray-500 uppercase"><Shield size={12} /> SECURE SSL</div>
               </div>
               <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest">{t('collection.tax_info')}</p>
