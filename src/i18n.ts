@@ -46,6 +46,12 @@ i18n
             description: "Suivez nos avancées et les témoignages de ceux que nous accompagnons.",
             search_placeholder: "Rechercher un article...",
             no_results: "Aucun article trouvé pour cette recherche",
+            back_to_blog: "Retour au blog",
+            author_label: "Auteur",
+            read_time: "{{count}} min de lecture",
+            support_title: "Soutenez notre action",
+            share: "Partager",
+            default_category: "Actualité",
           },
           legal: {
             update_label: "Mise à jour :",
@@ -223,7 +229,13 @@ i18n
             title: "News and Stories",
             description: "Follow our progress and stories from the field.",
             search_placeholder: "Search articles...",
-            no_results: "No articles found for this search"
+            no_results: "No articles found for this search",
+            back_to_blog: "Back to blog",
+            author_label: "Author",
+            read_time: "{{count}} min read",
+            support_title: "Support our cause",
+            share: "Share",
+            default_category: "News"
           },
           legal: {
             update_label: "Updated:",

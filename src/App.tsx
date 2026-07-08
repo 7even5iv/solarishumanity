@@ -3,6 +3,8 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Navbar from './layouts/Navbar';
 import Footer from './layouts/Footer';
 
+import ScrollToTop from './components/ScrollToTop';
+
 // Import des nouvelles PAGES
 import Home from './pages/Home';
 import About from './pages/About';
@@ -20,6 +22,7 @@ import BlogPostDetail from './pages/BlogPostDetail';
 const App: React.FC = () => {
   return (
     <Router>
+      <ScrollToTop />
       <div className="min-h-screen bg-white selection:bg-orange-500 selection:text-white scroll-smooth">
         <Navbar />
         <Routes>
@@ -34,7 +37,7 @@ const App: React.FC = () => {
           <Route path="/Rapports" element={<Reports />} />
           <Route path="/mentions-legales" element={<LegalNotice />} />
           <Route path="/confidentialite" element={<PrivacyPolicy />} />
-          <Route path="/Blog/:slug" element={<BlogPostDetail />} />
+          <Route path="/blog/:slug" element={<BlogPostDetail />} />
         </Routes>
         <Footer />
       </div>

@@ -15,10 +15,19 @@ const BlogPostDetail: React.FC = () => {
     const [post, setPost] = useState<any>(null);
     const [isLoading, setIsLoading] = useState(true);
 
+    // Detect current language
     const isFr = i18n.language.startsWith('fr');
 
+    // Fetch post data when slug changes
     useEffect(() => {
-        // La requête récupère TOUS les champs bilingues
+        if (!slug) {
+            setIsLoading(false);
+            return;
+        }
+
+        setIsLoading(true);
+
+        // Query retrieves ALL bilingual fields
         const query = `*[_type == "post" && slug.current == $slug][0]{
             titleFr, 
             titleEn,
@@ -35,22 +44,37 @@ const BlogPostDetail: React.FC = () => {
                 setPost(data);
                 setIsLoading(false);
             })
-            .catch(console.error);
+            .catch((error) => {
+                console.error('Error fetching post:', error);
+                setIsLoading(false);
+            });
 
         window.scrollTo(0, 0);
     }, [slug]);
 
-    // LOGIQUE DE SÉLECTION DU CONTENU (Avec repli vers le français si l'anglais est vide)
+    // Re-fetch or update when language changes
+    useEffect(() => {
+        // If we have a post, just re-render with new language selection
+        // The useMemo hooks will handle content selection automatically
+        if (post) {
+            setIsLoading(false);
+        }
+    }, [i18n.language, post]);
+
+    // Content selection logic with fallback to French if English is empty
     const displayTitle = useMemo(() => {
         if (!post) return "";
-        return isFr ? post.titleFr : (post.titleEn || post.titleFr);
+        if (isFr) return post.titleFr;
+        return post.titleEn || post.titleFr;
     }, [post, isFr]);
 
     const displayBody = useMemo(() => {
         if (!post) return null;
-        return isFr ? post.bodyFr : (post.bodyEn || post.bodyFr);
+        if (isFr) return post.bodyFr;
+        return post.bodyEn || post.bodyFr;
     }, [post, isFr]);
 
+    // Loading state
     if (isLoading) return (
         <div className="min-h-screen flex items-center justify-center">
             <div className="flex flex-col items-center gap-4">
@@ -60,6 +84,7 @@ const BlogPostDetail: React.FC = () => {
         </div>
     );
 
+    // No post found
     if (!post) return (
         <div className="min-h-screen flex flex-col items-center justify-center">
             <p className="text-xl font-black text-gray-900 mb-6 uppercase tracking-tighter">{t('blog.no_results')}</p>
@@ -72,23 +97,11 @@ const BlogPostDetail: React.FC = () => {
     return (
         <main className="pt-32 pb-20 bg-white">
             <div className="max-w-4xl mx-auto px-4">
-
-                {/* BOUTON RETOUR BILINGUE */}
-                <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} className="mb-12">
-                    <Link
-                        to="/Blog"
-                        className="inline-flex items-center gap-3 text-[10px] font-black text-gray-500 hover:text-blue-500 transition-all uppercase tracking-widest group"
-                    >
-                        <div className="p-2 bg-gray-100 rounded-full group-hover:bg-blue-50 transition-colors">
-                            <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" />
-                        </div>
-                        {t('blog.back_to_blog')}
-                    </Link>
-                </motion.div>
-
-                {/* EN-TÊTE */}
+                {/* HEADER */}
                 <header className="mb-12">
-                    <Badge variant="blue" className="mb-6 uppercase">{post.category || "Action"}</Badge>
+                    <Badge variant="blue" className="mb-6 uppercase">
+                        {post.category || t('blog.default_category') || "Action"}
+                    </Badge>
                     <h1 className="text-4xl md:text-6xl font-black text-gray-900 leading-tight mb-8 tracking-tighter uppercase">
                         {displayTitle}
                     </h1>
@@ -104,7 +117,7 @@ const BlogPostDetail: React.FC = () => {
                         </div>
                         <div className="flex items-center gap-2">
                             <User size={16} className="text-blue-500" />
-                            {t('blog.author_label')}
+                            {post.authorName || t('blog.author_label')}
                         </div>
                         <div className="flex items-center gap-2">
                             <Clock size={16} className="text-blue-500" />
@@ -114,18 +127,26 @@ const BlogPostDetail: React.FC = () => {
                 </header>
 
                 {/* IMAGE */}
-                <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="relative rounded-[2.5rem] overflow-hidden shadow-2xl mb-16 aspect-video bg-gray-100 border border-gray-100">
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="relative rounded-[2.5rem] overflow-hidden shadow-2xl mb-16 aspect-video bg-gray-100 border border-gray-100"
+                >
                     {post.mainImage && (
-                        <img src={urlFor(post.mainImage).width(1200).url()} alt={displayTitle} className="w-full h-full object-cover" />
+                        <img
+                            src={urlFor(post.mainImage).width(1200).url()}
+                            alt={displayTitle}
+                            className="w-full h-full object-cover"
+                        />
                     )}
                 </motion.div>
 
-                {/* CONTENU DYNAMIQUE (PortableText) */}
+                {/* DYNAMIC CONTENT (PortableText) */}
                 <article className="prose prose-lg prose-blue max-w-none text-gray-600 leading-relaxed font-medium">
                     {displayBody && <PortableText value={displayBody} />}
                 </article>
 
-                {/* FOOTER ARTICLE */}
+                {/* ARTICLE FOOTER */}
                 <footer className="mt-20 pt-10 border-t border-gray-100 flex flex-col md:flex-row items-center justify-between gap-8">
                     <div className="text-center md:text-left">
                         <h4 className="font-black text-gray-900 uppercase text-xs tracking-widest mb-2">
@@ -134,7 +155,22 @@ const BlogPostDetail: React.FC = () => {
                         <p className="text-gray-500 text-sm italic">{t('footer.quote')}</p>
                     </div>
                     <div className="flex gap-4">
-                        <Button variant="outline" size="sm" icon={<Share2 size={16} />}>
+                        <Button
+                            variant="outline"
+                            size="sm"
+                            icon={<Share2 size={16} />}
+                            onClick={() => {
+                                if (navigator.share) {
+                                    navigator.share({
+                                        title: displayTitle,
+                                        url: window.location.href
+                                    });
+                                } else {
+                                    // Fallback: copy to clipboard
+                                    navigator.clipboard?.writeText(window.location.href);
+                                }
+                            }}
+                        >
                             {t('blog.share')}
                         </Button>
                         <Button

@@ -1,16 +1,17 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
 import { useTranslation } from 'react-i18next';
 import Hero from '../sections/Hero';
 import { SectionTitle } from '../components/SectionTitle';
 import { Button } from '../components/Button';
 import { Card } from '../components/Card';
-import { client, urlFor } from '../lib/sanity'; // Import Sanity
+import { client, urlFor } from '../lib/sanity';
 import {
   Droplets, HeartPulse, GraduationCap,
-  Sparkles, Users, Globe, Shield, TrendingUp, Heart, Camera
+  Sparkles, Users, Globe, Shield, TrendingUp, Heart, Camera,
+  Calendar, ArrowRight // Nouvel import
 } from 'lucide-react';
 import { Badge } from '../components/Badge';
 
@@ -43,26 +44,36 @@ const itemVariants = {
 const Home: React.FC = () => {
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
-  const [latestMedia, setLatestMedia] = useState<any[]>([]);
   const isFr = i18n.language.startsWith('fr');
 
-  // 1. CHARGEMENT DYNAMIQUE DES DERNIERS MÉDIAS DEPUIS SANITY
+  const [latestMedia, setLatestMedia] = useState<any[]>([]);
+  const [latestPosts, setLatestPosts] = useState<any[]>([]); // État pour le blog
+  const [isLoading, setIsLoading] = useState(true);
+
   useEffect(() => {
     window.scrollTo(0, 0);
 
-    const query = `*[_type == "gallery"] | order(_createdAt desc) [0...4] {
+    // 1. Récupération des 4 dernières photos
+    client.fetch(`*[_type == "gallery"] | order(_createdAt desc) [0...4]`)
+      .then(data => setLatestMedia(data));
+
+    // 2. Récupération des 3 derniers articles de blog
+    const postsQuery = `*[_type == "post"] | order(publishedAt desc) [0...3] {
       _id,
-      image,
-      thumbnail,
-      captionFr,
-      captionEn,
-      locationFr,
-      locationEn
+      titleFr, titleEn,
+      slug,
+      mainImage,
+      publishedAt,
+      excerptFr, excerptEn,
+      category
     }`;
 
-    client.fetch(query)
-      .then(data => setLatestMedia(data))
-      .catch(err => console.error("Erreur chargement accueil:", err));
+    client.fetch(postsQuery)
+      .then(data => {
+        setLatestPosts(data);
+        setIsLoading(false);
+      })
+      .catch(err => console.error("Erreur blog accueil:", err));
   }, []);
 
   const keyStats = useMemo(() => [
@@ -123,8 +134,76 @@ const Home: React.FC = () => {
         </div>
       </section>
 
-      {/* 3. GALERIE D'IMPACT DYNAMIQUE (Depuis Sanity) */}
+      {/* 3. SECTION BLOG DYNAMIQUE (Nouveau) */}
       <section className="py-32 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <SectionTitle
+            subtitle={t('nav.blog')}
+            title={isFr ? "Dernières Actualités" : "Latest News"}
+            description={t('blog.description')}
+          />
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-12">
+            {latestPosts.map((post, index) => {
+              const title = isFr ? post.titleFr : (post.titleEn || post.titleFr);
+              const excerpt = isFr ? post.excerptFr : (post.excerptEn || post.excerptFr);
+
+              return (
+                <motion.div
+                  key={post._id}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: index * 0.1 }}
+                  onClick={() => navigate(`/blog/${post.slug.current}`)}
+                  className="group cursor-pointer"
+                >
+                  <Card className="p-0 overflow-hidden h-full flex flex-col border-none shadow-sm hover:shadow-2xl transition-all duration-500 rounded-[2.5rem] bg-gray-50">
+                    <div className="relative h-48 overflow-hidden">
+                      {post.mainImage && (
+                        <img
+                          src={urlFor(post.mainImage).width(400).url()}
+                          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                          alt={title}
+                        />
+                      )}
+                      <div className="absolute top-4 left-4">
+                        <Badge variant="blue" className="text-[8px] uppercase">{post.category || "Action"}</Badge>
+                      </div>
+                    </div>
+                    <div className="p-6 flex flex-col flex-grow text-left">
+                      <div className="flex items-center gap-3 text-[9px] font-black text-gray-400 uppercase mb-3">
+                        <Calendar size={12} className="text-blue-500" />
+                        {new Date(post.publishedAt).toLocaleDateString(isFr ? 'fr-FR' : 'en-US')}
+                      </div>
+                      <h4 className="text-lg font-black text-gray-900 mb-3 line-clamp-2 group-hover:text-blue-600 transition-colors uppercase tracking-tight">
+                        {title}
+                      </h4>
+                      <p className="text-gray-500 text-sm line-clamp-2 mb-6 italic">
+                        {excerpt}
+                      </p>
+                      <div className="mt-auto">
+                        <span className="text-[10px] font-black text-blue-600 flex items-center gap-1 uppercase tracking-widest">
+                          {isFr ? 'Lire la suite' : 'Read more'} <ArrowRight size={12} />
+                        </span>
+                      </div>
+                    </div>
+                  </Card>
+                </motion.div>
+              );
+            })}
+          </div>
+
+          <div className="text-center mt-12">
+            <Button variant="outline" onClick={() => navigate('/Blog')}>
+              {isFr ? 'VOIR TOUT LE JOURNAL' : 'VIEW ALL NEWS'}
+            </Button>
+          </div>
+        </div>
+      </section>
+
+      {/* 4. GALERIE D'IMPACT DYNAMIQUE */}
+      <section className="py-32 bg-gray-50/30 border-y border-gray-100">
         <div className="max-w-7xl mx-auto px-4">
           <div className="grid lg:grid-cols-2 gap-16 items-center">
             <motion.div initial={{ opacity: 0, x: -50 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.8 }}>
@@ -138,7 +217,6 @@ const Home: React.FC = () => {
               <Button onClick={() => navigate('/Galerie')} icon={<Camera size={20} />}>{t('nav.gallery')}</Button>
             </motion.div>
 
-            {/* GRILLE DYNAMIQUE */}
             <div className="grid grid-cols-2 gap-4">
               {latestMedia.length > 0 ? (
                 latestMedia.map((media, index) => (
@@ -153,18 +231,14 @@ const Home: React.FC = () => {
                       className="w-full h-full object-cover transition-all duration-700 group-hover:scale-110"
                       alt={isFr ? media.captionFr : media.captionEn}
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-blue-900/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex flex-col justify-end p-6">
+                    <div className="absolute inset-0 bg-gradient-to-t from-blue-900/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex flex-col justify-end p-6 text-left">
                       <p className="text-white font-black text-[10px] uppercase tracking-widest leading-tight">
                         {isFr ? media.captionFr : media.captionEn}
-                      </p>
-                      <p className="text-yellow-400 text-[8px] font-bold uppercase mt-1">
-                        {isFr ? media.locationFr : media.locationEn}
                       </p>
                     </div>
                   </motion.div>
                 ))
               ) : (
-                // Fallback (Squelettes si pas encore de données)
                 [1, 2, 3, 4].map((i) => (
                   <div key={i} className="aspect-square bg-gray-50 rounded-[2.5rem] border border-dashed border-gray-200 animate-pulse" />
                 ))
@@ -174,9 +248,9 @@ const Home: React.FC = () => {
         </div>
       </section>
 
-      {/* 4. CTA FINAL */}
+      {/* 5. CTA FINAL */}
       <section className="py-32 bg-gradient-to-br from-blue-900 via-blue-800 to-gray-900 relative overflow-hidden">
-        <motion.div animate={{ scale: [1, 1.2, 1], opacity: [0.1, 0.2, 0.1] }} transition={{ duration: 10, repeat: Infinity }} className="absolute top-0 right-0 w-[500px] h-[500px] bg-yellow-500 rounded-full blur-[120px]" />
+        <motion.div animate={{ scale: [1, 1.2, 1], opacity: [0.1, 0.2, 0.1] }} transition={{ duration: 10, repeat: Infinity }} className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-yellow-500 rounded-full blur-[120px]" />
         <div className="max-w-4xl mx-auto px-4 text-center relative z-10">
           <motion.div initial={{ opacity: 0, scale: 0.9 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }}>
             <div className="mb-10 inline-flex p-5 bg-white/10 rounded-3xl backdrop-blur-xl border border-white/20">

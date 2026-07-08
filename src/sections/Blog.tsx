@@ -7,7 +7,7 @@ import { Card } from '../components/Card';
 import {
   Calendar, Share2, Search, User
 } from 'lucide-react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate} from 'react-router-dom';
 
 const Blog: React.FC = () => {
   const { t, i18n } = useTranslation();
