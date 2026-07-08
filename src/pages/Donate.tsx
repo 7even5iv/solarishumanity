@@ -68,16 +68,6 @@ const Donate: React.FC = () => {
   return (
     <div className="min-h-screen bg-white pt-32 pb-20 overflow-hidden font-sans">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-
-        <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} className="mb-12">
-          <Link to="/" className="inline-flex items-center gap-3 text-[10px] font-black text-gray-500 hover:text-blue-500 transition-all uppercase tracking-[0.2em] group">
-            <div className="p-2.5 bg-gray-100 rounded-full group-hover:bg-blue-50 transition-colors shadow-sm">
-              <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" />
-            </div>
-            <span className="mt-0.5">{t('nav.back')}</span>
-          </Link>
-        </motion.div>
-
         <div className="grid lg:grid-cols-5 gap-12 lg:gap-20">
 
           <div className="lg:col-span-3 space-y-12">
