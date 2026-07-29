@@ -74,8 +74,8 @@ const Missions: React.FC = () => {
 
   const statsItems = useMemo(() => [
     { label: t('about.stats.foundation'), value: "2025", icon: <Target size={20} /> },
-    { label: t('about.stats.impact'), value: "1000+", icon: <Users size={20} /> },
-    { label: t('about.stats.countries'), value: "3", icon: <Shield size={20} /> },
+    { label: t('about.stats.impact'), value: "30", icon: <Users size={20} /> },
+    { label: t('about.stats.countries'), value: "1", icon: <Shield size={20} /> },
     { label: t('about.stats.transparency'), value: "100%", icon: <TrendingUp size={20} /> },
   ], [t]);
 

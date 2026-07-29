@@ -119,9 +119,9 @@ i18n
             title: "Apporter la Lumière là où règne l'obscurité.",
             description: "Fondée en 2025 par Mme Nelly NDOH NGUELET, Solaris Humanity est née d'une conviction simple : chaque vie mérite de l'espoir et de l'autonomie.",
             stats: {
-              foundation: "Fondation",
+              foundation: "Depuis 2025 ",
               impact: "Vies impactées",
-              countries: "Pays d'action",
+              countries: "Pays d'intervention (Cameroun)",
               transparency: "Transparence"
             },
             tabs: {
@@ -136,9 +136,9 @@ i18n
             cta_contact: "NOUS CONTACTER"
           },
           missions: {
-            badge: "NOS DOMAINES D'ACTION",
-            title: "Apporter des solutions concrètes",
-            description: "Découvrez nos 4 missions principales pour l'autonomie des populations.",
+            badge: "NOS PROGRAMMES D'ACTION",
+            title: "Nos programmes d'action ",
+            description: "Des solutions durables pour un impact concret.",
             btn_support: "Soutenir cette mission",
             btn_all: "DÉCOUVRIR TOUTES NOS MISSIONS",
             solutions_label: "Nos Solutions",
@@ -304,9 +304,9 @@ i18n
             title: "Bringing Light where darkness reigns.",
             description: "Founded in 2025 by Mrs. Nelly NDOH NGUELET, Solaris Humanity was born from a simple conviction: every life deserves hope and autonomy.",
             stats: {
-              foundation: "Founded",
+              foundation: "Since 2025",
               impact: "Lives impacted",
-              countries: "Active countries",
+              countries: "Country of operation (Cameroon)",
               transparency: "Transparency"
             },
             tabs: {
@@ -321,9 +321,9 @@ i18n
             cta_contact: "CONTACT US"
           },
           missions: {
-            badge: "OUR FIELDS OF ACTION",
-            title: "Providing concrete solutions",
-            description: "Discover our 4 main missions for population autonomy.",
+            badge: "OUR PROGRAMMES",
+            title: "Our Programmes ",
+            description: "sustainable solutions. Lasting impact. ",
             btn_support: "Support this mission",
             btn_all: "DISCOVER ALL OUR MISSIONS",
             solutions_label: "Our Solutions",

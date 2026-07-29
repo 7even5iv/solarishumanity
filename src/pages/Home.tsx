@@ -44,66 +44,46 @@ const itemVariants = {
 const Home: React.FC = () => {
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
-  const isFr = i18n.language.startsWith('fr');
-
   const [latestMedia, setLatestMedia] = useState<any[]>([]);
-  const [latestPosts, setLatestPosts] = useState<any[]>([]); // État pour le blog
-  const [isLoading, setIsLoading] = useState(true);
+  const isFr = i18n.language.startsWith('fr');
 
   useEffect(() => {
     window.scrollTo(0, 0);
-
-    // 1. Récupération des 4 dernières photos
+    // On récupère les 4 dernières photos pour le teaser
     client.fetch(`*[_type == "gallery"] | order(_createdAt desc) [0...4]`)
       .then(data => setLatestMedia(data));
-
-    // 2. Récupération des 3 derniers articles de blog
-    const postsQuery = `*[_type == "post"] | order(publishedAt desc) [0...3] {
-      _id,
-      titleFr, titleEn,
-      slug,
-      mainImage,
-      publishedAt,
-      excerptFr, excerptEn,
-      category
-    }`;
-
-    client.fetch(postsQuery)
-      .then(data => {
-        setLatestPosts(data);
-        setIsLoading(false);
-      })
-      .catch(err => console.error("Erreur blog accueil:", err));
   }, []);
 
+  // 1. STATS MISES À JOUR (30 vies, 1 pays)
   const keyStats = useMemo(() => [
-    { icon: Users, value: "1000+", label: t('about.stats.impact'), color: "text-blue-500" },
-    { icon: Globe, value: "3", label: t('about.stats.countries'), color: "text-blue-500" },
-    { icon: Shield, value: "100%", label: t('about.stats.transparency'), color: "text-blue-500" },
-    { icon: TrendingUp, value: "5+", label: t('nav.missions'), color: "text-blue-500" },
+    { icon: <Calendar />, value: t('stats.since'), label: t('about.tabs.history'), color: "text-blue-500" },
+    { icon: <Users />, value: t('stats.impact'), label: t('about.stats.impact'), color: "text-blue-500" },
+    { icon: <Globe />, value: t('stats.country'), label: t('about.stats.countries'), color: "text-blue-500" },
+    { icon: <Shield />, value: t('stats.transparency'), label: t('about.stats.transparency'), color: "text-blue-500" },
   ], [t]);
 
+  // 2. RÉSUMÉ MISSIONS (Texte long du PDF)
   const missionsTeaser = useMemo(() => [
-    { icon: <Droplets size={32} />, title: t('missions.p1.title'), stats: "5000+ Pers." },
-    { icon: <HeartPulse size={32} />, title: t('missions.p2.title'), stats: "10+ Centres" },
-    { icon: <GraduationCap size={32} />, title: t('missions.p3.title'), stats: "2000+ Kits" }
+    { icon: <Droplets size={32} />, title: t('missions.p1.title'), desc: t('missions.p1.desc') },
+    { icon: <HeartPulse size={32} />, title: t('missions.p2.title'), desc: t('missions.p2.desc') },
+    { icon: <GraduationCap size={32} />, title: t('missions.p3.title'), desc: t('missions.p3.desc') }
   ], [t]);
 
   return (
     <main className="overflow-hidden bg-white">
       <Hero />
 
-      {/* 1. SECTION STATISTIQUES */}
-      <section className="py-20 relative z-20 border-b border-gray-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      {/* SECTION STATISTIQUES */}
+      <section className="py-20 border-b border-gray-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <motion.div className="grid grid-cols-2 md:grid-cols-4 gap-8" variants={containerVariants} initial="hidden" whileInView="visible" viewport={{ once: true }}>
             {keyStats.map((stat, i) => (
-              <motion.div key={i} variants={itemVariants}>
-                <Card variant="gradient" className="text-center group h-full">
-                  <div className={`w-14 h-14 mx-auto mb-4 bg-blue-50 rounded-2xl flex items-center justify-center text-blue-500 group-hover:rotate-6 transition-transform`}>
-                    <stat.icon size={28} />
+              <motion.div key={i} variants={itemVariants} className="text-center group">
+                <Card variant="gradient" className="h-full py-10">
+                  <div className="w-14 h-14 mx-auto mb-4 bg-blue-50 rounded-2xl flex items-center justify-center text-blue-500 group-hover:scale-110 transition-transform">
+                    {stat.icon}
                   </div>
-                  <p className="text-4xl font-black text-gray-900 mb-1"><StatDigit value={stat.value} /></p>
+                  <p className="text-xl md:text-2xl font-black text-gray-900 mb-1 uppercase tracking-tighter">{stat.value}</p>
                   <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest leading-loose">{stat.label}</p>
                 </Card>
               </motion.div>
@@ -112,157 +92,63 @@ const Home: React.FC = () => {
         </div>
       </section>
 
-      {/* 2. RÉSUMÉ MISSIONS */}
+      {/* SECTION MISSIONS */}
       <section className="py-32 bg-gray-50/50">
         <div className="max-w-7xl mx-auto px-4">
           <SectionTitle subtitle={t('missions.badge')} title={t('missions.title')} description={t('missions.description')} />
-          <motion.div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-16" variants={containerVariants} initial="hidden" whileInView="visible" viewport={{ once: true }}>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-16">
             {missionsTeaser.map((item, i) => (
-              <motion.div key={i} variants={itemVariants} whileHover={{ y: -10 }}>
-                <Card variant="glass" className="text-center h-full flex flex-col group border-b-4 border-b-transparent hover:border-b-blue-500 transition-all duration-500">
-                  <div className="w-16 h-16 mx-auto mb-8 bg-white shadow-sm text-blue-500 rounded-2xl flex items-center justify-center group-hover:bg-blue-500 group-hover:text-white transition-colors">
-                    {item.icon}
-                  </div>
-                  <h4 className="text-2xl font-black text-gray-900 mb-4 tracking-tighter uppercase">{item.title}</h4>
-                  <Badge variant="blue" className="mb-6 w-fit mx-auto uppercase">{item.stats}</Badge>
-                  <p className="text-gray-500 leading-relaxed mb-8 flex-grow">{t('hero.subtitle')}</p>
-                  <Button variant="outline" size="sm" onClick={() => navigate('/Missions')} className="w-full">{t('missions.btn_support')}</Button>
-                </Card>
-              </motion.div>
+              <Card key={i} variant="glass" className="text-center flex flex-col h-full border-b-4 border-b-transparent hover:border-b-blue-600 transition-all">
+                <div className="w-16 h-16 mx-auto mb-8 bg-white shadow-sm text-blue-500 rounded-2xl flex items-center justify-center">
+                  {item.icon}
+                </div>
+                <h4 className="text-xl font-black text-gray-900 mb-4 uppercase tracking-tighter">{item.title}</h4>
+                <p className="text-gray-500 leading-relaxed mb-10 flex-grow text-sm italic">{item.desc}</p>
+                <Button variant="outline" size="sm" className="w-full" onClick={() => navigate('/Missions')}>
+                  {t('missions.btn_support')}
+                </Button>
+              </Card>
             ))}
-          </motion.div>
+          </div>
         </div>
       </section>
 
-      {/* 3. SECTION BLOG DYNAMIQUE (Nouveau) */}
+      {/* SECTION GALERIE (La preuve de votre impact) */}
       <section className="py-32 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <SectionTitle
-            subtitle={t('nav.blog')}
-            title={isFr ? "Dernières Actualités" : "Latest News"}
-            description={t('blog.description')}
-          />
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-12">
-            {latestPosts.map((post, index) => {
-              const title = isFr ? post.titleFr : (post.titleEn || post.titleFr);
-              const excerpt = isFr ? post.excerptFr : (post.excerptEn || post.excerptFr);
-
-              return (
-                <motion.div
-                  key={post._id}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: index * 0.1 }}
-                  onClick={() => navigate(`/blog/${post.slug.current}`)}
-                  className="group cursor-pointer"
-                >
-                  <Card className="p-0 overflow-hidden h-full flex flex-col border-none shadow-sm hover:shadow-2xl transition-all duration-500 rounded-[2.5rem] bg-gray-50">
-                    <div className="relative h-48 overflow-hidden">
-                      {post.mainImage && (
-                        <img
-                          src={urlFor(post.mainImage).width(400).url()}
-                          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                          alt={title}
-                        />
-                      )}
-                      <div className="absolute top-4 left-4">
-                        <Badge variant="blue" className="text-[8px] uppercase">{post.category || "Action"}</Badge>
-                      </div>
-                    </div>
-                    <div className="p-6 flex flex-col flex-grow text-left">
-                      <div className="flex items-center gap-3 text-[9px] font-black text-gray-400 uppercase mb-3">
-                        <Calendar size={12} className="text-blue-500" />
-                        {new Date(post.publishedAt).toLocaleDateString(isFr ? 'fr-FR' : 'en-US')}
-                      </div>
-                      <h4 className="text-lg font-black text-gray-900 mb-3 line-clamp-2 group-hover:text-blue-600 transition-colors uppercase tracking-tight">
-                        {title}
-                      </h4>
-                      <p className="text-gray-500 text-sm line-clamp-2 mb-6 italic">
-                        {excerpt}
-                      </p>
-                      <div className="mt-auto">
-                        <span className="text-[10px] font-black text-blue-600 flex items-center gap-1 uppercase tracking-widest">
-                          {isFr ? 'Lire la suite' : 'Read more'} <ArrowRight size={12} />
-                        </span>
-                      </div>
-                    </div>
-                  </Card>
-                </motion.div>
-              );
-            })}
-          </div>
-
-          <div className="text-center mt-12">
-            <Button variant="outline" onClick={() => navigate('/Blog')}>
-              {isFr ? 'VOIR TOUT LE JOURNAL' : 'VIEW ALL NEWS'}
-            </Button>
-          </div>
-        </div>
-      </section>
-
-      {/* 4. GALERIE D'IMPACT DYNAMIQUE */}
-      <section className="py-32 bg-gray-50/30 border-y border-gray-100">
         <div className="max-w-7xl mx-auto px-4">
-          <div className="grid lg:grid-cols-2 gap-16 items-center">
-            <motion.div initial={{ opacity: 0, x: -50 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.8 }}>
+          <div className="grid lg:grid-cols-2 gap-20 items-center">
+            <motion.div initial={{ opacity: 0, x: -30 }} whileInView={{ opacity: 1, x: 0 }}>
               <Badge variant="blue" className="mb-6 uppercase">{t('nav.gallery')}</Badge>
-              <h2 className="text-4xl md:text-5xl font-black text-gray-900 mb-8 leading-tight uppercase">
-                {t('about.title')}
+              <h2 className="text-4xl md:text-5xl font-black text-gray-900 mb-8 leading-tight uppercase tracking-tighter">
+                {t('gallery.title')}
               </h2>
-              <p className="text-gray-500 text-lg mb-10 leading-relaxed italic text-balance">
-                {t('about.vision_text')}
-              </p>
-              <Button onClick={() => navigate('/Galerie')} icon={<Camera size={20} />}>{t('nav.gallery')}</Button>
+              <p className="text-gray-500 text-lg mb-10 leading-relaxed italic">{t('gallery.description')}</p>
+              <Button onClick={() => navigate('/Galerie')} icon={<Camera size={20} />}>{t('gallery.section_title')}</Button>
             </motion.div>
 
             <div className="grid grid-cols-2 gap-4">
-              {latestMedia.length > 0 ? (
-                latestMedia.map((media, index) => (
-                  <motion.div
-                    key={media._id}
-                    whileHover={{ scale: 0.98, rotate: index % 2 === 0 ? 1 : -1 }}
-                    className="group relative aspect-square bg-gray-100 rounded-[2.5rem] overflow-hidden shadow-lg cursor-pointer"
-                    onClick={() => navigate('/Galerie')}
-                  >
-                    <img
-                      src={urlFor(media.image || media.thumbnail).width(400).url()}
-                      className="w-full h-full object-cover transition-all duration-700 group-hover:scale-110"
-                      alt={isFr ? media.captionFr : media.captionEn}
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-blue-900/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex flex-col justify-end p-6 text-left">
-                      <p className="text-white font-black text-[10px] uppercase tracking-widest leading-tight">
-                        {isFr ? media.captionFr : media.captionEn}
-                      </p>
-                    </div>
-                  </motion.div>
-                ))
-              ) : (
-                [1, 2, 3, 4].map((i) => (
-                  <div key={i} className="aspect-square bg-gray-50 rounded-[2.5rem] border border-dashed border-gray-200 animate-pulse" />
-                ))
-              )}
+              {latestMedia.map((media, index) => (
+                <div key={media._id} className="group relative aspect-square bg-gray-100 rounded-[2.5rem] overflow-hidden shadow-lg cursor-pointer" onClick={() => navigate('/Galerie')}>
+                  <img src={urlFor(media.image || media.thumbnail).width(400).url()} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" alt="Impact" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-blue-900/90 via-transparent opacity-0 group-hover:opacity-100 transition-opacity p-6 flex flex-col justify-end text-left">
+                    <p className="text-white font-black text-[10px] uppercase tracking-widest">{isFr ? media.captionFr : media.captionEn}</p>
+                    <p className="text-yellow-400 text-[8px] font-bold uppercase mt-1">{isFr ? media.locationFr : media.locationEn}</p>
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
         </div>
       </section>
 
-      {/* 5. CTA FINAL */}
-      <section className="py-32 bg-gradient-to-br from-blue-900 via-blue-800 to-gray-900 relative overflow-hidden">
+      {/* SECTION ENGAGEMENT */}
+      <section className="py-32 bg-gradient-to-br from-blue-900 to-gray-900 text-white text-center relative overflow-hidden">
         <motion.div animate={{ scale: [1, 1.2, 1], opacity: [0.1, 0.2, 0.1] }} transition={{ duration: 10, repeat: Infinity }} className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-yellow-500 rounded-full blur-[120px]" />
-        <div className="max-w-4xl mx-auto px-4 text-center relative z-10">
-          <motion.div initial={{ opacity: 0, scale: 0.9 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }}>
-            <div className="mb-10 inline-flex p-5 bg-white/10 rounded-3xl backdrop-blur-xl border border-white/20">
-              <Sparkles className="text-yellow-400 animate-pulse" size={40} />
-            </div>
-            <h2 className="text-5xl md:text-7xl font-black text-white mb-8 tracking-tighter uppercase">{t('footer.action_title')}</h2>
-            <p className="text-blue-100 text-xl mb-12 max-w-2xl mx-auto leading-relaxed italic">{t('footer.quote')}</p>
-            <div className="flex flex-col sm:flex-row justify-center gap-6">
-              <Button size="lg" variant="primary" onClick={() => navigate('/Donate')} className="bg-blue-600 text-white hover:bg-yellow-500 hover:text-gray-900 transition-all shadow-xl">{t('nav.donate')}</Button>
-              <Button variant="outline" size="lg" className="border-white/30 text-white hover:bg-white/10 hover:border-yellow-400 hover:text-yellow-400" onClick={() => navigate('/Contact')}>{t('nav.contact')}</Button>
-            </div>
-          </motion.div>
+        <div className="max-w-4xl mx-auto px-4 relative z-10">
+          <Badge variant="orange" className="mb-6 uppercase">{t('footer.action_title')}</Badge>
+          <h2 className="text-5xl md:text-7xl font-black mb-8 tracking-tighter uppercase">{t('hero.cta_main')}</h2>
+          <p className="text-blue-100 text-xl mb-12 max-w-2xl mx-auto italic">{t('footer.quote')}</p>
+          <Button size="lg" variant="primary" onClick={() => navigate('/Donate')} className="px-16 shadow-xl">{t('nav.donate')}</Button>
         </div>
       </section>
     </main>
