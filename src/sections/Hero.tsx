@@ -10,7 +10,17 @@ const Hero: React.FC = () => {
   const [isVisible, setIsVisible] = useState(false);
   const [activeTestimonial, setActiveTestimonial] = useState(0);
   const [navbarHeight, setNavbarHeight] = useState(0);
+  const [isMobile, setIsMobile] = useState(false);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 640);
+    };
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   useEffect(() => {
     setIsVisible(true);
@@ -27,10 +37,7 @@ const Hero: React.FC = () => {
     return () => window.removeEventListener('resize', updateNavbarHeight);
   }, []);
 
-  // 🌍 LOGIQUE DU LOGO BILINGUE
-  // On détecte si la langue commence par 'en'
   const isEnglish = i18n.language.startsWith('en');
-  // On définit le chemin de l'image en fonction de la langue
   const currentLogo = isEnglish ? '/logo-solaris-en.png' : '/logo-solaris.png';
 
   const testimonials = [
@@ -62,78 +69,87 @@ const Hero: React.FC = () => {
       className="relative min-h-[100dvh] flex items-center overflow-hidden bg-white"
       style={{ paddingTop: `${navbarHeight}px` }}
     >
-      {/* Éléments décoratifs de fond */}
+      {/* Éléments décoratifs de fond - Responsive */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-0 right-0 -translate-y-1/4 translate-x-1/4 w-[400px] sm:w-[600px] md:w-[800px] h-[400px] sm:h-[600px] md:h-[800px] bg-gradient-to-br from-blue-400/20 via-blue-300/10 to-transparent rounded-full blur-3xl animate-pulse-slow" />
-        <div className="absolute bottom-0 left-0 translate-y-1/4 -translate-x-1/4 w-[300px] sm:w-[450px] md:w-[600px] h-[300px] sm:h-[450px] md:h-[600px] bg-gradient-to-tr from-blue-500/10 via-transparent to-transparent rounded-full blur-3xl animate-pulse-slow animation-delay-1000" />
+        <div className="absolute top-0 right-0 -translate-y-1/4 translate-x-1/4 w-[250px] xs:w-[350px] sm:w-[500px] md:w-[700px] lg:w-[800px] h-[250px] xs:h-[350px] sm:h-[500px] md:h-[700px] lg:h-[800px] bg-gradient-to-br from-blue-400/20 via-blue-300/10 to-transparent rounded-full blur-2xl sm:blur-3xl animate-pulse-slow" />
+        <div className="absolute bottom-0 left-0 translate-y-1/4 -translate-x-1/4 w-[200px] xs:w-[300px] sm:w-[400px] md:w-[550px] lg:w-[600px] h-[200px] xs:h-[300px] sm:h-[400px] md:h-[550px] lg:h-[600px] bg-gradient-to-tr from-blue-500/10 via-transparent to-transparent rounded-full blur-2xl sm:blur-3xl animate-pulse-slow animation-delay-1000" />
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full relative z-10">
-        <div className="grid lg:grid-cols-2 gap-8 sm:gap-12 lg:gap-16 items-center">
+      <div className="max-w-7xl mx-auto px-3 xs:px-4 sm:px-6 lg:px-8 w-full relative z-10">
+        <div className="grid lg:grid-cols-2 gap-6 xs:gap-8 sm:gap-10 md:gap-12 lg:gap-16 items-center">
 
-          {/* TEXTE - GAUCHE (Garder ton code tel quel) */}
+          {/* TEXTE - GAUCHE - Responsive */}
           <div className="text-center lg:text-left order-2 lg:order-1">
-            {/* ... contenu du texte ... */}
             <div className={`transition-all duration-700 ${isVisible ? 'animate-fadeInUp' : 'opacity-0'}`}>
-              <Badge variant="blue" className="mb-6 sm:mb-8 group cursor-pointer hover:scale-105 transition-all shadow-md inline-flex">
-                <span className="flex items-center gap-1 sm:gap-2">
-                  <Sun size={12} className="sm:w-[14px] sm:h-[14px] animate-spin-slow text-blue-500" />
-                  <span className="text-[10px] sm:text-xs font-black tracking-widest uppercase">{t('hero.foundation_date')}</span>
-                  <Sparkles size={10} className="sm:w-[12px] sm:h-[12px] text-yellow-500" />
+              <Badge variant="blue" className="mb-4 xs:mb-5 sm:mb-6 md:mb-8 group cursor-pointer hover:scale-105 transition-all shadow-md inline-flex">
+                <span className="flex items-center gap-1 xs:gap-1.5 sm:gap-2">
+                  <Sun size={isMobile ? 10 : 12} className="sm:w-[14px] sm:h-[14px] animate-spin-slow text-blue-500" />
+                  <span className="text-[8px] xs:text-[9px] sm:text-[10px] md:text-xs font-black tracking-widest uppercase">
+                    {t('hero.foundation_date')}
+                  </span>
+                  <Sparkles size={isMobile ? 8 : 10} className="sm:w-[12px] sm:h-[12px] text-yellow-500" />
                 </span>
               </Badge>
             </div>
 
             <h1 className={`transition-all duration-700 delay-200 ${isVisible ? 'animate-fadeInUp' : 'opacity-0'}`}>
-              <span className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl 2xl:text-8xl font-black text-gray-800 leading-[1.2] sm:leading-[1.1] block mb-3 sm:mb-4 uppercase">
-                {t('hero.title_part1')}
-              </span>
-              <span className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl 2xl:text-8xl font-black leading-[1.2] sm:leading-[1.1] block uppercase">
+              <span className="text-2xl xs:text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl 2xl:text-8xl font-black leading-[1.2] sm:leading-[1.1] block uppercase">
                 <span className="bg-gradient-to-r from-blue-500 via-yellow-500 to-blue-500 bg-clip-text text-transparent animate-gradient bg-[length:200%_auto]">
-                  {t('hero.title_part2')}
+                  {t('hero.title_part1')}
                 </span>
-                <span className="text-gray-800"> » </span>
               </span>
             </h1>
 
-            <p className={`text-gray-600 text-base sm:text-lg md:text-xl mb-6 sm:mb-8 max-w-xl mx-auto lg:mx-0 leading-relaxed px-4 sm:px-0 transition-all duration-700 delay-400 ${isVisible ? 'animate-fadeInUp' : 'opacity-0'}`}>
-              { t('hero.title_part3')}
+            <p className={`text-gray-600 text-sm xs:text-base sm:text-lg md:text-xl mb-5 xs:mb-6 sm:mb-7 md:mb-8 max-w-xl mx-auto lg:mx-0 leading-relaxed px-4 sm:px-0 transition-all duration-700 delay-400 ${isVisible ? 'animate-fadeInUp' : 'opacity-0'}`}>
+              {t('hero.title_part3')}
               {t('hero.subtitle')}
             </p>
 
-            <div className={`flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-3 sm:gap-4 transition-all duration-700 delay-600 ${isVisible ? 'animate-fadeInUp' : 'opacity-0'} px-4 sm:px-0`}>
-              <Button size="lg" variant="primary" icon={<Heart className="sm:w-[18px] sm:h-[18px] fill-current" />} onClick={goToDonate} className="w-full sm:w-auto text-sm sm:text-base">
+            <div className={`flex flex-col xs:flex-row items-center justify-center lg:justify-start gap-2 xs:gap-3 sm:gap-4 transition-all duration-700 delay-600 ${isVisible ? 'animate-fadeInUp' : 'opacity-0'} px-4 sm:px-0`}>
+              <Button
+                size="lg"
+                variant="primary"
+                icon={<Heart className="sm:w-[18px] sm:h-[18px] fill-current" />}
+                onClick={goToDonate}
+                className="w-full xs:w-auto text-xs xs:text-sm sm:text-base px-4 xs:px-5 sm:px-6 py-2.5 xs:py-3 sm:py-3.5"
+              >
                 {t('hero.cta_projects')}
               </Button>
-              <Button variant="outline" size="lg" icon={<Play className="sm:w-[18px] sm:h-[18px]" />} onClick={goToMissions} className="w-full sm:w-auto text-sm sm:text-base">
+              <Button
+                variant="outline"
+                size="lg"
+                icon={<Play className="sm:w-[18px] sm:h-[18px]" />}
+                onClick={goToMissions}
+                className="w-full xs:w-auto text-xs xs:text-sm sm:text-base px-4 xs:px-5 sm:px-6 py-2.5 xs:py-3 sm:py-3.5"
+              >
                 {t('hero.cta_missions')}
               </Button>
             </div>
           </div>
 
-          {/* IMAGE - DROITE */}
-          <div className={`relative order-1 lg:order-2 transition-all duration-1000 delay-300 ${isVisible ? 'animate-fadeInRight' : 'opacity-0'} px-4 sm:px-0`}>
-            <div className="relative bg-white rounded-2xl sm:rounded-[2rem] md:rounded-[3rem] p-2 sm:p-3 shadow-2xl border border-gray-100 group">
-              <div className="aspect-[4/5] rounded-xl sm:rounded-2xl md:rounded-[2.5rem] overflow-hidden relative bg-gray-50">
+          {/* IMAGE - DROITE - Responsive */}
+          <div className={`relative order-1 lg:order-2 transition-all duration-1000 delay-300 ${isVisible ? 'animate-fadeInRight' : 'opacity-0'} px-2 xs:px-3 sm:px-4`}>
+            <div className="relative bg-white rounded-xl xs:rounded-2xl sm:rounded-[2rem] md:rounded-[3rem] p-1.5 xs:p-2 sm:p-3 shadow-2xl border border-gray-100 group">
+              <div className="aspect-[4/5] rounded-lg xs:rounded-xl sm:rounded-2xl md:rounded-[2.5rem] overflow-hidden relative bg-gray-50">
 
-                {/* 📸 LOGO DYNAMIQUE ICI */}
+                {/* 📸 LOGO DYNAMIQUE */}
                 <img
                   src={currentLogo}
                   alt="Solaris Humanity Action"
                   className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
                   loading="eager"
-                  key={i18n.language} // La clé force React à recharger proprement l'image
+                  key={i18n.language}
                 />
 
                 <div className="absolute inset-0 bg-gradient-to-t from-gray-900/60 via-transparent to-transparent" />
               </div>
 
-              {/* Badges décoratifs */}
-              <div className="absolute -top-3 -right-3 sm:-top-4 sm:-right-4 w-10 h-10 sm:w-12 sm:h-12 bg-white rounded-xl sm:rounded-2xl shadow-lg flex items-center justify-center text-blue-500 animate-float">
-                <Sparkles size={18} className="sm:w-[24px] sm:h-[24px]" />
+              {/* Badges décoratifs - Responsive */}
+              <div className="absolute -top-2 -right-2 xs:-top-2.5 xs:-right-2.5 sm:-top-3 sm:-right-3 md:-top-4 md:-right-4 w-8 h-8 xs:w-9 xs:h-9 sm:w-11 sm:h-11 md:w-12 md:h-12 bg-white rounded-lg xs:rounded-xl sm:rounded-2xl shadow-lg flex items-center justify-center text-blue-500 animate-float">
+                <Sparkles size={isMobile ? 14 : 18} className="sm:w-[22px] sm:h-[22px] md:w-[24px] md:h-[24px]" />
               </div>
-              <div className="absolute -bottom-3 -left-3 sm:-bottom-4 sm:-left-4 px-2 sm:px-3 md:px-4 py-1.5 sm:py-2 bg-gray-800 text-white rounded-lg sm:rounded-xl shadow-lg flex items-center gap-1 sm:gap-2 text-[8px] sm:text-[10px] font-black animate-float animation-delay-500">
-                <Shield size={10} className="sm:w-[12px] sm:h-[12px] text-yellow-500" />
+              <div className="absolute -bottom-2 -left-2 xs:-bottom-2.5 xs:-left-2.5 sm:-bottom-3 sm:-left-3 md:-bottom-4 md:-left-4 px-1.5 xs:px-2 sm:px-3 md:px-4 py-1 xs:py-1.5 sm:py-2 bg-gray-800 text-white rounded-lg xs:rounded-xl sm:rounded-2xl shadow-lg flex items-center gap-1 xs:gap-1.5 sm:gap-2 text-[7px] xs:text-[8px] sm:text-[9px] md:text-[10px] font-black animate-float animation-delay-500">
+                <Shield size={isMobile ? 8 : 10} className="sm:w-[12px] sm:h-[12px] text-yellow-500" />
                 <span>{i18n.language.startsWith('fr') ? 'SÉCURISÉ' : 'SECURE'}</span>
               </div>
             </div>
