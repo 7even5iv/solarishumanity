@@ -107,10 +107,17 @@ const Navbar: React.FC = memo(() => {
       {/* Spacer pour compenser la navbar fixe */}
       <div style={{ height: `${navbarHeight}px` }} className="w-full" />
 
-      <nav className={`fixed w-full top-0 z-50 transition-all duration-500 ${scrolled
-        ? 'bg-white/70 backdrop-blur-xl shadow-lg py-2'
-        : 'bg-white/50 backdrop-blur-md py-3 md:py-4 border-b border-white/20'
-        }`}>
+      <nav
+        className={`fixed w-full top-0 z-50 transition-all duration-500 ${scrolled
+            ? 'bg-white/60 backdrop-blur-2xl shadow-2xl py-2 border-b border-white/30'
+            : 'bg-white/40 backdrop-blur-xl shadow-lg py-3 md:py-4 border-b border-white/30'
+          }`}
+        style={{
+          boxShadow: '0 8px 32px rgba(0, 0, 0, 0.08)',
+          backdropFilter: 'blur(20px)',
+          WebkitBackdropFilter: 'blur(20px)',
+        }}
+      >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 lg:px-10">
           <div className="flex justify-between items-center">
             {/* LOGO - Avec flèche retour sur les pages internes */}
@@ -118,7 +125,7 @@ const Navbar: React.FC = memo(() => {
               {!isHomePage && (
                 <button
                   onClick={handleGoBack}
-                  className="p-2 rounded-lg hover:bg-white/30 text-gray-600 hover:text-blue-600 transition-all backdrop-blur-sm group"
+                  className="p-2 rounded-lg hover:bg-white/40 text-gray-600 hover:text-blue-600 transition-all backdrop-blur-sm group border border-white/20"
                   aria-label="Retour"
                   title="Retour"
                 >
@@ -152,7 +159,7 @@ const Navbar: React.FC = memo(() => {
 
               <button
                 onClick={toggleLang}
-                className="ml-2 flex items-center gap-1.5 px-3 py-2 rounded-lg hover:bg-white/20 text-gray-600 hover:text-blue-600 transition-all font-black text-[10px] lg:text-xs tracking-widest border-l border-white/30 backdrop-blur-sm"
+                className="ml-2 flex items-center gap-1.5 px-3 py-2 rounded-lg hover:bg-white/30 text-gray-600 hover:text-blue-600 transition-all font-black text-[10px] lg:text-xs tracking-widest border-l border-white/30 backdrop-blur-sm"
                 aria-label="Changer de langue"
               >
                 <Globe size={14} />
@@ -169,7 +176,7 @@ const Navbar: React.FC = memo(() => {
             {/* BOUTON MENU HAMBURGER - Visible uniquement sur mobile et tablette */}
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="lg:hidden p-2 text-gray-600 hover:text-blue-600 transition-colors z-50 relative bg-white/20 backdrop-blur-sm rounded-lg"
+              className="lg:hidden p-2 text-gray-600 hover:text-blue-600 transition-colors z-50 relative bg-white/30 backdrop-blur-md rounded-lg border border-white/30 shadow-lg hover:bg-white/50"
               aria-label={isMenuOpen ? "Fermer le menu" : "Ouvrir le menu"}
               aria-expanded={isMenuOpen}
             >
@@ -178,24 +185,23 @@ const Navbar: React.FC = memo(() => {
           </div>
         </div>
 
-        {/* MENU MOBILE & TABLETTE - Glassmorphism */}
+        {/* MENU MOBILE & TABLETTE - Glassmorphism amélioré */}
         {isMenuOpen && (
           <>
-            {/* Overlay */}
+            {/* Overlay avec blur */}
             <div
-              className="fixed inset-0 bg-black/40 backdrop-blur-md z-40 lg:hidden animate-fadeIn"
+              className="fixed inset-0 bg-black/30 backdrop-blur-md z-40 lg:hidden animate-fadeIn"
               onClick={() => setIsMenuOpen(false)}
               aria-hidden="true"
             />
 
             {/* Panel Menu */}
-            <div className="lg:hidden fixed top-[calc(var(--navbar-height,72px)+0.5rem)] left-4 right-4 bg-white/95 backdrop-blur-xl rounded-2xl shadow-2xl z-50 animate-slideInUp border border-white/20 overflow-hidden">
+            <div className="lg:hidden fixed top-[calc(var(--navbar-height,72px)+0.5rem)] left-4 right-4 bg-white/80 backdrop-blur-2xl rounded-2xl shadow-2xl z-50 animate-slideInUp border border-white/30 overflow-hidden">
               <div className="p-4 sm:p-6 space-y-3 sm:space-y-4 max-h-[calc(100vh-6rem)] overflow-y-auto">
-
                 {/* Language selector */}
                 <button
                   onClick={toggleLang}
-                  className="w-full flex items-center justify-between p-4 bg-gradient-to-r from-blue-500/10 to-indigo-500/10 backdrop-blur-sm rounded-xl text-blue-600 font-bold hover:from-blue-500/20 hover:to-indigo-500/20 transition-all border border-white/30"
+                  className="w-full flex items-center justify-between p-4 bg-gradient-to-r from-blue-500/20 to-indigo-500/20 backdrop-blur-md rounded-xl text-blue-600 font-bold hover:from-blue-500/30 hover:to-indigo-500/30 transition-all border border-white/40 shadow-lg"
                 >
                   <span className="flex items-center gap-2">
                     <Globe size={18} />
@@ -212,7 +218,7 @@ const Navbar: React.FC = memo(() => {
                     <Link
                       key={link.href}
                       to={link.href}
-                      className="flex items-center justify-between p-4 text-base font-bold text-gray-800 hover:text-blue-600 hover:bg-blue-500/10 rounded-xl transition-all group backdrop-blur-sm"
+                      className="flex items-center justify-between p-4 text-base font-bold text-gray-800 hover:text-blue-600 hover:bg-blue-500/20 rounded-xl transition-all group backdrop-blur-sm border border-transparent hover:border-white/30"
                       onClick={() => setIsMenuOpen(false)}
                     >
                       <span>{link.name}</span>
@@ -223,7 +229,7 @@ const Navbar: React.FC = memo(() => {
 
                 {/* Bouton Don */}
                 <Button
-                  className="w-full py-4 mt-2 text-base font-bold shadow-lg bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 backdrop-blur-sm"
+                  className="w-full py-4 mt-2 text-base font-bold shadow-xl bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 backdrop-blur-sm"
                   onClick={handleDonateClick}
                   icon={<Heart size={18} className="fill-current" />}
                 >
@@ -245,13 +251,13 @@ const NavLinkItem: React.FC<{ link: NavLink }> = memo(({ link }) => {
     <Link
       to={link.href}
       className={`relative px-2 xl:px-3 py-2 text-[10px] xl:text-[11px] font-black tracking-widest transition-all duration-300 rounded-lg whitespace-nowrap backdrop-blur-sm ${isActive
-        ? 'text-blue-600 bg-blue-500/20'
-        : 'text-gray-600 hover:text-blue-600 hover:bg-white/20'
+          ? 'text-blue-600 bg-blue-500/30 shadow-lg border border-blue-300/50'
+          : 'text-gray-600 hover:text-blue-600 hover:bg-white/30 hover:shadow-md border border-transparent hover:border-white/30'
         }`}
     >
       {link.name.toUpperCase()}
       {isActive && (
-        <div className="absolute bottom-0 left-2 xl:left-3 right-2 xl:right-3 h-0.5 bg-gradient-to-r from-blue-400 to-blue-600 rounded-full" />
+        <div className="absolute bottom-0 left-2 xl:left-3 right-2 xl:right-3 h-0.5 bg-gradient-to-r from-blue-400 to-blue-600 rounded-full shadow-sm" />
       )}
     </Link>
   );
@@ -270,12 +276,17 @@ if (typeof document !== 'undefined') {
       @keyframes slideInUp {
         from {
           opacity: 0;
-          transform: translateY(20px);
+          transform: translateY(20px) scale(0.95);
         }
         to {
           opacity: 1;
-          transform: translateY(0);
+          transform: translateY(0) scale(1);
         }
+      }
+
+      @keyframes float {
+        0%, 100% { transform: translateY(0px); }
+        50% { transform: translateY(-5px); }
       }
 
       .animate-fadeIn {
@@ -284,6 +295,10 @@ if (typeof document !== 'undefined') {
 
       .animate-slideInUp {
         animation: slideInUp 0.3s ease-out;
+      }
+
+      .animate-float {
+        animation: float 3s ease-in-out infinite;
       }
 
       /* Support mobile */

@@ -32,6 +32,7 @@ i18n
             subtitle: " Solaris Humanity est une association humanitaire française qui transforme la solidarité en actions concrètes. Nous agissons pour améliorer durablement l'accès à l'éducation, à la santé, à l'eau potable, à l'énergie propre et à l'inclusion numérique des communautés les plus vulnérables en Afrique.", 
             cta_projects: "SOUTENIR NOS PROJETS",
             cta_missions: "DECOUVRIR NOTRE MISSION",
+            cta_main: "S'ENGAGER",
             foundation_date: "ASSOCIATION HUMANITAIRE INTERNATIONALE • DEPUIS 2025",
             last_action: "DERNIÈRE ACTION",
             location_cameroon: "Cameroun : Village Nkolafamba",
@@ -72,7 +73,7 @@ i18n
             description: "Chaque moment documenté est une preuve de la transformation sur le terrain.",
             loading: "Chargement de la médiathèque...",
             all: "TOUS",
-            photo_title: "Galerie Photos",
+            section_title: "Galerie Photos",
             video_title: "Rapports Vidéos",
             video_label: "VIDÉO",
             categories: {
@@ -127,7 +128,7 @@ i18n
             tabs: {
               vision: "VISION",
               mission: "MISSION",
-              histoire: "HISTOIRE"
+              history: "HISTOIRE"
             },
             vision_title: "Plus qu'une aide, un vecteur d'autonomie",
             vision_text: "Notre vision est de créer un monde où chaque communauté isolée a accès à l'énergie, l'eau et l'éducation.",
@@ -142,8 +143,8 @@ i18n
             btn_support: "Soutenir cette mission",
             btn_all: "DÉCOUVRIR TOUTES NOS MISSIONS",
             solutions_label: "Nos Solutions",
-            p1: { title: "Accès à l'eau", desc: "Construction de puits et forages avec pompes solaires." },
-            p2: { title: "Soins Médicaux", desc: "Matériel médical et soutien aux dispensaires locaux." },
+            p1: { title: "Accès à l'eau", desc: "Construction de puits, forages et solutions durables pour faciliter l'accès à l'eau potable. " },
+            p2: { title: "Soins Médicaux", desc: "Soutien aux centres de santé grâce à des équipements et du matériel essentiel. " },
             p3: { title: "Éducation", desc: "Fournitures scolaires, bibliothèques et formations numériques." },
             p4: { title: "Solidarité", desc: "Dons alimentaires, vestimentaires et aide aux seniors." }
           },
@@ -179,11 +180,17 @@ i18n
             success: "Merci ! Message transmis avec succès.",
             error: "Erreur lors de l'envoi. Veuillez réessayer."
           },
+          stats: {
+            since: "Depuis 2025",
+            impact: "30 vies",
+            country: "1 pays",
+            transparency: "100% transparence"
+          },
           footer: {
             international_label: "ONG INTERNATIONALE",
             ong_label: "ONG FRANÇAISE",
             law_label: "LOI 1901",
-            quote: "« Le sourire d'un enfant, la lumière d'un village, la main tendue à une personne, ça n'a pas de prix. »",
+            quote: "« Chaque geste compte. Ensemble, nous des solutions durables aux communautés qui en ont le plus besoin.  »",
             contact_title: "NOUS CONTACTER",
             contact_locations: "France (IDF), Cameroun",
             contact_response: "Réponse sous 48h ouvrées",
@@ -218,6 +225,7 @@ i18n
             subtitle: "Solaris Humanity is a French non-profit organization transforming generosity into meaningful action. We improve access to education, healthcare, clean water, renewable energy and digital inclusion to empower vulnerable communities across Africa.",
             cta_projects: "SUPPORT OUR PROJECTS",
             cta_missions: "DISCOVER OUR MISSION",
+            cta_main: "Get Involved",
             foundation_date: "INTERNATIONAL HUMANITARIAN ORGANIZATION • SINCE 2025",
             last_action: "LATEST ACTION",
             location_cameroon: "Cameroon: Nkolafamba Village",
@@ -258,7 +266,7 @@ i18n
             description: "Every documented moment is proof of the transformation on the ground.",
             loading: "Loading media library...",
             all: "ALL",
-            photo_title: "Photo Gallery",
+            section_title: "Photo Gallery",
             video_title: "Video Reports",
             video_label: "VIDEO",
             categories: {
@@ -312,7 +320,7 @@ i18n
             tabs: {
               vision: "VISION",
               mission: "MISSION",
-              histoire: "HISTORY"
+              history: "HISTORY"
             },
             vision_title: "More than aid, a driver for autonomy",
             vision_text: "Our vision is to create a world where every isolated community has access to energy, water, and education.",
@@ -327,8 +335,8 @@ i18n
             btn_support: "Support this mission",
             btn_all: "DISCOVER ALL OUR MISSIONS",
             solutions_label: "Our Solutions",
-            p1: { title: "Water Access", desc: "Construction of wells and boreholes with solar pumps." },
-            p2: { title: "Medical Care", desc: "Medical equipment and support for local clinics." },
+            p1: { title: "Water Access", desc: "Construction of wells, boreholes and sustainable clean water solutions to improve access to safe drinking water. " },
+            p2: { title: "Medical Care", desc: "upporting healthcare facilities with essential equipment and medical supplies. " },
             p3: { title: "Education", desc: "School supplies, libraries, and digital training." },
             p4: { title: "Solidarity", desc: "Food and clothing donations, and support for seniors." }
           },
@@ -365,11 +373,17 @@ i18n
             success: "Thank you! Message successfully transmitted.",
             error: "Error while sending. Please try again."
           },
+          stats: {
+            since: "Since 2025",
+            impact: "30 lives",
+            country: "1 country",
+            transparency: "100% transparency" 
+          },
           footer: {
             international_label: "INTERNATIONAL NGO",
             ong_label: "FRENCH NGO",
             law_label: "1901 LAW",
-            quote: "“A child's smile, a village's light, a hand reached out to someone, is priceless.”",
+            quote: "Every action counts. Together, we deliver sustainable solutions to the communities that need them most.",
             contact_title: "CONTACT US",
             contact_locations: "France (Paris), Cameroon",
             contact_response: "Response within 48 business hours",
