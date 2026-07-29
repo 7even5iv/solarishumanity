@@ -92,28 +92,14 @@ const Hero: React.FC = () => {
                 <span className="bg-gradient-to-r from-blue-500 via-yellow-500 to-blue-500 bg-clip-text text-transparent animate-gradient bg-[length:200%_auto]">
                   {t('hero.title_part2')}
                 </span>
-                <span className="text-gray-800"> »</span>
+                <span className="text-gray-800"> » </span>
               </span>
             </h1>
 
             <p className={`text-gray-600 text-base sm:text-lg md:text-xl mb-6 sm:mb-8 max-w-xl mx-auto lg:mx-0 leading-relaxed px-4 sm:px-0 transition-all duration-700 delay-400 ${isVisible ? 'animate-fadeInUp' : 'opacity-0'}`}>
+              { t('hero.title_part3')} 
               {t('hero.subtitle')}
             </p>
-
-            {/* Témoignage */}
-            <div className={`mb-8 sm:mb-10 p-4 sm:p-5 bg-white/80 backdrop-blur-md rounded-2xl sm:rounded-3xl border border-blue-100 shadow-sm transition-all duration-700 delay-500 ${isVisible ? 'animate-fadeInUp' : 'opacity-0'} mx-4 sm:mx-0`}>
-              <div className="flex items-start gap-3 sm:gap-4">
-                <Star size={16} className="sm:w-[18px] sm:h-[18px] text-yellow-500 fill-yellow-500 shrink-0 mt-0.5 sm:mt-1" />
-                <div className="text-left">
-                  <p className="text-gray-600 text-xs sm:text-sm italic leading-relaxed line-clamp-3 sm:line-clamp-none">
-                    "{testimonials[activeTestimonial].text}"
-                  </p>
-                  <p className="text-[9px] sm:text-[10px] font-black text-blue-500 uppercase tracking-widest mt-2">
-                    — {testimonials[activeTestimonial].author}
-                  </p>
-                </div>
-              </div>
-            </div>
 
             <div className={`flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-3 sm:gap-4 transition-all duration-700 delay-600 ${isVisible ? 'animate-fadeInUp' : 'opacity-0'} px-4 sm:px-0`}>
               <Button size="lg" variant="primary" icon={<Heart className="sm:w-[18px] sm:h-[18px] fill-current" />} onClick={goToDonate} className="w-full sm:w-auto text-sm sm:text-base">
