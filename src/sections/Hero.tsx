@@ -97,7 +97,7 @@ const Hero: React.FC = () => {
             </h1>
 
             <p className={`text-gray-600 text-base sm:text-lg md:text-xl mb-6 sm:mb-8 max-w-xl mx-auto lg:mx-0 leading-relaxed px-4 sm:px-0 transition-all duration-700 delay-400 ${isVisible ? 'animate-fadeInUp' : 'opacity-0'}`}>
-              { t('hero.title_part3')} 
+              { t('hero.title_part3')}
               {t('hero.subtitle')}
             </p>
 
