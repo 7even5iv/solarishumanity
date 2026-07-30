@@ -413,7 +413,7 @@ const Home: React.FC = () => {
   }, []);
 
   const keyStats = useMemo(() => [
-    { icon: <Calendar />, value: t('stats.since'), label: t('about.tabs.history'), color: "text-blue-500" },
+    { icon: <Calendar />, value: t('stats.since'), label: t('about.tabs.histoire'), color: "text-blue-500" },
     { icon: <Users />, value: t('stats.impact'), label: t('about.stats.impact'), color: "text-blue-500" },
     { icon: <Globe />, value: t('stats.country'), label: t('about.stats.countries'), color: "text-blue-500" },
     { icon: <Shield />, value: t('stats.transparency'), label: t('about.stats.transparency'), color: "text-blue-500" },

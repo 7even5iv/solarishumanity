@@ -21,11 +21,22 @@ const Navbar: React.FC = memo(() => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [navbarHeight, setNavbarHeight] = useState(0);
+  const [isMobile, setIsMobile] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
 
   // Vérifier si on est sur la page d'accueil
   const isHomePage = location.pathname === '/';
+
+  // Détection mobile
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 640);
+    };
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   // Calculer et partager la hauteur de la navbar
   useEffect(() => {
@@ -109,8 +120,8 @@ const Navbar: React.FC = memo(() => {
 
       <nav
         className={`fixed w-full top-0 z-50 transition-all duration-500 ${scrolled
-            ? 'bg-white/60 backdrop-blur-2xl shadow-2xl py-2 border-b border-white/30'
-            : 'bg-white/40 backdrop-blur-xl shadow-lg py-3 md:py-4 border-b border-white/30'
+            ? 'bg-white/60 backdrop-blur-2xl shadow-2xl py-1.5 xs:py-2 border-b border-white/30'
+            : 'bg-white/40 backdrop-blur-xl shadow-lg py-2 xs:py-3 md:py-4 border-b border-white/30'
           }`}
         style={{
           boxShadow: '0 8px 32px rgba(0, 0, 0, 0.08)',
@@ -118,33 +129,33 @@ const Navbar: React.FC = memo(() => {
           WebkitBackdropFilter: 'blur(20px)',
         }}
       >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 lg:px-10">
+        <div className="max-w-7xl mx-auto px-3 xs:px-4 sm:px-6 md:px-8 lg:px-10">
           <div className="flex justify-between items-center">
             {/* LOGO - Avec flèche retour sur les pages internes */}
-            <div className="flex items-center gap-2 md:gap-3 flex-shrink-0">
+            <div className="flex items-center gap-1.5 xs:gap-2 md:gap-3 flex-shrink-0">
               {!isHomePage && (
                 <button
                   onClick={handleGoBack}
-                  className="p-2 rounded-lg hover:bg-white/40 text-gray-600 hover:text-blue-600 transition-all backdrop-blur-sm group border border-white/20"
+                  className="p-1.5 xs:p-2 rounded-lg hover:bg-white/40 text-gray-600 hover:text-blue-600 transition-all backdrop-blur-sm group border border-white/20"
                   aria-label="Retour"
                   title="Retour"
                 >
-                  <ArrowLeft size={20} className="group-hover:-translate-x-0.5 transition-transform" />
+                  <ArrowLeft size={isMobile ? 16 : 20} className="group-hover:-translate-x-0.5 transition-transform" />
                 </button>
               )}
-              <Link to="/" className="flex items-center gap-2 md:gap-3 group">
-                <div className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 rounded-xl bg-gradient-to-br from-blue-500 to-blue-600 p-0.5 shadow-lg group-hover:rotate-6 transition-transform">
-                  <div className="w-full h-full bg-white backdrop-blur-sm rounded-[10px] flex items-center justify-center overflow-hidden">
+              <Link to="/" className="flex items-center gap-1.5 xs:gap-2 md:gap-3 group">
+                <div className="w-7 h-7 xs:w-8 xs:h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 rounded-lg xs:rounded-xl bg-gradient-to-br from-blue-500 to-blue-600 p-0.5 shadow-lg group-hover:rotate-6 transition-transform">
+                  <div className="w-full h-full bg-white backdrop-blur-sm rounded-[8px] xs:rounded-[10px] flex items-center justify-center overflow-hidden">
                     <img
                       src="/logo-solaris.png"
                       alt="Solaris Logo"
-                      className="w-6 h-6 sm:w-8 sm:h-8 object-contain"
+                      className="w-5 h-5 xs:w-6 xs:h-6 sm:w-8 sm:h-8 object-contain"
                       loading="lazy"
                     />
                   </div>
                 </div>
                 <div className="flex flex-col">
-                  <span className="font-black text-xs sm:text-sm md:text-base lg:text-xl tracking-tighter uppercase bg-gradient-to-r from-blue-800 to-gray-700 bg-clip-text text-transparent">
+                  <span className="font-black text-[10px] xs:text-xs sm:text-sm md:text-base lg:text-xl tracking-tighter uppercase bg-gradient-to-r from-blue-800 to-gray-700 bg-clip-text text-transparent">
                     SOLARIS <span className="text-yellow-500">HUMANITY</span>
                   </span>
                 </div>
@@ -159,28 +170,29 @@ const Navbar: React.FC = memo(() => {
 
               <button
                 onClick={toggleLang}
-                className="ml-2 flex items-center gap-1.5 px-3 py-2 rounded-lg hover:bg-white/30 text-gray-600 hover:text-blue-600 transition-all font-black text-[10px] lg:text-xs tracking-widest border-l border-white/30 backdrop-blur-sm"
+                className="ml-2 flex items-center gap-1 xs:gap-1.5 px-2 xs:px-3 py-1.5 xs:py-2 rounded-lg hover:bg-white/30 text-gray-600 hover:text-blue-600 transition-all font-black text-[9px] xs:text-[10px] lg:text-xs tracking-widest border-l border-white/30 backdrop-blur-sm"
                 aria-label="Changer de langue"
               >
-                <Globe size={14} />
-                {i18n.language === 'fr' ? 'EN' : 'FR'}
+                <Globe size={isMobile ? 12 : 14} />
+                <span className="hidden xs:inline">{i18n.language === 'fr' ? 'EN' : 'FR'}</span>
               </button>
 
-              <div className="ml-4">
-                <Button size="sm" onClick={handleDonateClick} icon={<Heart size={14} className="fill-current" />}>
-                  {t('nav.donate')}
+              <div className="ml-3 xs:ml-4">
+                <Button size="sm" onClick={handleDonateClick} icon={<Heart size={isMobile ? 12 : 14} className="fill-current" />}>
+                  <span className="hidden xs:inline">{t('nav.donate')}</span>
+                  <span className="xs:hidden">♥</span>
                 </Button>
               </div>
             </div>
 
-            {/* BOUTON MENU HAMBURGER - Visible uniquement sur mobile et tablette */}
+            {/* BOUTON MENU HAMBURGER - Responsive */}
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="lg:hidden p-2 text-gray-600 hover:text-blue-600 transition-colors z-50 relative bg-white/30 backdrop-blur-md rounded-lg border border-white/30 shadow-lg hover:bg-white/50"
+              className="lg:hidden p-1.5 xs:p-2 text-gray-600 hover:text-blue-600 transition-colors z-50 relative bg-white/30 backdrop-blur-md rounded-lg border border-white/30 shadow-lg hover:bg-white/50"
               aria-label={isMenuOpen ? "Fermer le menu" : "Ouvrir le menu"}
               aria-expanded={isMenuOpen}
             >
-              {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
+              {isMenuOpen ? <X size={isMobile ? 20 : 24} /> : <Menu size={isMobile ? 20 : 24} />}
             </button>
           </div>
         </div>
@@ -195,43 +207,43 @@ const Navbar: React.FC = memo(() => {
               aria-hidden="true"
             />
 
-            {/* Panel Menu */}
-            <div className="lg:hidden fixed top-[calc(var(--navbar-height,72px)+0.5rem)] left-4 right-4 bg-white/80 backdrop-blur-2xl rounded-2xl shadow-2xl z-50 animate-slideInUp border border-white/30 overflow-hidden">
-              <div className="p-4 sm:p-6 space-y-3 sm:space-y-4 max-h-[calc(100vh-6rem)] overflow-y-auto">
-                {/* Language selector */}
+            {/* Panel Menu - Responsive */}
+            <div className="lg:hidden fixed top-[calc(var(--navbar-height,72px)+0.5rem)] left-3 xs:left-4 right-3 xs:right-4 bg-white/80 backdrop-blur-2xl rounded-xl xs:rounded-2xl shadow-2xl z-50 animate-slideInUp border border-white/30 overflow-hidden">
+              <div className="p-3 xs:p-4 sm:p-5 md:p-6 space-y-2.5 xs:space-y-3 sm:space-y-4 max-h-[calc(100vh-6rem)] overflow-y-auto">
+                {/* Language selector - Responsive */}
                 <button
                   onClick={toggleLang}
-                  className="w-full flex items-center justify-between p-4 bg-gradient-to-r from-blue-500/20 to-indigo-500/20 backdrop-blur-md rounded-xl text-blue-600 font-bold hover:from-blue-500/30 hover:to-indigo-500/30 transition-all border border-white/40 shadow-lg"
+                  className="w-full flex items-center justify-between p-3 xs:p-4 bg-gradient-to-r from-blue-500/20 to-indigo-500/20 backdrop-blur-md rounded-lg xs:rounded-xl text-blue-600 font-bold hover:from-blue-500/30 hover:to-indigo-500/30 transition-all border border-white/40 shadow-lg"
                 >
-                  <span className="flex items-center gap-2">
-                    <Globe size={18} />
-                    <span>{i18n.language === 'fr' ? 'Français' : 'English'}</span>
+                  <span className="flex items-center gap-1.5 xs:gap-2">
+                    <Globe size={isMobile ? 16 : 18} />
+                    <span className="text-xs xs:text-sm">{i18n.language === 'fr' ? 'Français' : 'English'}</span>
                   </span>
-                  <span className="text-sm bg-white/50 backdrop-blur-sm px-3 py-1 rounded-full shadow-sm border border-white/30">
-                    {i18n.language === 'fr' ? '🇬🇧 ENGLISH' : '🇫🇷 FRANÇAIS'}
+                  <span className="text-[10px] xs:text-xs bg-white/50 backdrop-blur-sm px-2 xs:px-3 py-1 rounded-full shadow-sm border border-white/30">
+                    {i18n.language === 'fr' ? '🇬🇧 EN' : '🇫🇷 FR'}
                   </span>
                 </button>
 
-                {/* Navigation Links */}
-                <div className="space-y-1">
+                {/* Navigation Links - Responsive */}
+                <div className="space-y-0.5 xs:space-y-1">
                   {navLinks.map((link) => (
                     <Link
                       key={link.href}
                       to={link.href}
-                      className="flex items-center justify-between p-4 text-base font-bold text-gray-800 hover:text-blue-600 hover:bg-blue-500/20 rounded-xl transition-all group backdrop-blur-sm border border-transparent hover:border-white/30"
+                      className="flex items-center justify-between p-3 xs:p-4 text-sm xs:text-base font-bold text-gray-800 hover:text-blue-600 hover:bg-blue-500/20 rounded-lg xs:rounded-xl transition-all group backdrop-blur-sm border border-transparent hover:border-white/30"
                       onClick={() => setIsMenuOpen(false)}
                     >
                       <span>{link.name}</span>
-                      <ChevronRight size={18} className="opacity-0 group-hover:opacity-100 transition-opacity text-blue-600" />
+                      <ChevronRight size={isMobile ? 16 : 18} className="opacity-0 group-hover:opacity-100 transition-opacity text-blue-600" />
                     </Link>
                   ))}
                 </div>
 
-                {/* Bouton Don */}
+                {/* Bouton Don - Responsive */}
                 <Button
-                  className="w-full py-4 mt-2 text-base font-bold shadow-xl bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 backdrop-blur-sm"
+                  className="w-full py-3 xs:py-3.5 sm:py-4 mt-2 text-sm xs:text-base font-bold shadow-xl bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 backdrop-blur-sm"
                   onClick={handleDonateClick}
-                  icon={<Heart size={18} className="fill-current" />}
+                  icon={<Heart size={isMobile ? 16 : 18} className="fill-current" />}
                 >
                   {t('nav.donate')}
                 </Button>
@@ -244,26 +256,26 @@ const Navbar: React.FC = memo(() => {
   );
 });
 
-// --- NAV LINK ITEM ---
+// --- NAV LINK ITEM - Responsive ---
 const NavLinkItem: React.FC<{ link: NavLink }> = memo(({ link }) => {
   const isActive = useActiveLink(link.href);
   return (
     <Link
       to={link.href}
-      className={`relative px-2 xl:px-3 py-2 text-[10px] xl:text-[11px] font-black tracking-widest transition-all duration-300 rounded-lg whitespace-nowrap backdrop-blur-sm ${isActive
+      className={`relative px-1.5 xs:px-2 xl:px-3 py-1.5 xs:py-2 text-[9px] xs:text-[10px] xl:text-[11px] font-black tracking-widest transition-all duration-300 rounded-lg whitespace-nowrap backdrop-blur-sm ${isActive
           ? 'text-blue-600 bg-blue-500/30 shadow-lg border border-blue-300/50'
           : 'text-gray-600 hover:text-blue-600 hover:bg-white/30 hover:shadow-md border border-transparent hover:border-white/30'
         }`}
     >
       {link.name.toUpperCase()}
       {isActive && (
-        <div className="absolute bottom-0 left-2 xl:left-3 right-2 xl:right-3 h-0.5 bg-gradient-to-r from-blue-400 to-blue-600 rounded-full shadow-sm" />
+        <div className="absolute bottom-0 left-1.5 xs:left-2 xl:left-3 right-1.5 xs:right-2 xl:right-3 h-0.5 bg-gradient-to-r from-blue-400 to-blue-600 rounded-full shadow-sm" />
       )}
     </Link>
   );
 });
 
-// ✅ Injection des styles globaux corrigée
+// ✅ Styles globaux
 if (typeof document !== 'undefined') {
   const styleId = 'navbar-styles';
   if (!document.getElementById(styleId)) {
@@ -305,6 +317,12 @@ if (typeof document !== 'undefined') {
       @media (max-width: 1023px) {
         .backdrop-blur-xl {
           backdrop-filter: blur(16px);
+        }
+      }
+
+      @media (max-width: 640px) {
+        .backdrop-blur-2xl {
+          backdrop-filter: blur(12px);
         }
       }
 

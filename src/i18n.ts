@@ -117,8 +117,8 @@ i18n
           about: {
             badge: "NOTRE HISTOIRE",
             badge_adn: "NOTRE ADN",
-            title: "Apporter la Lumière là où règne l'obscurité.",
-            description: "Fondée en 2025 par Mme Nelly NDOH NGUELET, Solaris Humanity est née d'une conviction simple : chaque vie mérite de l'espoir et de l'autonomie.",
+            title: "Apporter de l'espoir, créer des opportunités durables.",
+            description: "Fondée en 2025, Solaris Humanity est une association humanitaire qui agit directement sur le terrain au Cameroun. Nous transformons chaque don en actions concrètes dans les domaines de l'éducation, de la santé, de l'accès à l'eau et du développement des communautés, avec une transparence totale. ",
             stats: {
               foundation: "Depuis 2025 ",
               impact: "Vies impactées",
@@ -128,12 +128,12 @@ i18n
             tabs: {
               vision: "VISION",
               mission: "MISSION",
-              history: "HISTOIRE"
+              histoire: "HISTOIRE"
             },
-            vision_title: "Plus qu'une aide, un vecteur d'autonomie",
-            vision_text: "Notre vision est de créer un monde où chaque communauté isolée a accès à l'énergie, l'eau et l'éducation.",
-            quote: "Que la lumière brille dans le noir, à travers le sourire d'un enfant ou une naissance sécurisée.",
-            founder_label: "Notre Fondatrice",
+            vision_title: "Transformer chaque don en action concrète. ",
+            vision_text: "Notre vision est d'améliorer durablement la vie des communautés les plus vulnérables grâce à des actions concrètes dans les domaines de l'éducation, de la santé, de l'accès à l'eau potable et du développement local. ",
+            quote: "Chaque don doit devenir une action concrète, visible et durable pour les communautés que nous accompagnons. ",
+            founder_label: "Fondatrice",
             cta_contact: "NOUS CONTACTER"
           },
           missions: {
@@ -308,9 +308,9 @@ i18n
           },
           about: {
             badge: "OUR STORY",
-            badge_adn: "OUR DNA",
-            title: "Bringing Light where darkness reigns.",
-            description: "Founded in 2025 by Mrs. Nelly NDOH NGUELET, Solaris Humanity was born from a simple conviction: every life deserves hope and autonomy.",
+            badge_adn: "OUR IDENTITY",
+            title: "Bringing Hope, Creating Sustainable Opportunities. ",
+            description: "Founded in 2025, Solaris Humanity is a humanitarian organization working directly in the field in Cameroon. We turn every donation into concrete action through projects focused on education, healthcare, clean water and community development, while ensuring complete transparency. ",
             stats: {
               foundation: "Since 2025",
               impact: "Lives impacted",
@@ -320,12 +320,12 @@ i18n
             tabs: {
               vision: "VISION",
               mission: "MISSION",
-              history: "HISTORY"
+              histoire: "HISTORY"
             },
-            vision_title: "More than aid, a driver for autonomy",
-            vision_text: "Our vision is to create a world where every isolated community has access to energy, water, and education.",
-            quote: "Let light shine in the dark, through a child's smile or a safe birth.",
-            founder_label: "Our Founder",
+            vision_title: "Turning Every Donation into Concrete Action.",
+            vision_text: "Our vision is to sustainably improve the lives of vulnerable communities through concrete actions in education, healthcare, clean water and local development. ",
+            quote: "Every donation should become a concrete, visible and lasting action for the communities we support.",
+            founder_label: "Founder",
             cta_contact: "CONTACT US"
           },
           missions: {
