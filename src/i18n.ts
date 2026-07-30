@@ -68,11 +68,12 @@ i18n
             cta_contact: "CONTACTER L'ONG"
           },
             gallery: {
-            title: "L'impact de vos dons en images",
-            description: "Chaque moment documenté est une preuve de la transformation sur le terrain.",
+            title: "La Preuve de votre impact",
+            description: "Nos équipes sont présentes sur le terrain à chaque étape de nos projets. Chaque don est collecté, acheminé, distribué et documenté afin de garantir une transparence totale à nos donateurs.",
             loading: "Chargement de la médiathèque...",
             all: "TOUS",
-            section_title: "Galerie Photos",
+            photo_title: "Nombre de photos dynamiques",
+            section_title: "Nos actions sur le terrain",
             video_title: "Rapports Vidéos",
             video_label: "VIDÉO",
             categories: {
@@ -260,11 +261,12 @@ i18n
             cta_contact: "CONTACT THE NGO"
           },
             gallery: {
-            title: "Our Impact in Pictures",
-            description: "Every documented moment is proof of the transformation on the ground.",
+            title: "The Proof of Your Impact",
+            description: "Our teams are present in the field at every stage of our projects. Every donation is collected, transported, delivered and documented to ensure complete transparency for our donors. ",
             loading: "Loading media library...",
             all: "ALL",
-            section_title: "Photo Gallery",
+            photo_title: "Dynamic photo counter",
+            section_title: "Our Actions in the Field",
             video_title: "Video Reports",
             video_label: "VIDEO",
             categories: {
