@@ -11,7 +11,7 @@ import { client, urlFor } from '../lib/sanity';
 import {
   Droplets, HeartPulse, GraduationCap,
   Sparkles, Users, Globe, Shield, TrendingUp, Heart, Camera,
-  Calendar, ArrowRight, Mail, BookOpen, Clock, User, Tag, Eye
+  Calendar, ArrowRight, Mail, BookOpen, Clock, User, Tag, Eye, AlertCircle
 } from 'lucide-react';
 import { Badge } from '../components/Badge';
 
@@ -46,13 +46,34 @@ const BlogCard = ({ post, isFr, navigate }: { post: any, isFr: boolean, navigate
   const [isHovered, setIsHovered] = useState(false);
 
   const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
-    return date.toLocaleDateString(isFr ? 'fr-FR' : 'en-US', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric'
-    });
+    if (!dateString) return '';
+    try {
+      const date = new Date(dateString);
+      return date.toLocaleDateString(isFr ? 'fr-FR' : 'en-US', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+      });
+    } catch (error) {
+      return dateString;
+    }
   };
+
+  // Vérifier si l'image existe et générer l'URL
+  const getImageUrl = () => {
+    if (!post.mainImage) return null;
+    try {
+      return urlFor(post.mainImage).width(800).height(500).url();
+    } catch (error) {
+      console.error('Erreur génération URL image:', error);
+      return null;
+    }
+  };
+
+  const imageUrl = getImageUrl();
+  const title = isFr ? post.titleFr : post.titleEn;
+  const excerpt = isFr ? post.excerptFr : post.excerptEn;
+  const slug = post.slug?.current || post.slug;
 
   return (
     <motion.div
@@ -63,21 +84,33 @@ const BlogCard = ({ post, isFr, navigate }: { post: any, isFr: boolean, navigate
       className="group cursor-pointer h-full"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
-      onClick={() => navigate(`/Blog/${post.slug.current}`)}
+      onClick={() => slug && navigate(`/Blog/${slug}`)}
     >
       <Card variant="glass" className="h-full overflow-hidden hover:shadow-2xl transition-all duration-500 flex flex-col">
         {/* Image de l'article */}
         <div className="relative aspect-[16/10] overflow-hidden bg-gradient-to-br from-blue-50 to-indigo-50">
-          {post.mainImage ? (
+          {imageUrl ? (
             <img
-              src={urlFor(post.mainImage).width(800).height(500).url()}
-              alt={isFr ? post.titleFr : post.titleEn}
+              src={imageUrl}
+              alt={title || 'Article'}
               className={`w-full h-full object-cover transition-all duration-700 ${isHovered ? 'scale-110' : 'scale-100'
                 }`}
               loading="lazy"
+              onError={(e) => {
+                console.error('Erreur chargement image:', imageUrl);
+                e.currentTarget.style.display = 'none';
+                // Afficher le fallback
+                const parent = e.currentTarget.parentElement;
+                if (parent) {
+                  const fallback = document.createElement('div');
+                  fallback.className = 'w-full h-full flex items-center justify-center bg-gradient-to-br from-blue-100 to-indigo-100';
+                  fallback.innerHTML = `<svg class="w-16 h-16 text-blue-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>`;
+                  parent.appendChild(fallback);
+                }
+              }}
             />
           ) : (
-            <div className="w-full h-full flex items-center justify-center">
+            <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-blue-100 to-indigo-100">
               <BookOpen size={64} className="text-blue-300" />
             </div>
           )}
@@ -131,13 +164,15 @@ const BlogCard = ({ post, isFr, navigate }: { post: any, isFr: boolean, navigate
           {/* Titre */}
           <h3 className={`text-base xs:text-lg sm:text-xl font-black text-gray-900 mb-3 transition-colors line-clamp-2 uppercase tracking-tighter ${isHovered ? 'text-blue-600' : ''
             }`}>
-            {isFr ? post.titleFr : post.titleEn}
+            {title || 'Sans titre'}
           </h3>
 
           {/* Extrait */}
-          <p className="text-gray-500 text-xs xs:text-sm leading-relaxed mb-4 line-clamp-3 flex-grow">
-            {isFr ? post.excerptFr : post.excerptEn}
-          </p>
+          {excerpt && (
+            <p className="text-gray-500 text-xs xs:text-sm leading-relaxed mb-4 line-clamp-3 flex-grow">
+              {excerpt}
+            </p>
+          )}
 
           {/* Auteur et lien */}
           <div className="flex items-center justify-between border-t border-gray-100 pt-4 mt-auto">
@@ -145,7 +180,7 @@ const BlogCard = ({ post, isFr, navigate }: { post: any, isFr: boolean, navigate
               {post.authorImage ? (
                 <img
                   src={urlFor(post.authorImage).width(40).height(40).url()}
-                  alt={post.author}
+                  alt={post.author || 'Auteur'}
                   className="w-8 h-8 rounded-full object-cover border-2 border-blue-100"
                 />
               ) : (
@@ -187,6 +222,8 @@ const Home: React.FC = () => {
   const navigate = useNavigate();
   const [latestMedia, setLatestMedia] = useState<any[]>([]);
   const [latestPosts, setLatestPosts] = useState<any[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [isMobile, setIsMobile] = useState(false);
   const isFr = i18n.language.startsWith('fr');
 
@@ -204,31 +241,65 @@ const Home: React.FC = () => {
     window.scrollTo(0, 0);
 
     // Récupération des médias
-    client.fetch(`*[_type == "gallery"] | order(_createdAt desc) [0...4]`)
-      .then(data => setLatestMedia(data));
+    const fetchMedia = async () => {
+      try {
+        const data = await client.fetch(`*[_type == "gallery"] | order(_createdAt desc) [0...4]`);
+        setLatestMedia(data || []);
+      } catch (error) {
+        console.error('Erreur chargement galerie:', error);
+      }
+    };
 
-    // Récupération des articles de blog avec toutes les données nécessaires
-    client.fetch(`*[_type == "blog"] | order(publishedAt desc) [0...3] {
-      _id,
-      titleFr,
-      titleEn,
-      slug,
-      excerptFr,
-      excerptEn,
-      publishedAt,
-      author,
-      authorImage,
-      mainImage,
-      categories,
-      readingTime,
-      views,
-      "slug": slug.current
-    }`).then(data => {
-      console.log('Blog posts:', data); // Pour déboguer
-      setLatestPosts(data);
-    }).catch(error => {
-      console.error('Error fetching blog posts:', error);
-    });
+    // Récupération des articles de blog
+    const fetchBlogPosts = async () => {
+      try {
+        setIsLoading(true);
+        setError(null);
+
+        // Requête GROQ pour récupérer les articles
+        const query = `*[_type == "post"] | order(publishedAt desc) [0...3] {
+          _id,
+          titleFr,
+          titleEn,
+          "slug": slug.current,
+          excerptFr,
+          excerptEn,
+          publishedAt,
+          author,
+          authorImage,
+          mainImage,
+          categories,
+          readingTime,
+          views
+        }`;
+
+        console.log('🔍 Requête GROQ envoyée:', query);
+
+        const data = await client.fetch(query);
+        console.log('📦 Données reçues de Sanity:', data);
+
+        if (data && Array.isArray(data)) {
+          if (data.length > 0) {
+            setLatestPosts(data);
+            console.log(`✅ ${data.length} articles chargés avec succès`);
+          } else {
+            setError('Aucun article trouvé dans la base de données');
+            console.warn('⚠️ La requête a retourné un tableau vide');
+          }
+        } else {
+          setError('Format de données invalide');
+          console.error('❌ Données reçues au format incorrect:', data);
+        }
+      } catch (err) {
+        console.error('❌ Erreur détaillée lors du chargement des articles:', err);
+        setError(err instanceof Error ? err.message : 'Erreur inconnue');
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    // Exécuter les deux requêtes
+    Promise.all([fetchMedia(), fetchBlogPosts()]);
   }, []);
 
   const keyStats = useMemo(() => [
@@ -248,7 +319,7 @@ const Home: React.FC = () => {
     <main className="overflow-hidden bg-white">
       <Hero />
 
-      {/* SECTION STATISTIQUES - Responsive */}
+      {/* SECTION STATISTIQUES */}
       <section className="py-12 xs:py-16 sm:py-20 border-b border-gray-50">
         <div className="max-w-7xl mx-auto px-3 xs:px-4 sm:px-6">
           <motion.div
@@ -277,7 +348,7 @@ const Home: React.FC = () => {
         </div>
       </section>
 
-      {/* SECTION MISSIONS - Responsive */}
+      {/* SECTION MISSIONS */}
       <section className="py-16 xs:py-20 sm:py-24 md:py-28 lg:py-32 bg-gray-50/50">
         <div className="max-w-7xl mx-auto px-3 xs:px-4 sm:px-6">
           <SectionTitle
@@ -306,7 +377,7 @@ const Home: React.FC = () => {
         </div>
       </section>
 
-      {/* SECTION BLOG - Dynamique avec images */}
+      {/* SECTION BLOG - DYNAMIQUE AVEC SANITY */}
       <section className="py-16 xs:py-20 sm:py-24 md:py-28 lg:py-32 bg-white border-b border-gray-50">
         <div className="max-w-7xl mx-auto px-3 xs:px-4 sm:px-6">
           <SectionTitle
@@ -315,14 +386,48 @@ const Home: React.FC = () => {
             description={t('blog.description', { defaultValue: 'Découvrez nos dernières actualités et histoires inspirantes' })}
           />
 
-          {latestPosts.length === 0 ? (
-            // État de chargement ou aucun article
-            <div className="text-center py-12">
-              <div className="w-16 h-16 mx-auto mb-4 bg-blue-50 rounded-full flex items-center justify-center animate-pulse">
-                <BookOpen size={32} className="text-blue-400" />
+          {isLoading ? (
+            // État de chargement
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 xs:gap-7 sm:gap-8 mt-10 xs:mt-12 sm:mt-14 md:mt-16">
+              {[1, 2, 3].map((i) => (
+                <div key={i} className="animate-pulse">
+                  <div className="bg-gray-200 rounded-2xl h-48"></div>
+                  <div className="mt-4 space-y-3">
+                    <div className="h-4 bg-gray-200 rounded w-3/4"></div>
+                    <div className="h-4 bg-gray-200 rounded w-1/2"></div>
+                    <div className="h-4 bg-gray-200 rounded w-full"></div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : error ? (
+            // État d'erreur
+            <div className="text-center py-16 bg-red-50 rounded-2xl mt-10">
+              <AlertCircle size={48} className="text-red-400 mx-auto mb-4" />
+              <p className="text-red-600 font-medium mb-2">
+                {isFr ? 'Erreur de chargement des articles' : 'Error loading articles'}
+              </p>
+              <p className="text-red-400 text-sm">{error}</p>
+              <Button
+                variant="outline"
+                size="sm"
+                className="mt-4"
+                onClick={() => window.location.reload()}
+              >
+                {isFr ? 'Réessayer' : 'Retry'}
+              </Button>
+            </div>
+          ) : latestPosts.length === 0 ? (
+            // Aucun article
+            <div className="text-center py-16 bg-gray-50 rounded-2xl mt-10">
+              <div className="w-20 h-20 mx-auto mb-4 bg-blue-50 rounded-full flex items-center justify-center">
+                <BookOpen size={40} className="text-blue-400" />
               </div>
-              <p className="text-gray-400 text-sm">
+              <p className="text-gray-500 text-lg font-medium">
                 {isFr ? 'Aucun article disponible' : 'No articles available'}
+              </p>
+              <p className="text-gray-400 text-sm mt-2">
+                {isFr ? 'Revenez bientôt pour découvrir nos actualités' : 'Check back soon for our latest news'}
               </p>
             </div>
           ) : (
@@ -355,7 +460,7 @@ const Home: React.FC = () => {
         </div>
       </section>
 
-      {/* SECTION GALERIE - Responsive */}
+      {/* SECTION GALERIE */}
       <section className="py-16 xs:py-20 sm:py-24 md:py-28 lg:py-32 bg-white">
         <div className="max-w-7xl mx-auto px-3 xs:px-4 sm:px-6">
           <div className="grid lg:grid-cols-2 gap-8 xs:gap-10 sm:gap-12 md:gap-16 lg:gap-20 items-center">
@@ -407,7 +512,7 @@ const Home: React.FC = () => {
         </div>
       </section>
 
-      {/* SECTION ENGAGEMENT - Responsive */}
+      {/* SECTION ENGAGEMENT */}
       <section className="py-16 xs:py-20 sm:py-24 md:py-28 lg:py-32 bg-gradient-to-br from-blue-900 to-gray-900 text-white text-center relative overflow-hidden">
         <motion.div
           animate={{ scale: [1, 1.2, 1], opacity: [0.1, 0.2, 0.1] }}
