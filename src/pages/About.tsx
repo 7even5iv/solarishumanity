@@ -310,8 +310,9 @@ const About: React.FC = () => {
           </motion.div>
 
           <h2 className="text-2xl xs:text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-gray-900 mb-6 xs:mb-8 sm:mb-10 leading-tight tracking-tighter uppercase">
-            {i18n.language === 'fr' ? 'Prêt à faire briller ' : 'Ready to shine '}
-            <span className="text-blue-500">{i18n.language === 'fr' ? 'un rayon de soleil' : 'a ray of sunshine'}</span> ?
+            <span className="text-gray-900">
+              {t('about.section_title')}
+            </span>
           </h2>
 
           <div className="flex flex-col xs:flex-row justify-center gap-3 xs:gap-4 sm:gap-6">

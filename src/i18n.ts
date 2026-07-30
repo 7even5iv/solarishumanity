@@ -43,7 +43,7 @@ i18n
             testimonial_3_author: "Fatima, Bénin",
           },
           blog: {
-            title: "Actualités et histoires",
+            title: "ACTUALITES ET HISTOIRES",
             description: "Suivez nos avancées et les témoignages de ceux que nous accompagnons.",
             search_placeholder: "Rechercher un article...",
             no_results: "Aucun article trouvé pour cette recherche",
@@ -68,7 +68,7 @@ i18n
             cta_contact: "CONTACTER L'ONG"
           },
             gallery: {
-            title: "La Preuve de votre impact",
+            title: "LA PREUVE DE VOTRE IMPACT",
             description: "Nos équipes sont présentes sur le terrain à chaque étape de nos projets. Chaque don est collecté, acheminé, distribué et documenté afin de garantir une transparence totale à nos donateurs.",
             loading: "Chargement de la médiathèque...",
             all: "TOUS",
@@ -118,6 +118,7 @@ i18n
             badge: "NOTRE HISTOIRE",
             badge_adn: "NOTRE ADN",
             title: "Apporter de l'espoir, créer des opportunités durables.",
+            section_title: "Ensemble, faisons la différence.",
             description: "Fondée en 2025, Solaris Humanity est une association humanitaire qui agit directement sur le terrain au Cameroun. Nous transformons chaque don en actions concrètes dans les domaines de l'éducation, de la santé, de l'accès à l'eau et du développement des communautés, avec une transparence totale. ",
             stats: {
               foundation: "Depuis 2025 ",
@@ -138,7 +139,7 @@ i18n
           },
           missions: {
             badge: "NOS PROGRAMMES D'ACTION",
-            title: "Nos programmes d'action ",
+            title: "NOS PROGRAMMES D'ACTION",  
             description: "Des solutions durables pour un impact concret.",
             btn_support: "Soutenir cette mission",
             btn_all: "DÉCOUVRIR TOUTES NOS MISSIONS",
@@ -150,7 +151,7 @@ i18n
           },
           collection: {
             badge: "AGIR MAINTENANT",
-            title: "Comment nous soutenir ?",
+            title: "COMMENT SOUTENIR SOLARIS HUMANITY?",
             method_mobile: "Collecte Mobile",
             method_financial: "Collecte Financière",
             method_material: "Collecte Matérielle",
@@ -236,7 +237,7 @@ i18n
             testimonial_3_author: "Fatima, Benin"
           },
           blog: {
-            title: "News and Stories",
+            title: "NEWS AND STORIES",
             description: "Follow our progress and stories from the field.",
             search_placeholder: "Search articles...",
             no_results: "No articles found for this search",
@@ -261,7 +262,7 @@ i18n
             cta_contact: "CONTACT THE NGO"
           },
             gallery: {
-            title: "The Proof of Your Impact",
+            title: "THE PROOF OF YOUR IMPACT",
             description: "Our teams are present in the field at every stage of our projects. Every donation is collected, transported, delivered and documented to ensure complete transparency for our donors. ",
             loading: "Loading media library...",
             all: "ALL",
@@ -310,6 +311,7 @@ i18n
             badge: "OUR STORY",
             badge_adn: "OUR IDENTITY",
             title: "Bringing Hope, Creating Sustainable Opportunities. ",
+            section_title: "Together, Let's Make a Difference.",
             description: "Founded in 2025, Solaris Humanity is a humanitarian organization working directly in the field in Cameroon. We turn every donation into concrete action through projects focused on education, healthcare, clean water and community development, while ensuring complete transparency. ",
             stats: {
               foundation: "Since 2025",
@@ -330,7 +332,7 @@ i18n
           },
           missions: {
             badge: "OUR PROGRAMMES",
-            title: "Our Programmes ",
+            title: "OUR PROGRAMMES",
             description: "sustainable solutions. Lasting impact. ",
             btn_support: "Support this programme",
             btn_all: "DISCOVER ALL OUR MISSIONS",
@@ -341,8 +343,8 @@ i18n
             p4: { title: "Solidarity", desc: "very contribution helps support our field projects. " }
           },
           collection: {
-            badge: "ACT NOW",
-            title: "How to support us?",
+            badge: "Take Action Today",
+            title: "HOW CAN YOU SUPPORT SOLARIS HUMANITY?",
             method_mobile: "Mobile Collection (France)",
             method_financial: "Financial Donation",
             method_material: "Material Donation",
