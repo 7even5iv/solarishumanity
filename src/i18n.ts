@@ -107,10 +107,10 @@ i18n
             help_title: "Une question ?",
             help_text: "Notre équipe répond à vos questions sur les dons matériels ou financiers.",
             tiers: {
-              tier1: "Petit Geste",
-              tier2: "Solidarité",
-              tier3: "Impact",
-              tier4: "Lumière"
+              tier1: "Un premier geste",
+              tier2: "Éducation ",
+              tier3: "Santé ",
+              tier4: "Eau & Développement Communautaire ",
             }
           },
           about: {
@@ -141,11 +141,11 @@ i18n
             description: "Des solutions durables pour un impact concret.",
             btn_support: "Soutenir cette mission",
             btn_all: "DÉCOUVRIR TOUTES NOS MISSIONS",
-            solutions_label: "Nos Solutions",
-            p1: { title: "Accès à l'eau", desc: "Construction de puits, forages et solutions durables pour faciliter l'accès à l'eau potable. " },
-            p2: { title: "Soins Médicaux", desc: "Soutien aux centres de santé grâce à des équipements et du matériel essentiel. " },
-            p3: { title: "Éducation", desc: "Fournitures scolaires, bibliothèques et formations numériques." },
-            p4: { title: "Solidarité", desc: "Dons alimentaires, vestimentaires et aide aux seniors." }
+            solutions_label: "Nos actions",
+            p1: { title: "Accès à l'eau", desc: "articipe au financement de projets d'accès à l'eau potable et au développement durable des communautés. " },
+            p2: { title: "Soins Médicaux", desc: "Contribue à l'achat de matériel médical essentiel et au soutien des centres de santé " },
+            p3: { title: "Éducation", desc: "Finance des fournitures scolaires, du matériel éducatif et des ressources numériques pour les enfants." },
+            p4: { title: "Solidarité", desc: "Chaque contribution compte et permet de soutenir nos actions sur le terrain. " }
           },
           collection: {
             badge: "AGIR MAINTENANT",
@@ -160,9 +160,9 @@ i18n
             material_desc: "Nous acheminons votre matériel vers nos centres de santé.",
             material_items: ["Matériel médical", "Mobilier & Équipement", "État neuf / Bon état"],
             btn_participate: "JE PARTICIPE",
-            express_title: "Faites un don en 1 minute",
-            btn_donate: "DONNER {{amount}}€ MAINTENANT",
-            tax_info: "66% de réduction d'impôt • PAIEMENT 100% SÉCURISÉ",
+            express_title: "Soutenez nos actions dès aujourd'hui",
+            btn_donate: "FAIRE UN DON DE {{amount}}€",
+            tax_info: "66% de réduction d'impôt (France) • DON 100% SÉCURISÉ",
             iban_label: "IBAN DE L'ASSOCIATION",
             transparency_title: "Transparence Totale",
             transparency_text: "« Vous donnez, nous vous montrons où brille votre lumière »"
@@ -298,10 +298,10 @@ i18n
             help_title: "Any questions?",
             help_text: "Our team answers your questions about material or financial donations.",
             tiers: {
-              tier1: "Small Gesture",
-              tier2: "Solidarity",
-              tier3: "Impact",
-              tier4: "Light"
+              tier1: "A First Step ",
+              tier2: "Education ",
+              tier3: "Healthcare",
+              tier4: "Water & Community Development ",
             }
           },
           about: {
@@ -330,13 +330,13 @@ i18n
             badge: "OUR PROGRAMMES",
             title: "Our Programmes ",
             description: "sustainable solutions. Lasting impact. ",
-            btn_support: "Support this mission",
+            btn_support: "Support this programme",
             btn_all: "DISCOVER ALL OUR MISSIONS",
-            solutions_label: "Our Solutions",
-            p1: { title: "Water Access", desc: "Construction of wells, boreholes and sustainable clean water solutions to improve access to safe drinking water. " },
-            p2: { title: "Medical Care", desc: "upporting healthcare facilities with essential equipment and medical supplies. " },
-            p3: { title: "Education", desc: "School supplies, libraries, and digital training." },
-            p4: { title: "Solidarity", desc: "Food and clothing donations, and support for seniors." }
+            solutions_label: "Our actions",
+            p1: { title: "Water Access", desc: "Supports clean water projects and sustainable community development. " },
+            p2: { title: "Medical Care", desc: "Helps provide essential medical equipment and support to partner healthcare centre." },
+            p3: { title: "Education", desc: "Provides school supplies, educational materials and digital learning resources for children. " },
+            p4: { title: "Solidarity", desc: "very contribution helps support our field projects. " }
           },
           collection: {
             badge: "ACT NOW",
@@ -351,9 +351,9 @@ i18n
             material_desc: "We transport your equipment to our health centers.",
             material_items: ["Medical equipment", "Furniture & Equipment", "New or good condition"],
             btn_participate: "I PARTICIPATE",
-            express_title: "Donate in just a few clicks",
-            btn_donate: "DONATE {{amount}}€ NOW",
-            tax_info: "66% Tax deduction (France) • 100% Secure Payment",
+            express_title: "Support Our Mission Today ",
+            btn_donate: "DONATE {{amount}}€",
+            tax_info: "66% Tax deduction (France) • 100% Secure Donation",
             iban_label: "ASSOCIATION IBAN",
             transparency_title: "Total Transparency",
             transparency_text: "“You give, we show you where your light shines”",
