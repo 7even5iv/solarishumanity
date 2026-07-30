@@ -14,11 +14,20 @@ const BlogPostDetail: React.FC = () => {
     const navigate = useNavigate();
     const [post, setPost] = useState<any>(null);
     const [isLoading, setIsLoading] = useState(true);
+    const [isMobile, setIsMobile] = useState(false);
 
-    // Detect current language
+    // Détection mobile
+    useEffect(() => {
+        const checkMobile = () => {
+            setIsMobile(window.innerWidth < 640);
+        };
+        checkMobile();
+        window.addEventListener('resize', checkMobile);
+        return () => window.removeEventListener('resize', checkMobile);
+    }, []);
+
     const isFr = i18n.language.startsWith('fr');
 
-    // Fetch post data when slug changes
     useEffect(() => {
         if (!slug) {
             setIsLoading(false);
@@ -27,7 +36,6 @@ const BlogPostDetail: React.FC = () => {
 
         setIsLoading(true);
 
-        // Query retrieves ALL bilingual fields
         const query = `*[_type == "post" && slug.current == $slug][0]{
             titleFr, 
             titleEn,
@@ -52,16 +60,12 @@ const BlogPostDetail: React.FC = () => {
         window.scrollTo(0, 0);
     }, [slug]);
 
-    // Re-fetch or update when language changes
     useEffect(() => {
-        // If we have a post, just re-render with new language selection
-        // The useMemo hooks will handle content selection automatically
         if (post) {
             setIsLoading(false);
         }
     }, [i18n.language, post]);
 
-    // Content selection logic with fallback to French if English is empty
     const displayTitle = useMemo(() => {
         if (!post) return "";
         if (isFr) return post.titleFr;
@@ -74,91 +78,98 @@ const BlogPostDetail: React.FC = () => {
         return post.bodyEn || post.bodyFr;
     }, [post, isFr]);
 
-    // Loading state
     if (isLoading) return (
-        <div className="min-h-screen flex items-center justify-center">
+        <div className="min-h-screen flex items-center justify-center px-4">
             <div className="flex flex-col items-center gap-4">
-                <div className="w-12 h-12 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
-                <p className="font-black text-blue-500 uppercase tracking-widest text-[10px]">{t('contact.sending')}</p>
+                <div className="w-10 xs:w-12 h-10 xs:h-12 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+                <p className="font-black text-blue-500 uppercase tracking-widest text-[8px] xs:text-[10px]">{t('contact.sending')}</p>
             </div>
         </div>
     );
 
-    // No post found
     if (!post) return (
-        <div className="min-h-screen flex flex-col items-center justify-center">
-            <p className="text-xl font-black text-gray-900 mb-6 uppercase tracking-tighter">{t('blog.no_results')}</p>
+        <div className="min-h-screen flex flex-col items-center justify-center px-4">
+            <p className="text-lg xs:text-xl font-black text-gray-900 mb-4 xs:mb-6 uppercase tracking-tighter text-center">
+                {t('blog.no_results')}
+            </p>
             <Link to="/Blog">
-                <Button variant="primary">{t('nav.blog')}</Button>
+                <Button variant="primary" className="text-sm xs:text-base">
+                    {t('nav.blog')}
+                </Button>
             </Link>
         </div>
     );
 
     return (
-        <main className="pt-32 pb-20 bg-white">
-            <div className="max-w-4xl mx-auto px-4">
-                {/* HEADER */}
-                <header className="mb-12">
-                    <Badge variant="blue" className="mb-6 uppercase">
+        <main className="pt-20 xs:pt-24 sm:pt-28 md:pt-32 pb-12 xs:pb-16 sm:pb-20 bg-white">
+            <div className="max-w-4xl mx-auto px-3 xs:px-4 sm:px-6">
+
+                {/* HEADER - Responsive */}
+                <header className="mb-8 xs:mb-10 sm:mb-12">
+                    <Badge variant="blue" className="mb-4 xs:mb-5 sm:mb-6 uppercase text-[8px] xs:text-[10px] sm:text-xs">
                         {post.category || t('blog.default_category') || "Action"}
                     </Badge>
-                    <h1 className="text-4xl md:text-6xl font-black text-gray-900 leading-tight mb-8 tracking-tighter uppercase">
+                    <h1 className="text-2xl xs:text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-gray-900 leading-tight mb-4 xs:mb-6 sm:mb-8 tracking-tighter uppercase">
                         {displayTitle}
                     </h1>
 
-                    <div className="flex flex-wrap items-center gap-6 py-6 border-y border-gray-100 text-gray-500 text-[11px] font-black uppercase tracking-widest">
-                        <div className="flex items-center gap-2">
-                            <Calendar size={16} className="text-blue-500" />
+                    {/* Métadonnées - Responsive */}
+                    <div className="flex flex-wrap items-center gap-3 xs:gap-4 sm:gap-6 py-4 xs:py-5 sm:py-6 border-y border-gray-100 text-gray-500 text-[9px] xs:text-[10px] sm:text-[11px] font-black uppercase tracking-widest">
+                        <div className="flex items-center gap-1.5 xs:gap-2">
+                            <Calendar size={isMobile ? 14 : 16} className="text-blue-500" />
                             {new Date(post.publishedAt).toLocaleDateString(isFr ? 'fr-FR' : 'en-US', {
                                 day: 'numeric',
                                 month: 'long',
                                 year: 'numeric'
                             })}
                         </div>
-                        <div className="flex items-center gap-2">
-                            <User size={16} className="text-blue-500" />
+                        <div className="flex items-center gap-1.5 xs:gap-2">
+                            <User size={isMobile ? 14 : 16} className="text-blue-500" />
                             {post.authorName || t('blog.author_label')}
                         </div>
-                        <div className="flex items-center gap-2">
-                            <Clock size={16} className="text-blue-500" />
+                        <div className="flex items-center gap-1.5 xs:gap-2">
+                            <Clock size={isMobile ? 14 : 16} className="text-blue-500" />
                             {t('blog.read_time', { count: 5 })}
                         </div>
                     </div>
                 </header>
 
-                {/* IMAGE */}
+                {/* IMAGE - Responsive */}
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className="relative rounded-[2.5rem] overflow-hidden shadow-2xl mb-16 aspect-video bg-gray-100 border border-gray-100"
+                    className="relative rounded-2xl xs:rounded-3xl sm:rounded-[2.5rem] overflow-hidden shadow-2xl mb-10 xs:mb-12 sm:mb-14 md:mb-16 aspect-video bg-gray-100 border border-gray-100"
                 >
                     {post.mainImage && (
                         <img
                             src={urlFor(post.mainImage).width(1200).url()}
                             alt={displayTitle}
                             className="w-full h-full object-cover"
+                            loading="lazy"
                         />
                     )}
                 </motion.div>
 
-                {/* DYNAMIC CONTENT (PortableText) */}
-                <article className="prose prose-lg prose-blue max-w-none text-gray-600 leading-relaxed font-medium">
+                {/* DYNAMIC CONTENT - Responsive */}
+                <article className="prose prose-base xs:prose-lg prose-blue max-w-none text-gray-600 leading-relaxed font-medium">
                     {displayBody && <PortableText value={displayBody} />}
                 </article>
 
-                {/* ARTICLE FOOTER */}
-                <footer className="mt-20 pt-10 border-t border-gray-100 flex flex-col md:flex-row items-center justify-between gap-8">
+                {/* ARTICLE FOOTER - Responsive */}
+                <footer className="mt-14 xs:mt-16 sm:mt-18 md:mt-20 pt-6 xs:pt-8 sm:pt-10 border-t border-gray-100 flex flex-col md:flex-row items-center justify-between gap-4 xs:gap-6 sm:gap-8">
                     <div className="text-center md:text-left">
-                        <h4 className="font-black text-gray-900 uppercase text-xs tracking-widest mb-2">
+                        <h4 className="font-black text-gray-900 uppercase text-[10px] xs:text-xs tracking-widest mb-1 xs:mb-2">
                             {t('blog.support_title')}
                         </h4>
-                        <p className="text-gray-500 text-sm italic">{t('footer.quote')}</p>
+                        <p className="text-gray-500 text-xs xs:text-sm italic max-w-[200px] xs:max-w-[250px] sm:max-w-none">
+                            {t('footer.quote')}
+                        </p>
                     </div>
-                    <div className="flex gap-4">
+                    <div className="flex flex-wrap gap-2 xs:gap-3 sm:gap-4 justify-center">
                         <Button
                             variant="outline"
                             size="sm"
-                            icon={<Share2 size={16} />}
+                            icon={<Share2 size={isMobile ? 14 : 16} />}
                             onClick={() => {
                                 if (navigator.share) {
                                     navigator.share({
@@ -166,18 +177,19 @@ const BlogPostDetail: React.FC = () => {
                                         url: window.location.href
                                     });
                                 } else {
-                                    // Fallback: copy to clipboard
                                     navigator.clipboard?.writeText(window.location.href);
                                 }
                             }}
+                            className="text-xs xs:text-sm px-3 xs:px-4 py-1.5 xs:py-2"
                         >
                             {t('blog.share')}
                         </Button>
                         <Button
                             variant="primary"
                             size="sm"
-                            icon={<Heart size={16} className="fill-current" />}
+                            icon={<Heart size={isMobile ? 14 : 16} className="fill-current" />}
                             onClick={() => navigate('/Donate')}
+                            className="text-xs xs:text-sm px-3 xs:px-4 py-1.5 xs:py-2"
                         >
                             {t('nav.donate')}
                         </Button>
