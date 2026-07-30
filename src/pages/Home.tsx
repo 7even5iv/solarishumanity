@@ -11,7 +11,7 @@ import { client, urlFor } from '../lib/sanity';
 import {
   Droplets, HeartPulse, GraduationCap,
   Sparkles, Users, Globe, Shield, TrendingUp, Heart, Camera,
-  Calendar, ArrowRight, Mail
+  Calendar, ArrowRight, Mail, BookOpen, Clock, User, Tag, Eye
 } from 'lucide-react';
 import { Badge } from '../components/Badge';
 
@@ -41,10 +41,152 @@ const itemVariants = {
   visible: { opacity: 1, y: 0, transition: { duration: 0.6 } }
 };
 
+// --- COMPOSANT CARD BLOG ---
+const BlogCard = ({ post, isFr, navigate }: { post: any, isFr: boolean, navigate: any }) => {
+  const [isHovered, setIsHovered] = useState(false);
+
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString(isFr ? 'fr-FR' : 'en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    });
+  };
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 30 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.6 }}
+      viewport={{ once: true }}
+      className="group cursor-pointer h-full"
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+      onClick={() => navigate(`/Blog/${post.slug.current}`)}
+    >
+      <Card variant="glass" className="h-full overflow-hidden hover:shadow-2xl transition-all duration-500 flex flex-col">
+        {/* Image de l'article */}
+        <div className="relative aspect-[16/10] overflow-hidden bg-gradient-to-br from-blue-50 to-indigo-50">
+          {post.mainImage ? (
+            <img
+              src={urlFor(post.mainImage).width(800).height(500).url()}
+              alt={isFr ? post.titleFr : post.titleEn}
+              className={`w-full h-full object-cover transition-all duration-700 ${isHovered ? 'scale-110' : 'scale-100'
+                }`}
+              loading="lazy"
+            />
+          ) : (
+            <div className="w-full h-full flex items-center justify-center">
+              <BookOpen size={64} className="text-blue-300" />
+            </div>
+          )}
+
+          {/* Overlay gradient */}
+          <div className={`absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent transition-opacity duration-500 ${isHovered ? 'opacity-100' : 'opacity-0'
+            }`} />
+
+          {/* Badge catégorie */}
+          {post.categories && post.categories.length > 0 && (
+            <div className="absolute top-4 left-4 flex flex-wrap gap-2">
+              {post.categories.slice(0, 2).map((category: string, idx: number) => (
+                <Badge key={idx} variant="blue" className="text-[8px] xs:text-[9px] font-bold shadow-lg backdrop-blur-sm bg-blue-600/90">
+                  <Tag size={10} className="inline mr-1" />
+                  {category}
+                </Badge>
+              ))}
+              {post.categories.length > 2 && (
+                <Badge variant="gray" className="text-[8px] xs:text-[9px] font-bold shadow-lg backdrop-blur-sm bg-gray-800/90">
+                  +{post.categories.length - 2}
+                </Badge>
+              )}
+            </div>
+          )}
+
+          {/* Temps de lecture sur l'image */}
+          {post.readingTime && (
+            <div className="absolute bottom-4 right-4 bg-black/70 backdrop-blur-sm text-white px-3 py-1.5 rounded-full text-[10px] font-bold flex items-center gap-1.5">
+              <Clock size={12} />
+              {post.readingTime} min
+            </div>
+          )}
+        </div>
+
+        {/* Contenu */}
+        <div className="p-5 xs:p-6 sm:p-7 flex flex-col flex-grow">
+          {/* Métadonnées */}
+          <div className="flex items-center justify-between text-gray-400 text-[10px] xs:text-[11px] font-medium mb-3">
+            <span className="flex items-center gap-1.5">
+              <Calendar size={14} className="text-blue-400" />
+              {formatDate(post.publishedAt)}
+            </span>
+            {post.views && (
+              <span className="flex items-center gap-1.5">
+                <Eye size={14} className="text-blue-400" />
+                {post.views}
+              </span>
+            )}
+          </div>
+
+          {/* Titre */}
+          <h3 className={`text-base xs:text-lg sm:text-xl font-black text-gray-900 mb-3 transition-colors line-clamp-2 uppercase tracking-tighter ${isHovered ? 'text-blue-600' : ''
+            }`}>
+            {isFr ? post.titleFr : post.titleEn}
+          </h3>
+
+          {/* Extrait */}
+          <p className="text-gray-500 text-xs xs:text-sm leading-relaxed mb-4 line-clamp-3 flex-grow">
+            {isFr ? post.excerptFr : post.excerptEn}
+          </p>
+
+          {/* Auteur et lien */}
+          <div className="flex items-center justify-between border-t border-gray-100 pt-4 mt-auto">
+            <div className="flex items-center gap-2.5">
+              {post.authorImage ? (
+                <img
+                  src={urlFor(post.authorImage).width(40).height(40).url()}
+                  alt={post.author}
+                  className="w-8 h-8 rounded-full object-cover border-2 border-blue-100"
+                />
+              ) : (
+                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center text-white font-bold text-sm">
+                  {post.author ? post.author.charAt(0).toUpperCase() : 'E'}
+                </div>
+              )}
+              <span className="text-gray-600 text-[10px] xs:text-[11px] font-medium">
+                {post.author || 'Équipe Eau Pure'}
+              </span>
+            </div>
+
+            <motion.div
+              initial={{ x: 0 }}
+              animate={{ x: isHovered ? 5 : 0 }}
+              transition={{ duration: 0.3 }}
+            >
+              <Button
+                variant="ghost"
+                size="sm"
+                className="text-blue-600 hover:text-blue-700 p-0 hover:bg-transparent group"
+                icon={<ArrowRight size={16} className={`transition-transform duration-300 ${isHovered ? 'translate-x-1' : ''
+                  }`} />}
+              >
+                <span className="text-[10px] xs:text-[11px] font-bold">
+                  {isFr ? 'Lire' : 'Read'}
+                </span>
+              </Button>
+            </motion.div>
+          </div>
+        </div>
+      </Card>
+    </motion.div>
+  );
+};
+
 const Home: React.FC = () => {
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
   const [latestMedia, setLatestMedia] = useState<any[]>([]);
+  const [latestPosts, setLatestPosts] = useState<any[]>([]);
   const [isMobile, setIsMobile] = useState(false);
   const isFr = i18n.language.startsWith('fr');
 
@@ -60,8 +202,33 @@ const Home: React.FC = () => {
 
   useEffect(() => {
     window.scrollTo(0, 0);
+
+    // Récupération des médias
     client.fetch(`*[_type == "gallery"] | order(_createdAt desc) [0...4]`)
       .then(data => setLatestMedia(data));
+
+    // Récupération des articles de blog avec toutes les données nécessaires
+    client.fetch(`*[_type == "blog"] | order(publishedAt desc) [0...3] {
+      _id,
+      titleFr,
+      titleEn,
+      slug,
+      excerptFr,
+      excerptEn,
+      publishedAt,
+      author,
+      authorImage,
+      mainImage,
+      categories,
+      readingTime,
+      views,
+      "slug": slug.current
+    }`).then(data => {
+      console.log('Blog posts:', data); // Pour déboguer
+      setLatestPosts(data);
+    }).catch(error => {
+      console.error('Error fetching blog posts:', error);
+    });
   }, []);
 
   const keyStats = useMemo(() => [
@@ -136,6 +303,55 @@ const Home: React.FC = () => {
               </Card>
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* SECTION BLOG - Dynamique avec images */}
+      <section className="py-16 xs:py-20 sm:py-24 md:py-28 lg:py-32 bg-white border-b border-gray-50">
+        <div className="max-w-7xl mx-auto px-3 xs:px-4 sm:px-6">
+          <SectionTitle
+            subtitle={t('blog.badge', { defaultValue: 'Actualités' })}
+            title={t('blog.title', { defaultValue: 'Derniers Articles' })}
+            description={t('blog.description', { defaultValue: 'Découvrez nos dernières actualités et histoires inspirantes' })}
+          />
+
+          {latestPosts.length === 0 ? (
+            // État de chargement ou aucun article
+            <div className="text-center py-12">
+              <div className="w-16 h-16 mx-auto mb-4 bg-blue-50 rounded-full flex items-center justify-center animate-pulse">
+                <BookOpen size={32} className="text-blue-400" />
+              </div>
+              <p className="text-gray-400 text-sm">
+                {isFr ? 'Aucun article disponible' : 'No articles available'}
+              </p>
+            </div>
+          ) : (
+            <>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 xs:gap-7 sm:gap-8 mt-10 xs:mt-12 sm:mt-14 md:mt-16">
+                {latestPosts.map((post) => (
+                  <BlogCard
+                    key={post._id}
+                    post={post}
+                    isFr={isFr}
+                    navigate={navigate}
+                  />
+                ))}
+              </div>
+
+              {/* Bouton Voir tous les articles */}
+              <div className="text-center mt-12 xs:mt-14 sm:mt-16">
+                <Button
+                  variant="outline"
+                  size="lg"
+                  onClick={() => navigate('/Blog')}
+                  icon={<BookOpen size={isMobile ? 16 : 20} />}
+                  className="px-8 xs:px-10 sm:px-12 hover:scale-105 transition-transform"
+                >
+                  {t('blog.view_all', { defaultValue: 'Voir tous les articles' })}
+                </Button>
+              </div>
+            </>
+          )}
         </div>
       </section>
 
