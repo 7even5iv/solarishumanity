@@ -34,15 +34,15 @@ const Contact: React.FC = () => {
     {
       icon: <Mail size={24} />,
       title: t('contact.email_label'),
-      content: "contact@solarishumanity.fr",
-      link: "mailto:contact@solarishumanity.fr",
+      content: "contact@solarishumanity.org",
+      link: "mailto:contact@solarishumanity.org",
       gradient: "from-blue-500 to-blue-600"
     },
     {
       icon: <Phone size={24} />,
       title: t('footer.contact_title'), // Réutilisation d'une clé existante
-      content: "+33 6 12 34 56 78",
-      link: "tel:+33612345678",
+      content: "+33 6 95 13 75 11",
+      link: "tel:+33695137511",
       gradient: "from-yellow-500 to-yellow-600"
     },
     {
@@ -55,7 +55,7 @@ const Contact: React.FC = () => {
       icon: <Globe size={24} />,
       title: "Web",
       content: "www.solarishumanity.fr",
-      link: "https://www.solarishumanity.fr",
+      link: "https://www.solarishumanity.org",
       gradient: "from-yellow-500 to-amber-600"
     }
   ], [t]);
