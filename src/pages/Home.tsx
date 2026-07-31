@@ -1191,7 +1191,7 @@ const Home: React.FC = () => {
                   <Button
                     variant="outline"
                     size="lg"
-                    className="w-full max-w-[220px] text-xs xs:text-sm sm:text-base border-white/50 text-white hover:bg-white/20 hover:border-white bg-white/10 backdrop-blur-sm font-bold uppercase tracking-wider py-3"
+                    className="w-full max-w-[220px] text-xs xs:text-sm sm:text-base border-white/50 text-white hover:bg-yellow-400 hover:border-white bg-white/10 backdrop-blur-sm font-bold uppercase tracking-wider py-3"
                     onClick={() => navigate('/Missions')}
                   >
                     {t('missions.btn_support')}
