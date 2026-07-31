@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Sun, Heart, Sparkles, Play, Shield, Star } from 'lucide-react';
+import { Sun, Heart, Sparkles, Play, Shield, Star, Quote } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { Button } from '../components/Button';
 import { Badge } from '../components/Badge';
 import { useNavigate } from 'react-router-dom';
+import { motion, AnimatePresence } from 'framer-motion';
 
 const Hero: React.FC = () => {
   const { t, i18n } = useTranslation();
@@ -71,8 +72,8 @@ const Hero: React.FC = () => {
     >
       {/* Éléments décoratifs de fond - Responsive */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-0 right-0 -translate-y-1/4 translate-x-1/4 w-[250px] xs:w-[350px] sm:w-[500px] md:w-[700px] lg:w-[800px] h-[250px] xs:h-[350px] sm:h-[500px] md:h-[700px] lg:h-[800px] bg-gradient-to-br from-blue-400/20 via-blue-300/10 to-transparent rounded-full blur-2xl sm:blur-3xl animate-pulse-slow" />
-        <div className="absolute bottom-0 left-0 translate-y-1/4 -translate-x-1/4 w-[200px] xs:w-[300px] sm:w-[400px] md:w-[550px] lg:w-[600px] h-[200px] xs:h-[300px] sm:h-[400px] md:h-[550px] lg:h-[600px] bg-gradient-to-tr from-blue-500/10 via-transparent to-transparent rounded-full blur-2xl sm:blur-3xl animate-pulse-slow animation-delay-1000" />
+        <div className="absolute top-0 right-0 -translate-y-1/4 translate-x-1/4 w-[200px] xs:w-[300px] sm:w-[450px] md:w-[650px] lg:w-[800px] h-[200px] xs:h-[300px] sm:h-[450px] md:h-[650px] lg:h-[800px] bg-gradient-to-br from-blue-400/20 via-blue-300/10 to-transparent rounded-full blur-2xl sm:blur-3xl animate-pulse-slow" />
+        <div className="absolute bottom-0 left-0 translate-y-1/4 -translate-x-1/4 w-[180px] xs:w-[250px] sm:w-[350px] md:w-[500px] lg:w-[600px] h-[180px] xs:h-[250px] sm:h-[350px] md:h-[500px] lg:h-[600px] bg-gradient-to-tr from-blue-500/10 via-transparent to-transparent rounded-full blur-2xl sm:blur-3xl animate-pulse-slow animation-delay-1000" />
       </div>
 
       <div className="max-w-7xl mx-auto px-3 xs:px-4 sm:px-6 lg:px-8 w-full relative z-10">
@@ -125,6 +126,45 @@ const Hero: React.FC = () => {
                 {t('hero.cta_missions')}
               </Button>
             </div>
+
+            {/* TÉMOIGNAGES - Ajouté */}
+            <div className={`mt-8 xs:mt-10 sm:mt-12 transition-all duration-700 delay-800 ${isVisible ? 'animate-fadeInUp' : 'opacity-0'}`}>
+              <div className="bg-gray-50/50 backdrop-blur-sm rounded-2xl xs:rounded-3xl p-4 xs:p-5 sm:p-6 border border-gray-100 shadow-sm">
+                <div className="flex items-start gap-2 xs:gap-3">
+                  <Quote className="text-blue-500 flex-shrink-0" size={isMobile ? 16 : 20} />
+                  <div className="flex-1 min-w-0">
+                    <AnimatePresence mode="wait">
+                      <motion.p
+                        key={activeTestimonial}
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -10 }}
+                        transition={{ duration: 0.5 }}
+                        className="text-gray-700 text-xs xs:text-sm sm:text-base italic leading-relaxed"
+                      >
+                        "{testimonials[activeTestimonial]?.text}"
+                      </motion.p>
+                    </AnimatePresence>
+                    <p className="text-[8px] xs:text-[9px] sm:text-[10px] font-black text-blue-600 uppercase tracking-widest mt-1 xs:mt-2">
+                      — {testimonials[activeTestimonial]?.author}
+                    </p>
+                    <div className="flex gap-1.5 xs:gap-2 mt-2 xs:mt-3">
+                      {testimonials.map((_, idx) => (
+                        <button
+                          key={idx}
+                          onClick={() => setActiveTestimonial(idx)}
+                          className={`h-1.5 xs:h-2 rounded-full transition-all duration-300 ${idx === activeTestimonial
+                              ? 'w-6 xs:w-8 bg-blue-600'
+                              : 'w-1.5 xs:w-2 bg-gray-300 hover:bg-gray-400'
+                            }`}
+                          aria-label={`Témoignage ${idx + 1}`}
+                        />
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
 
           {/* IMAGE - DROITE - Responsive */}
@@ -156,6 +196,76 @@ const Hero: React.FC = () => {
           </div>
         </div>
       </div>
+
+      {/* Ajout des styles globaux si nécessaire */}
+      <style>{`
+        @keyframes fadeInUp {
+          from {
+            opacity: 0;
+            transform: translateY(30px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+
+        @keyframes fadeInRight {
+          from {
+            opacity: 0;
+            transform: translateX(30px);
+          }
+          to {
+            opacity: 1;
+            transform: translateX(0);
+          }
+        }
+
+        @keyframes float {
+          0%, 100% { transform: translateY(0px); }
+          50% { transform: translateY(-8px); }
+        }
+
+        @keyframes spin-slow {
+          from { transform: rotate(0deg); }
+          to { transform: rotate(360deg); }
+        }
+
+        @keyframes gradient {
+          0% { background-position: 0% 50%; }
+          50% { background-position: 100% 50%; }
+          100% { background-position: 0% 50%; }
+        }
+
+        .animate-fadeInUp {
+          animation: fadeInUp 0.8s ease-out forwards;
+        }
+
+        .animate-fadeInRight {
+          animation: fadeInRight 0.8s ease-out forwards;
+        }
+
+        .animate-float {
+          animation: float 4s ease-in-out infinite;
+        }
+
+        .animate-spin-slow {
+          animation: spin-slow 8s linear infinite;
+        }
+
+        .animate-gradient {
+          animation: gradient 4s ease infinite;
+          background-size: 200% 200%;
+        }
+
+        .animation-delay-1000 {
+          animation-delay: 1000ms;
+        }
+
+        .animation-delay-500 {
+          animation-delay: 500ms;
+        }
+      `}</style>
     </section>
   );
 };
