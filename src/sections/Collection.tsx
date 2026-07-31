@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect, useCallback } from 'react';
+import React, { useState, useMemo, useEffect, useCallback, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
@@ -24,6 +24,11 @@ const Collection: React.FC = () => {
   const [showIban, setShowIban] = useState<boolean>(false);
   const [showPaypal, setShowPaypal] = useState<boolean>(false);
 
+  // Références pour les timers (pour éviter les fuites mémoire)
+  const ibanTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const paypalTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const redirectTimerRef = useRef<NodeJS.Timeout | null>(null);
+
   // L'IBAN complet
   const IBAN_FULL = "FR76 1234 5678 9012 3456 7890 123";
   // IBAN masqué
@@ -36,11 +41,13 @@ const Collection: React.FC = () => {
 
   // Fonction pour copier l'IBAN
   const copyIban = useCallback(async () => {
+    // Nettoyer le timer précédent s'il existe
+    if (ibanTimerRef.current) clearTimeout(ibanTimerRef.current);
+
     try {
       await navigator.clipboard.writeText(IBAN_FULL);
       setCopiedIban(true);
-      const timer = setTimeout(() => setCopiedIban(false), 2000);
-      return () => clearTimeout(timer);
+      ibanTimerRef.current = setTimeout(() => setCopiedIban(false), 2000);
     } catch (error) {
       console.error('Erreur de copie IBAN:', error);
     }
@@ -48,11 +55,13 @@ const Collection: React.FC = () => {
 
   // Fonction pour copier l'adresse PayPal
   const copyPaypal = useCallback(async () => {
+    // Nettoyer le timer précédent s'il existe
+    if (paypalTimerRef.current) clearTimeout(paypalTimerRef.current);
+
     try {
       await navigator.clipboard.writeText(PAYPAL_EMAIL);
       setCopiedPaypal(true);
-      const timer = setTimeout(() => setCopiedPaypal(false), 2000);
-      return () => clearTimeout(timer);
+      paypalTimerRef.current = setTimeout(() => setCopiedPaypal(false), 2000);
     } catch (error) {
       console.error('Erreur de copie PayPal:', error);
     }
@@ -60,21 +69,30 @@ const Collection: React.FC = () => {
 
   // Fonction pour basculer l'affichage de l'IBAN
   const toggleIbanVisibility = useCallback(() => {
-    setShowIban(!showIban);
-  }, [showIban]);
+    setShowIban((prev) => !prev);
+  }, []);
 
   // Fonction pour basculer l'affichage de PayPal
   const togglePaypalVisibility = useCallback(() => {
-    setShowPaypal(!showPaypal);
-  }, [showPaypal]);
+    setShowPaypal((prev) => !prev);
+  }, []);
 
-  // Fonction pour gérer le clic sur l'IBAN (copie automatique)
-  const handleIbanClick = useCallback(() => {
+  // Gestionnaire de clic/clavier pour l'IBAN (Accessibilité)
+  const handleIbanClick = useCallback((e: React.MouseEvent | React.KeyboardEvent) => {
+    // Si c'est un événement clavier, vérifier que c'est Entrée ou Espace
+    if ('key' in e && e.key !== 'Enter' && e.key !== ' ') return;
+
+    // Empêcher le comportement par défaut pour la touche Entrée (évite le scroll)
+    if ('key' in e && e.key === 'Enter') e.preventDefault();
+
     copyIban();
   }, [copyIban]);
 
-  // Fonction pour gérer le clic sur PayPal (copie automatique)
-  const handlePaypalClick = useCallback(() => {
+  // Gestionnaire de clic/clavier pour PayPal (Accessibilité)
+  const handlePaypalClick = useCallback((e: React.MouseEvent | React.KeyboardEvent) => {
+    if ('key' in e && e.key !== 'Enter' && e.key !== ' ') return;
+    if ('key' in e && e.key === 'Enter') e.preventDefault();
+
     copyPaypal();
   }, [copyPaypal]);
 
@@ -112,14 +130,24 @@ const Collection: React.FC = () => {
     { amount: 250, title: t('donate.tiers.tier4'), impact: t('missions.p1.desc'), icon: <Target size={20} /> }
   ], [t]);
 
+  // Nettoyage du timer de redirection
   const handleFinalPayment = useCallback(() => {
+    if (redirectTimerRef.current) clearTimeout(redirectTimerRef.current);
+
     setIsRedirecting(true);
-    const timer = setTimeout(() => {
+    redirectTimerRef.current = setTimeout(() => {
       window.open(HELLO_ASSO_URL, '_blank', 'noopener,noreferrer');
       setIsRedirecting(false);
     }, 800);
+  }, []);
 
-    return () => clearTimeout(timer);
+  // Nettoyage des timers au démontage du composant
+  useEffect(() => {
+    return () => {
+      if (ibanTimerRef.current) clearTimeout(ibanTimerRef.current);
+      if (paypalTimerRef.current) clearTimeout(paypalTimerRef.current);
+      if (redirectTimerRef.current) clearTimeout(redirectTimerRef.current);
+    };
   }, []);
 
   return (
@@ -252,6 +280,7 @@ const Collection: React.FC = () => {
                   <button
                     onClick={toggleIbanVisibility}
                     className="text-white/40 hover:text-white transition-colors text-xs flex items-center gap-1.5"
+                    type="button"
                   >
                     {showIban ? (
                       <>
@@ -266,22 +295,26 @@ const Collection: React.FC = () => {
                 </div>
 
                 <div className="flex flex-col sm:flex-row items-center gap-3">
-                  <motion.div
+                  {/* Le conteneur est maintenant un bouton pour l'accessibilité */}
+                  <motion.button
                     whileTap={{ scale: 0.98 }}
                     onClick={handleIbanClick}
-                    className="flex-1 w-full p-3 bg-black/40 rounded-xl font-mono text-sm border border-white/5 cursor-pointer hover:bg-black/60 transition-all group relative"
+                    onKeyDown={handleIbanClick}
+                    type="button"
+                    className="flex-1 w-full p-3 bg-black/40 rounded-xl font-mono text-sm border border-white/5 cursor-pointer hover:bg-black/60 transition-all group relative text-left"
                   >
                     <code className="text-blue-100 break-all text-xs sm:text-sm">
                       {showIban ? IBAN_FULL : IBAN_MASKED}
                     </code>
-                    <div className="absolute -top-9 left-1/2 -translate-x-1/2 bg-gray-800 text-white text-[9px] font-bold px-2 py-0.5 rounded-full opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
+                    <span className="absolute -top-9 left-1/2 -translate-x-1/2 bg-gray-800 text-white text-[9px] font-bold px-2 py-0.5 rounded-full opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
                       {t('collection.click_to_copy') || 'Cliquer pour copier'}
-                    </div>
-                  </motion.div>
+                    </span>
+                  </motion.button>
 
                   <motion.button
                     whileTap={{ scale: 0.9 }}
                     onClick={copyIban}
+                    type="button"
                     className={`p-3 rounded-xl transition-all shadow-lg flex items-center justify-center min-w-[48px] ${copiedIban ? 'bg-green-500' : 'bg-blue-500 hover:bg-blue-600'}`}
                   >
                     <AnimatePresence mode="wait" initial={false}>
@@ -370,6 +403,7 @@ const Collection: React.FC = () => {
                   <button
                     onClick={togglePaypalVisibility}
                     className="text-white/40 hover:text-white transition-colors text-xs flex items-center gap-1.5"
+                    type="button"
                   >
                     {showPaypal ? (
                       <>
@@ -384,22 +418,25 @@ const Collection: React.FC = () => {
                 </div>
 
                 <div className="flex flex-col sm:flex-row items-center gap-3">
-                  <motion.div
+                  <motion.button
                     whileTap={{ scale: 0.98 }}
                     onClick={handlePaypalClick}
-                    className="flex-1 w-full p-3 bg-black/40 rounded-xl font-mono text-sm border border-white/5 cursor-pointer hover:bg-black/60 transition-all group relative"
+                    onKeyDown={handlePaypalClick}
+                    type="button"
+                    className="flex-1 w-full p-3 bg-black/40 rounded-xl font-mono text-sm border border-white/5 cursor-pointer hover:bg-black/60 transition-all group relative text-left"
                   >
                     <code className="text-blue-100 break-all text-xs sm:text-sm">
                       {showPaypal ? PAYPAL_EMAIL : PAYPAL_MASKED}
                     </code>
-                    <div className="absolute -top-9 left-1/2 -translate-x-1/2 bg-gray-800 text-white text-[9px] font-bold px-2 py-0.5 rounded-full opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
+                    <span className="absolute -top-9 left-1/2 -translate-x-1/2 bg-gray-800 text-white text-[9px] font-bold px-2 py-0.5 rounded-full opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
                       {t('collection.click_to_copy') || 'Cliquer pour copier'}
-                    </div>
-                  </motion.div>
+                    </span>
+                  </motion.button>
 
                   <motion.button
                     whileTap={{ scale: 0.9 }}
                     onClick={copyPaypal}
+                    type="button"
                     className={`p-3 rounded-xl transition-all shadow-lg flex items-center justify-center min-w-[48px] ${copiedPaypal ? 'bg-green-500' : 'bg-[#ffc439] hover:bg-[#ffd966] text-[#003087]'}`}
                   >
                     <AnimatePresence mode="wait" initial={false}>

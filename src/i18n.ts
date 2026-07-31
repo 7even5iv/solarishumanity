@@ -210,7 +210,7 @@ collection: {
         qr_info: 'Scannez notre QR code pour un don rapide',
         
         // Boutons
-        btn_donate: 'Donner {amount}€',
+        btn_donate: 'Donner {{amount}}€',
         
         // Traductions pour les tiers de dons
         tiers: {
@@ -396,30 +396,74 @@ collection: {
             p4: { title: "Solidarity", desc: "very contribution helps support our field projects. " }
           },
           collection: {
-            badge: "Take Action Today",
-            title: "HOW CAN YOU SUPPORT SOLARIS HUMANITY?",
-            show: "Show",
-            hide: "Hide",
-            secure_iban: "Secure IBAN for financial donations",
-            copied: "Copied",
-            method_mobile: "Mobile Collection (France)",
-            method_financial: "Financial Donation",
-            method_material: "Material Donation",
-            mobile_desc: "We collect your physical donations directly in the Paris region (IDF).",
-            mobile_items: ["Greater Paris Tours", "Partner relay points", "Logistics on appointment"],
-            financial_desc: "Support our missions through a secure and tax-deductible donation.",
-            financial_items: ["3DS Secure payment", "Instant tax receipt", "Recurring donations"],
-            material_desc: "We transport your equipment to our health centers.",
-            material_items: ["Medical equipment", "Furniture & Equipment", "New or good condition"],
-            btn_participate: "I PARTICIPATE",
-            express_title: "Support Our Mission Today ",
-            btn_donate: "DONATE {{amount}}€",
-            tax_info: "66% Tax deduction (France) • 100% Secure Donation",
-            iban_label: "ASSOCIATION IBAN",
-            transparency_title: "Total Transparency",
-            transparency_text: "“You give, we show you where your light shines”",
-            btn_reports: "VIEW OUR REPORTS"
-          },
+                  badge: 'Take Action Now',
+                  title: 'Support Our Missions',
+                  
+                  // Collection methods
+                  method_mobile: 'Mobile Collection',
+                  mobile_desc: 'Teams mobilized on the ground to collect your material and financial donations.',
+                  mobile_items: [
+                    'Distribution of food kits',
+                    'Clothing and school supplies collection',
+                    'Community outreach'
+                  ],
+                  
+                  method_financial: 'Financial Donations',
+                  financial_desc: 'Every euro counts to fund our emergency humanitarian actions.',
+                  financial_items: [
+                    'Purchase of medicines and medical equipment',
+                    'Funding for wells and water points',
+                    'Support for orphanages'
+                  ],
+                  
+                  method_material: 'Material Collection',
+                  material_desc: 'Your material donations make a difference on the ground.',
+                  material_items: [
+                    'School supplies',
+                    'Clothing and shoes',
+                    'Medical equipment'
+                  ],
+                  
+                  btn_participate: 'Participate',
+                  
+                  // Express section
+                  express_title: 'Make an Express Donation',
+                  tax_info: 'Tax deductible • Up to 66%',
+                  
+                  // IBAN Section
+                  iban_label: 'IBAN',
+                  transfer_title: 'Bank Transfer',
+                  transfer_desc: 'Make a transfer directly to our bank account.',
+                  iban: 'IBAN',
+                  hide: 'Hide',
+                  show: 'Show',
+                  click_to_copy: 'Click to copy',
+                  copied: 'IBAN copied to clipboard!',
+                  secure_iban: 'Secure banking data',
+                  transparency_title: 'Financial Transparency',
+                  transparency_text: '100% of donations are used for our field missions.',
+                  
+                  // PayPal Section
+                  paypal_title: 'PayPal',
+                  paypal_desc: 'Send your donation via PayPal, fast and secure.',
+                  paypal_email: 'PayPal Address',
+                  copied_paypal: 'PayPal address copied!',
+                  secure_paypal: 'Secure PayPal payment',
+                  
+                  // QR Code
+                  qr_info: 'Scan our QR code for quick donation',
+                  
+                  // Buttons
+                  btn_donate: 'Donate {{amount}}€',
+                  
+                  // Tiers translations
+                  tiers: {
+                    tier1: 'Solidarity',
+                    tier2: 'Commitment',
+                    tier3: 'Impact',
+                    tier4: 'Visionary'
+                  }
+                },
           contact: {
             title: "Send us a message",
             subtitle: "We will get back to you as soon as possible",
