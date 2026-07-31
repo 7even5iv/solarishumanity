@@ -38,6 +38,23 @@ const Gallery: React.FC = () => {
 
   const isFr = i18n.language.startsWith('fr');
 
+  // ==========================================
+  // FONCTION DE FORMATAGE DE DATE
+  // ==========================================
+  const formatDate = (dateString: string) => {
+    if (!dateString) return '';
+    try {
+      const date = new Date(dateString);
+      return date.toLocaleDateString(isFr ? 'fr-FR' : 'en-US', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+      });
+    } catch (error) {
+      return dateString;
+    }
+  };
+
   useEffect(() => {
     const query = `*[_type == "gallery"] | order(date desc) {
       _id,
@@ -60,7 +77,6 @@ const Gallery: React.FC = () => {
 
     client.fetch(query)
       .then((data) => {
-        // Traiter les données pour extraire l'URL de la vidéo correctement
         const processedData = data.map((item: any) => {
           let videoUrl = null;
           if (item.videoFile?.asset?.url) {
@@ -450,7 +466,7 @@ const Gallery: React.FC = () => {
                       poster={selectedMedia.thumbnail ? urlFor(selectedMedia.thumbnail).width(1200).url() : undefined}
                     />
 
-                    {/* Overlay de contrôle - s'affiche au survol ou quand la vidéo est en pause */}
+                    {/* Overlay de contrôle */}
                     <div className={`absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/20 transition-opacity duration-300 ${!isVideoPlaying ? 'opacity-100' : 'opacity-0 hover:opacity-100'
                       }`}>
                       {/* Bouton Play/Pause central */}
@@ -474,7 +490,6 @@ const Gallery: React.FC = () => {
                       {/* Contrôles en bas */}
                       <div className="absolute bottom-0 left-0 right-0 p-3 xs:p-4 bg-gradient-to-t from-black/90 to-transparent">
                         <div className="flex items-center gap-3 xs:gap-4">
-                          {/* Play/Pause */}
                           <button
                             onClick={(e) => {
                               e.stopPropagation();
@@ -485,7 +500,6 @@ const Gallery: React.FC = () => {
                             {isVideoPlaying ? <Pause size={isMobile ? 18 : 24} /> : <Play size={isMobile ? 18 : 24} className="fill-white" />}
                           </button>
 
-                          {/* Barre de progression */}
                           <div
                             className="flex-1 h-1 xs:h-1.5 bg-white/30 rounded-full cursor-pointer group/progress"
                             onClick={(e) => {
@@ -499,12 +513,10 @@ const Gallery: React.FC = () => {
                             />
                           </div>
 
-                          {/* Durée */}
                           <span className="text-white/80 text-[9px] xs:text-[10px] sm:text-xs font-mono min-w-[80px] xs:min-w-[100px]">
                             {formatTime(videoCurrentTime)} / {formatTime(videoDuration)}
                           </span>
 
-                          {/* Mute */}
                           <button
                             onClick={(e) => {
                               e.stopPropagation();
@@ -515,7 +527,6 @@ const Gallery: React.FC = () => {
                             {isVideoMuted ? <VolumeX size={isMobile ? 16 : 20} /> : <Volume2 size={isMobile ? 16 : 20} />}
                           </button>
 
-                          {/* Plein écran */}
                           <button
                             onClick={(e) => {
                               e.stopPropagation();
@@ -528,7 +539,6 @@ const Gallery: React.FC = () => {
                         </div>
                       </div>
 
-                      {/* Raccourcis clavier */}
                       <div className="absolute bottom-16 xs:bottom-20 left-1/2 -translate-x-1/2 text-white/30 text-[8px] xs:text-[9px] font-medium tracking-wider uppercase pointer-events-none opacity-0 hover:opacity-100 transition-opacity">
                         {isMobile ? 'Tap pour Play/Pause' : 'Espace: Play/Pause · M: Muet · F: Plein écran'}
                       </div>
@@ -537,7 +547,9 @@ const Gallery: React.FC = () => {
                 )}
               </div>
 
-              {/* Informations du média */}
+              {/* ==========================================
+                  INFORMATIONS DU MÉDIA - DATE FORMATÉE
+                  ========================================== */}
               <div className="text-center text-white px-2 xs:px-4 mt-4 xs:mt-6">
                 {selectedMedia.category && (
                   <Badge variant="blue" className="mb-2 xs:mb-3 sm:mb-4 uppercase text-[8px] xs:text-[10px]">
@@ -559,7 +571,8 @@ const Gallery: React.FC = () => {
                   {selectedMedia.date && (
                     <span className="flex items-center gap-1.5 xs:gap-2">
                       <Calendar size={isMobile ? 12 : 16} className="text-yellow-400" />
-                      {selectedMedia.date}
+                      {/* DATE FORMATÉE SELON LA LANGUE */}
+                      {formatDate(selectedMedia.date)}
                     </span>
                   )}
                   <span className="flex items-center gap-1.5 xs:gap-2">
