@@ -17,6 +17,19 @@ import {
 } from 'lucide-react';
 import { Badge } from '../components/Badge';
 
+// ============================================
+// IMPORTS DES IMAGES DES MISSIONS
+// ============================================
+// Remplace ces chemins par tes propres images
+import eauImage from '../assets/images/missions/eau.jpeg';
+import santeImage from '../assets/images/missions/sante.jpeg';
+import educationImage from '../assets/images/missions/education.jpeg';
+
+// Si tu utilises des images WebP (optimisées)
+// import eauImage from '../assets/images/missions/eau.webp';
+// import santeImage from '../assets/images/missions/sante.webp';
+// import educationImage from '../assets/images/missions/education.webp';
+
 // --- COMPOSANT STATISTIQUE ---
 const StatDigit = ({ value }: { value: string }) => {
   const { ref, inView } = useInView({ triggerOnce: true, threshold: 0.5 });
@@ -401,8 +414,8 @@ const GalleryPro: React.FC<{
                   key={cat}
                   onClick={() => setFilter(cat)}
                   className={`px-2 xs:px-2.5 sm:px-3 py-1 xs:py-1.5 rounded-full text-[7px] xs:text-[8px] sm:text-[9px] font-bold uppercase tracking-wider transition-all duration-300 ${filter === cat
-                      ? 'bg-blue-600 text-white shadow-lg shadow-blue-500/30 border border-yellow-400/30'
-                      : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                    ? 'bg-blue-600 text-white shadow-lg shadow-blue-500/30 border border-yellow-400/30'
+                    : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
                     }`}
                 >
                   {cat === 'all' ? (isFr ? 'Tous' : 'All') : cat}
@@ -413,8 +426,8 @@ const GalleryPro: React.FC<{
               <button
                 onClick={() => setViewMode('masonry')}
                 className={`p-1 xs:p-1.5 rounded-full transition-all duration-300 ${viewMode === 'masonry'
-                    ? 'bg-white shadow-md text-blue-600'
-                    : 'text-gray-400 hover:text-gray-600'
+                  ? 'bg-white shadow-md text-blue-600'
+                  : 'text-gray-400 hover:text-gray-600'
                   }`}
               >
                 <LayoutGrid size={isMobile ? 14 : 16} />
@@ -422,8 +435,8 @@ const GalleryPro: React.FC<{
               <button
                 onClick={() => setViewMode('grid')}
                 className={`p-1 xs:p-1.5 rounded-full transition-all duration-300 ${viewMode === 'grid'
-                    ? 'bg-white shadow-md text-blue-600'
-                    : 'text-gray-400 hover:text-gray-600'
+                  ? 'bg-white shadow-md text-blue-600'
+                  : 'text-gray-400 hover:text-gray-600'
                   }`}
               >
                 <Grid size={isMobile ? 14 : 16} />
@@ -1080,9 +1093,27 @@ const Home: React.FC = () => {
   ], [t]);
 
   const missionsTeaser = useMemo(() => [
-    { icon: <Droplets size={isMobile ? 24 : 32} />, title: t('missions.p1.title'), desc: t('missions.p1.desc') },
-    { icon: <HeartPulse size={isMobile ? 24 : 32} />, title: t('missions.p2.title'), desc: t('missions.p2.desc') },
-    { icon: <GraduationCap size={isMobile ? 24 : 32} />, title: t('missions.p3.title'), desc: t('missions.p3.desc') }
+    {
+      icon: <Droplets size={isMobile ? 24 : 32} />,
+      title: t('missions.p1.title'),
+      desc: t('missions.p1.desc'),
+      // Image personnalisée pour la mission Eau
+      bgImage: eauImage
+    },
+    {
+      icon: <HeartPulse size={isMobile ? 24 : 32} />,
+      title: t('missions.p2.title'),
+      desc: t('missions.p2.desc'),
+      // Image personnalisée pour la mission Santé
+      bgImage: santeImage
+    },
+    {
+      icon: <GraduationCap size={isMobile ? 24 : 32} />,
+      title: t('missions.p3.title'),
+      desc: t('missions.p3.desc'),
+      // Image personnalisée pour la mission Éducation
+      bgImage: educationImage
+    }
   ], [t, isMobile]);
 
   return (
@@ -1118,7 +1149,9 @@ const Home: React.FC = () => {
         </div>
       </section>
 
-      {/* SECTION MISSIONS */}
+      {/* ==========================================
+          SECTION MISSIONS - AVEC IMAGES PERSONNALISÉES
+          ========================================== */}
       <section className="py-14 xs:py-16 sm:py-20 md:py-24 lg:py-28 xl:py-32 bg-gradient-to-b from-gray-50/50 to-white">
         <div className="max-w-7xl mx-auto px-3 xs:px-4 sm:px-6">
           <SectionTitle
@@ -1128,19 +1161,42 @@ const Home: React.FC = () => {
           />
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 xs:gap-4 sm:gap-5 md:gap-6 lg:gap-8 mt-8 xs:mt-10 sm:mt-12 md:mt-14 lg:mt-16">
             {missionsTeaser.map((item, i) => (
-              <Card key={i} variant="glass" className="text-center flex flex-col h-full border-b-4 border-b-transparent hover:border-b-yellow-400 transition-all p-4 xs:p-5 sm:p-6 md:p-7 lg:p-8 group">
-                <div className="w-12 h-12 xs:w-13 xs:h-13 sm:w-14 sm:h-14 md:w-15 md:h-15 lg:w-16 lg:h-16 mx-auto mb-3 xs:mb-4 sm:mb-5 md:mb-6 lg:mb-8 bg-white shadow-sm text-blue-500 rounded-lg xs:rounded-xl sm:rounded-2xl flex items-center justify-center group-hover:bg-yellow-400 group-hover:text-white group-hover:shadow-lg transition-all">
-                  {item.icon}
+              <Card
+                key={i}
+                variant="glass"
+                className="relative text-center flex flex-col h-full border-b-4 border-b-transparent hover:border-b-yellow-400 transition-all p-4 xs:p-5 sm:p-6 md:p-7 lg:p-8 group overflow-hidden min-h-[320px] xs:min-h-[340px] sm:min-h-[360px]"
+              >
+                {/* Image de fond personnalisée */}
+                <div
+                  className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-110"
+                  style={{
+                    backgroundImage: `url(${item.bgImage})`,
+                  }}
+                />
+
+                {/* Overlay sombre pour lisibilité */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/50 to-black/40 group-hover:from-black/70 group-hover:via-black/40 group-hover:to-black/30 transition-all duration-500" />
+
+                {/* Contenu au-dessus de l'image */}
+                <div className="relative z-10 flex flex-col items-center justify-center h-full">
+                  <div className="w-12 h-12 xs:w-13 xs:h-13 sm:w-14 sm:h-14 md:w-15 md:h-15 lg:w-16 lg:h-16 mx-auto mb-3 xs:mb-4 sm:mb-5 md:mb-6 lg:mb-8 bg-white/20 backdrop-blur-sm text-white rounded-lg xs:rounded-xl sm:rounded-2xl flex items-center justify-center group-hover:bg-yellow-400 group-hover:text-white group-hover:shadow-lg transition-all border border-white/20">
+                    {item.icon}
+                  </div>
+                  <h4 className="text-white text-sm xs:text-base sm:text-lg md:text-xl font-black mb-1.5 xs:mb-2 sm:mb-3 md:mb-4 uppercase tracking-tighter">
+                    {item.title}
+                  </h4>
+                  <p className="text-white/90 text-[10px] xs:text-xs sm:text-sm leading-relaxed mb-4 xs:mb-5 sm:mb-6 md:mb-8 lg:mb-10 flex-grow italic">
+                    {item.desc}
+                  </p>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="w-full text-[10px] xs:text-xs sm:text-sm border-white/50 text-white hover:bg-white/20 hover:border-white bg-white/10 backdrop-blur-sm"
+                    onClick={() => navigate('/Missions')}
+                  >
+                    {t('missions.btn_support')}
+                  </Button>
                 </div>
-                <h4 className="text-sm xs:text-base sm:text-lg md:text-xl font-black text-gray-900 mb-1.5 xs:mb-2 sm:mb-3 md:mb-4 uppercase tracking-tighter">
-                  {item.title}
-                </h4>
-                <p className="text-gray-500 text-[10px] xs:text-xs sm:text-sm leading-relaxed mb-4 xs:mb-5 sm:mb-6 md:mb-8 lg:mb-10 flex-grow italic">
-                  {item.desc}
-                </p>
-                <Button variant="outline" size="sm" className="w-full text-[10px] xs:text-xs sm:text-sm border-blue-600 text-blue-600 hover:bg-blue-50" onClick={() => navigate('/Missions')}>
-                  {t('missions.btn_support')}
-                </Button>
               </Card>
             ))}
           </div>
