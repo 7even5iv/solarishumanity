@@ -154,6 +154,9 @@ i18n
           collection: {
             badge: "AGIR MAINTENANT",
             title: "COMMENT SOUTENIR SOLARIS HUMANITY?",
+            show: "Afficher",
+            hide: "Masquer",
+            secure_iban: "IBAN sécurisé pour les dons financiers",
             method_mobile: "Collecte Mobile",
             method_financial: "Collecte Financière",
             method_material: "Collecte Matérielle",
@@ -169,7 +172,7 @@ i18n
             tax_info: "66% de réduction d'impôt (France) • DON 100% SÉCURISÉ",
             iban_label: "IBAN DE L'ASSOCIATION",
             transparency_title: "Transparence Totale",
-            transparency_text: "« Vous donnez, nous vous montrons où brille votre lumière »"
+            transparency_text: "« Vous donnez, nous vous montrons où brille votre lumière »",
           },
           contact: {
             title: "Envoyez-nous un message",
@@ -349,6 +352,9 @@ i18n
           collection: {
             badge: "Take Action Today",
             title: "HOW CAN YOU SUPPORT SOLARIS HUMANITY?",
+            show: "Show",
+            hide: "Hide",
+            secure_iban: "Secure IBAN for financial donations",
             method_mobile: "Mobile Collection (France)",
             method_financial: "Financial Donation",
             method_material: "Material Donation",

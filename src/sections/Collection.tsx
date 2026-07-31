@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import {
   Truck, CreditCard, Package, Heart, CheckCircle2,
   Shield, Gift, Target, Copy, Check, Sparkles, ArrowLeft,
-  Lock, Loader2
+  Lock, Loader2, Eye, EyeOff
 } from 'lucide-react';
 
 import { SectionTitle } from '../components/SectionTitle';
@@ -20,8 +20,14 @@ const Collection: React.FC = () => {
   const [selectedTier, setSelectedTier] = useState<number>(50);
   const [copied, setCopied] = useState<boolean>(false);
   const [isRedirecting, setIsRedirecting] = useState<boolean>(false);
+  const [showIban, setShowIban] = useState<boolean>(false);
 
-  // ✅ Correction 1 : Utiliser useMemo avec dépendances correctes
+  // L'IBAN complet
+  const IBAN_FULL = "FR76 1234 5678 9012 3456 7890 123";
+
+  // IBAN masqué (affiche seulement les 4 premiers et 4 derniers caractères)
+  const IBAN_MASKED = "FR76 **** **** **** **** 7890 123";
+
   const collectionMethods = useMemo(() => [
     {
       title: t('collection.method_mobile'),
@@ -47,7 +53,7 @@ const Collection: React.FC = () => {
       color: "from-blue-500 to-indigo-600",
       gradient: "from-blue-50 to-white"
     }
-  ], [t]); // ✅ Dépendance correcte
+  ], [t]);
 
   const donationTiers = useMemo(() => [
     { amount: 25, title: t('donate.tiers.tier1'), impact: t('missions.p4.desc'), icon: <Heart size={20} /> },
@@ -56,7 +62,6 @@ const Collection: React.FC = () => {
     { amount: 250, title: t('donate.tiers.tier4'), impact: t('missions.p1.desc'), icon: <Target size={20} /> }
   ], [t]);
 
-  // ✅ Correction 2 : Utiliser useCallback pour les fonctions
   const handleFinalPayment = useCallback(() => {
     setIsRedirecting(true);
     const timer = setTimeout(() => {
@@ -64,13 +69,13 @@ const Collection: React.FC = () => {
       setIsRedirecting(false);
     }, 800);
 
-    // ✅ Nettoyage du timer
     return () => clearTimeout(timer);
   }, []);
 
-  const copyRib = useCallback(async () => {
+  // Fonction pour copier l'IBAN
+  const copyIban = useCallback(async () => {
     try {
-      await navigator.clipboard.writeText("FR76 1234 5678 9012 3456 7890 123");
+      await navigator.clipboard.writeText(IBAN_FULL);
       setCopied(true);
       const timer = setTimeout(() => setCopied(false), 2000);
       return () => clearTimeout(timer);
@@ -79,15 +84,15 @@ const Collection: React.FC = () => {
     }
   }, []);
 
-  // ✅ Correction 3 : Ajouter un useEffect pour le nettoyage si besoin
-  useEffect(() => {
-    // Ici, vous pouvez ajouter des abonnements si nécessaire
-    // Et retourner une fonction de nettoyage
+  // Fonction pour basculer l'affichage de l'IBAN
+  const toggleIbanVisibility = useCallback(() => {
+    setShowIban(!showIban);
+  }, [showIban]);
 
-    return () => {
-      // Nettoyage si nécessaire
-    };
-  }, []);
+  // Fonction pour gérer le clic sur l'IBAN (copie automatique)
+  const handleIbanClick = useCallback(() => {
+    copyIban();
+  }, [copyIban]);
 
   return (
     <section id="collecte" className="relative py-12 bg-white overflow-hidden min-h-screen">
@@ -176,6 +181,9 @@ const Collection: React.FC = () => {
           </div>
         </motion.div>
 
+        {/* ==========================================
+            SECTION IBAN - MASQUÉ AVEC CLIC POUR COPIER
+            ========================================== */}
         <motion.div
           initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -188,15 +196,49 @@ const Collection: React.FC = () => {
           />
           <SectionTitle dark subtitle={t('collection.iban_label')} title={t('collection.transparency_title')} description={t('collection.transparency_text')} />
           <div className="max-w-2xl mx-auto mt-12 bg-white/5 p-8 rounded-2xl border border-white/10 backdrop-blur-md">
-            <h4 className="text-sm font-black uppercase tracking-widest mb-6 flex items-center gap-3 text-yellow-400"><CreditCard size={18} /> {t('collection.iban_label')}</h4>
+            <div className="flex items-center justify-between mb-4">
+              <h4 className="text-sm font-black uppercase tracking-widest flex items-center gap-3 text-yellow-400">
+                <CreditCard size={18} /> {t('collection.iban_label')}
+              </h4>
+              <button
+                onClick={toggleIbanVisibility}
+                className="text-white/60 hover:text-white transition-colors text-xs flex items-center gap-1.5"
+              >
+                {showIban ? (
+                  <>
+                    <EyeOff size={16} /> {t('collection.hide') || 'Masquer'}
+                  </>
+                ) : (
+                  <>
+                    <Eye size={16} /> {t('collection.show') || 'Afficher'}
+                  </>
+                )}
+              </button>
+            </div>
+
             <div className="flex flex-col sm:flex-row items-center gap-4">
-              <code className="flex-1 p-4 bg-black/40 rounded-xl text-blue-100 font-mono text-sm break-all border border-white/5">FR76 1234 5678 9012 3456 7890 123</code>
+              {/* IBAN masqué ou affiché - Clic pour copier */}
+              <motion.div
+                whileTap={{ scale: 0.98 }}
+                onClick={handleIbanClick}
+                className="flex-1 w-full p-4 bg-black/40 rounded-xl font-mono text-sm sm:text-base border border-white/5 cursor-pointer hover:bg-black/60 transition-all group relative"
+              >
+                <code className="text-blue-100 break-all">
+                  {showIban ? IBAN_FULL : IBAN_MASKED}
+                </code>
+
+                {/* Tooltip au survol */}
+                <div className="absolute -top-10 left-1/2 -translate-x-1/2 bg-gray-800 text-white text-[10px] font-bold px-3 py-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
+                  {t('collection.click_to_copy') || 'Cliquez pour copier'}
+                </div>
+              </motion.div>
+
+              {/* Bouton Copier */}
               <motion.button
                 whileTap={{ scale: 0.9 }}
-                onClick={copyRib}
-                className={`p-4 rounded-xl transition-all shadow-lg flex items-center justify-center ${copied ? 'bg-green-500' : 'bg-blue-500 hover:bg-blue-600'}`}
+                onClick={copyIban}
+                className={`p-4 rounded-xl transition-all shadow-lg flex items-center justify-center min-w-[56px] ${copied ? 'bg-green-500' : 'bg-blue-500 hover:bg-blue-600'}`}
               >
-                {/* ✅ Correction 4 : AnimatePresence avec key unique */}
                 <AnimatePresence mode="wait" initial={false}>
                   {copied ? (
                     <motion.div
@@ -221,6 +263,27 @@ const Collection: React.FC = () => {
                   )}
                 </AnimatePresence>
               </motion.button>
+            </div>
+
+            {/* Message de confirmation de copie */}
+            <AnimatePresence>
+              {copied && (
+                <motion.div
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  className="mt-4 text-center text-green-400 text-sm font-bold flex items-center justify-center gap-2"
+                >
+                  <Check size={18} />
+                  {t('collection.copied') || 'IBAN copié dans le presse-papier !'}
+                </motion.div>
+              )}
+            </AnimatePresence>
+
+            {/* Sécurité */}
+            <div className="mt-6 flex items-center justify-center gap-2 text-white/30 text-[10px] uppercase tracking-widest font-bold">
+              <Lock size={12} />
+              {t('collection.secure_iban') || 'Données bancaires sécurisées'}
             </div>
           </div>
         </motion.div>
