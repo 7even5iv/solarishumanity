@@ -227,7 +227,7 @@ const About: React.FC = () => {
                     {activeTab === 'histoire' && (
                       <div className="space-y-4 xs:space-y-5 sm:space-y-6 text-gray-600 leading-relaxed">
                         <h2 className="text-2xl xs:text-3xl sm:text-4xl font-black text-gray-900 leading-tight uppercase tracking-tighter">
-                          {t('about.tabs.history')}
+                          {t('about.tabs.histoire')}
                         </h2>
                         <div className="pl-4 border-l-2 border-blue-100 space-y-6 xs:space-y-8">
                           <div className="relative">

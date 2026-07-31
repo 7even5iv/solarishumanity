@@ -4,9 +4,9 @@ import { useTranslation } from 'react-i18next';
 import {
   Droplets, HeartPulse, GraduationCap, Users,
   CheckCircle2, Sparkles, ArrowRight, TrendingUp,
-  Target, Shield, ArrowLeft, ChevronDown
+  Target, Shield, ChevronDown
 } from 'lucide-react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import { SectionTitle } from '../components/SectionTitle';
 import { Card } from '../components/Card';
@@ -21,6 +21,7 @@ interface IMission {
   solutions: string[];
   gradientFrom: string;
   gradientTo: string;
+  image: string;
 }
 
 const Missions: React.FC = () => {
@@ -52,7 +53,9 @@ const Missions: React.FC = () => {
         "Filtration d'eau"
       ],
       gradientFrom: "from-blue-500",
-      gradientTo: "to-cyan-600"
+      gradientTo: "to-cyan-600",
+      // Utilisation d'URLs Web pour garantir l'affichage immédiat (remplacez par vos images locales plus tard)
+      image: "https://images.unsplash.com/photo-1543168103-83229fa6ee3d?q=80&w=1000&auto=format&fit=crop"
     },
     {
       id: "02",
@@ -61,7 +64,8 @@ const Missions: React.FC = () => {
       description: t('missions.p2.desc'),
       solutions: ["Soutien aux dispensaires", "Campagnes de prévention", "Matériel médical", "Énergie solaire santé"],
       gradientFrom: "from-yellow-500",
-      gradientTo: "to-orange-500"
+      gradientTo: "to-orange-500",
+      image: "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?q=80&w=1000&auto=format&fit=crop"
     },
     {
       id: "03",
@@ -70,7 +74,8 @@ const Missions: React.FC = () => {
       description: t('missions.p3.desc'),
       solutions: ["Fournitures scolaires", "Création de bibliothèques", "Formations couture/numérique", "Bourses d'études"],
       gradientFrom: "from-blue-500",
-      gradientTo: "to-indigo-600"
+      gradientTo: "to-indigo-600",
+      image: "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?q=80&w=1000&auto=format&fit=crop"
     },
     {
       id: "04",
@@ -79,7 +84,8 @@ const Missions: React.FC = () => {
       description: t('missions.p4.desc'),
       solutions: ["Dons alimentaires", "Équipements maison", "Collecte de jouets", "Marrainage"],
       gradientFrom: "from-yellow-500",
-      gradientTo: "to-amber-600"
+      gradientTo: "to-amber-600",
+      image: "https://images.unsplash.com/photo-1599058917212-d750089bc07e?q=80&w=1000&auto=format&fit=crop"
     }
   ], [t, isMobile]);
 
@@ -158,74 +164,91 @@ const Missions: React.FC = () => {
           className="grid grid-cols-1 lg:grid-cols-2 gap-4 xs:gap-5 sm:gap-6 md:gap-8"
         >
           {missionsData.map((mission) => (
-            <motion.div key={mission.id} variants={itemVariants} layout>
+            <motion.div
+              key={mission.id}
+              variants={itemVariants}
+              layout
+              // Le style est appliqué sur ce conteneur pour éviter d'être écrasé par le composant Card
+              style={{
+                backgroundImage: `url(${mission.image})`,
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+                backgroundRepeat: 'no-repeat'
+              }}
+            >
               <Card
                 className={`h-full relative overflow-hidden transition-all duration-500 cursor-pointer p-4 xs:p-5 sm:p-6 md:p-8 ${expandedMission === mission.id ? 'ring-2 ring-blue-500 shadow-2xl scale-[1.01]' : 'hover:shadow-xl'
                   }`}
                 onClick={() => handleMissionClick(mission.id)}
               >
-                <div className="flex justify-between items-start mb-4 xs:mb-5 sm:mb-6 md:mb-8">
-                  <motion.div
-                    whileHover={{ rotate: 10 }}
-                    className={`p-3 xs:p-3.5 sm:p-4 rounded-xl xs:rounded-2xl bg-gradient-to-br ${mission.gradientFrom} ${mission.gradientTo} text-white shadow-lg`}
-                  >
-                    {mission.icon}
-                  </motion.div>
-                  <Badge variant="blue" className="text-[8px] xs:text-[10px]">Mission {mission.id}</Badge>
-                </div>
+                {/* Overlay sombre pour la lisibilité du texte */}
+                <div className="absolute inset-0 bg-black/60 backdrop-blur-[2px] transition-colors hover:bg-black/50" />
 
-                <h4 className="text-lg xs:text-xl sm:text-2xl font-black text-gray-800 mb-2 xs:mb-3 sm:mb-4">
-                  {mission.title}
-                </h4>
-                <p className="text-gray-500 text-xs xs:text-sm leading-relaxed mb-4 xs:mb-6 sm:mb-8 italic">
-                  {mission.description}
-                </p>
-
-                <div className="bg-gray-50 rounded-lg xs:rounded-xl sm:rounded-2xl border border-gray-100 overflow-hidden">
-                  <div className="flex items-center justify-between p-3 xs:p-4 sm:p-5 bg-white/50">
-                    <p className="text-[8px] xs:text-[9px] sm:text-[10px] font-black text-blue-500 uppercase tracking-widest flex items-center gap-1.5 xs:gap-2">
-                      <Sparkles size={isMobile ? 10 : 12} /> {t('missions.solutions_label')}
-                    </p>
-                    <motion.div animate={{ rotate: expandedMission === mission.id ? 180 : 0 }}>
-                      <ChevronDown size={isMobile ? 14 : 16} className="text-gray-400" />
+                {/* Contenu de la carte (placé au-dessus de l'overlay) */}
+                <div className="relative z-10 flex flex-col h-full">
+                  <div className="flex justify-between items-start mb-4 xs:mb-5 sm:mb-6 md:mb-8">
+                    <motion.div
+                      whileHover={{ rotate: 10 }}
+                      className={`p-3 xs:p-3.5 sm:p-4 rounded-xl xs:rounded-2xl bg-gradient-to-br ${mission.gradientFrom} ${mission.gradientTo} text-white shadow-lg`}
+                    >
+                      {mission.icon}
                     </motion.div>
+                    <Badge variant="blue" className="text-[8px] xs:text-[10px] bg-white/90 text-gray-900 border-none">Mission {mission.id}</Badge>
                   </div>
 
-                  <AnimatePresence>
-                    {expandedMission === mission.id && (
-                      <motion.div
-                        initial={{ height: 0, opacity: 0 }}
-                        animate={{ height: "auto", opacity: 1 }}
-                        exit={{ height: 0, opacity: 0 }}
-                        className="p-3 xs:p-4 sm:p-5 md:p-6 space-y-2 xs:space-y-2.5 sm:space-y-3"
-                      >
-                        {mission.solutions.map((sol, idx) => (
-                          <motion.div
-                            key={idx}
-                            initial={{ x: -10 }}
-                            animate={{ x: 0 }}
-                            className="flex items-center gap-2 xs:gap-2.5 sm:gap-3 text-[10px] xs:text-xs sm:text-sm font-bold text-gray-700"
-                          >
-                            <CheckCircle2 size={isMobile ? 14 : 16} className="text-blue-500 shrink-0" />
-                            <span className="leading-tight">{sol}</span>
-                          </motion.div>
-                        ))}
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                </div>
+                  <h4 className="text-lg xs:text-xl sm:text-2xl font-black text-white mb-2 xs:mb-3 sm:mb-4">
+                    {mission.title}
+                  </h4>
+                  <p className="text-gray-200 text-xs xs:text-sm leading-relaxed mb-4 xs:mb-6 sm:mb-8 italic">
+                    {mission.description}
+                  </p>
 
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
-                    navigate('/Donate');
-                  }}
-                  className="mt-4 xs:mt-5 sm:mt-6 md:mt-8 w-full py-3 xs:py-3.5 sm:py-4 bg-gray-800 text-white rounded-lg xs:rounded-xl font-black text-[8px] xs:text-[9px] sm:text-[10px] tracking-widest hover:bg-blue-600 transition-all flex items-center justify-center gap-1.5 xs:gap-2 uppercase"
-                >
-                  {t('missions.btn_support')}
-                  <ArrowRight size={isMobile ? 12 : 14} />
-                </button>
+                  <div className="bg-white/10 backdrop-blur-md rounded-lg xs:rounded-xl sm:rounded-2xl border border-white/10 overflow-hidden mt-auto">
+                    <div className="flex items-center justify-between p-3 xs:p-4 sm:p-5 bg-white/5">
+                      <p className="text-[8px] xs:text-[9px] sm:text-[10px] font-black text-blue-300 uppercase tracking-widest flex items-center gap-1.5 xs:gap-2">
+                        <Sparkles size={isMobile ? 10 : 12} /> {t('missions.solutions_label')}
+                      </p>
+                      <motion.div animate={{ rotate: expandedMission === mission.id ? 180 : 0 }}>
+                        <ChevronDown size={isMobile ? 14 : 16} className="text-gray-300" />
+                      </motion.div>
+                    </div>
+
+                    <AnimatePresence>
+                      {expandedMission === mission.id && (
+                        <motion.div
+                          initial={{ height: 0, opacity: 0 }}
+                          animate={{ height: "auto", opacity: 1 }}
+                          exit={{ height: 0, opacity: 0 }}
+                          className="p-3 xs:p-4 sm:p-5 md:p-6 space-y-2 xs:space-y-2.5 sm:space-y-3"
+                        >
+                          {mission.solutions.map((sol, idx) => (
+                            <motion.div
+                              key={idx}
+                              initial={{ x: -10 }}
+                              animate={{ x: 0 }}
+                              className="flex items-center gap-2 xs:gap-2.5 sm:gap-3 text-[10px] xs:text-xs sm:text-sm font-bold text-white"
+                            >
+                              <CheckCircle2 size={isMobile ? 14 : 16} className="text-blue-400 shrink-0" />
+                              <span className="leading-tight">{sol}</span>
+                            </motion.div>
+                          ))}
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </div>
+
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      window.scrollTo({ top: 0, behavior: 'smooth' });
+                      navigate('/Donate');
+                    }}
+                    className="mt-4 xs:mt-5 sm:mt-6 md:mt-8 w-full py-3 xs:py-3.5 sm:py-4 bg-white text-blue-900 rounded-lg xs:rounded-xl font-black text-[8px] xs:text-[9px] sm:text-[10px] tracking-widest hover:bg-blue-50 transition-all flex items-center justify-center gap-1.5 xs:gap-2 uppercase shadow-lg"
+                  >
+                    {t('missions.btn_support')}
+                    <ArrowRight size={isMobile ? 12 : 14} />
+                  </button>
+                </div>
               </Card>
             </motion.div>
           ))}

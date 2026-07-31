@@ -130,10 +130,10 @@ const Footer: React.FC = () => {
               <li className="flex items-center gap-1.5 xs:gap-2 sm:gap-3 group">
                 <Mail size={isMobile ? 14 : 16} className="text-blue-500 shrink-0" />
                 <a
-                  href="mailto:contact@solarishumanity.fr"
+                  href="mailto:Contact@solarishumanity.fr"
                   className="text-[10px] xs:text-xs sm:text-sm text-gray-600 hover:text-blue-600 transition-colors break-all"
                 >
-                  contact@solarishumanity.org
+                  Contact@solarishumanity.org
                 </a>
               </li>
               <li className="flex items-center gap-1.5 xs:gap-2 sm:gap-3 group">

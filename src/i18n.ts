@@ -131,7 +131,7 @@ i18n
             tabs: {
               vision: "VISION",
               mission: "MISSION",
-              histoire: "HISTOIRE"
+              histoire: "HISTOIRE",
             },
             vision_title: "Transformer chaque don en action concrète. ",
             vision_text: "Notre vision est d'améliorer durablement la vie des communautés les plus vulnérables grâce à des actions concrètes dans les domaines de l'éducation, de la santé, de l'accès à l'eau potable et du développement local. ",
@@ -244,7 +244,7 @@ collection: {
             law_label: "LOI 1901",
             quote: "« Solaris Humanity agit directement sur le terrain afin de transformer chaque don en une action concrète, durable et transparente.  »",
             contact_title: "NOUS CONTACTER",
-            contact_locations: "France (Île-de-France) • Cameroun ",
+            contact_locations: "France • Cameroun ",
             contact_response: "Réponse sous 48h",
             newsletter_title: "NEWSLETTER",
             newsletter_desc: "Recevez nos actualités, nos projets et les résultats de nos actions directement par e-mail. ",
@@ -375,7 +375,8 @@ collection: {
             tabs: {
               vision: "VISION",
               mission: "MISSION",
-              histoire: "HISTORY"
+              histoire: "HISTORY",
+            
             },
             vision_title: "Turning Every Donation into Concrete Action.",
             vision_text: "Our vision is to sustainably improve the lives of vulnerable communities through concrete actions in education, healthcare, clean water and local development. ",
@@ -488,7 +489,7 @@ collection: {
             law_label: "1901 LAW",
             quote: "«Solaris Humanity works directly in the field, turning every donation into concrete, sustainable and transparent action.»",
             contact_title: "CONTACT US",
-            contact_locations: "France (Paris Region) • Cameroon ",
+            contact_locations: "France • Cameroon ",
             contact_response: "Response within 48 business hours",
             newsletter_title: "NEWSLETTER",
             newsletter_desc: "Receive our latest news, projects and field results directly in your inbox.",
