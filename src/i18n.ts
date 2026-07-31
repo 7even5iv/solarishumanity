@@ -151,30 +151,75 @@ i18n
             p3: { title: "Éducation", desc: "Finance des fournitures scolaires, du matériel éducatif et des ressources numériques pour les enfants." },
             p4: { title: "Solidarité", desc: "Chaque contribution compte et permet de soutenir nos actions sur le terrain. " }
           },
-          collection: {
-            badge: "AGIR MAINTENANT",
-            title: "COMMENT SOUTENIR SOLARIS HUMANITY?",
-            show: "Afficher",
-            hide: "Masquer",
-            secure_iban: "IBAN sécurisé pour les dons financiers",
-            copied: "Copié",
-            method_mobile: "Collecte Mobile",
-            method_financial: "Collecte Financière",
-            method_material: "Collecte Matérielle",
-            mobile_desc: "Nous récupérons vos dons matériels directement en IDF.",
-            mobile_items: ["Tournées Île-de-France", "Points relais partenaires", "Logistique sur RDV"],
-            financial_desc: "Soutenez nos missions par un don sécurisé et défiscalisé.",
-            financial_items: ["Paiement sécurisé 3DS", "Reçu fiscal immédiat", "Dons récurrents"],
-            material_desc: "Nous acheminons votre matériel vers nos centres de santé.",
-            material_items: ["Matériel médical", "Mobilier & Équipement", "État neuf / Bon état"],
-            btn_participate: "JE PARTICIPE",
-            express_title: "Soutenez nos actions dès aujourd'hui",
-            btn_donate: "FAIRE UN DON DE {{amount}}€",
-            tax_info: "66% de réduction d'impôt (France) • DON 100% SÉCURISÉ",
-            iban_label: "IBAN DE L'ASSOCIATION",
-            transparency_title: "Transparence Totale",
-            transparency_text: "« Vous donnez, nous vous montrons où brille votre lumière »",
-          },
+collection: {
+        badge: 'Agir Maintenant',
+        title: 'Soutenir nos Missions',
+        
+        // Méthodes de collecte
+        method_mobile: 'Collecte Mobile',
+        mobile_desc: 'Des équipes mobilisées sur le terrain pour recueillir vos dons matériels et financiers.',
+        mobile_items: [
+          'Distribution de kits alimentaires',
+          'Collecte de vêtements et matériel scolaire',
+          'Animation de quartiers'
+        ],
+        
+        method_financial: 'Dons Financiers',
+        financial_desc: 'Chaque euro compte pour financer nos actions humanitaires d\'urgence.',
+        financial_items: [
+          'Achat de médicaments et matériel médical',
+          'Financement de puits et points d\'eau',
+          'Soutien aux orphelinats'
+        ],
+        
+        method_material: 'Collecte Matérielle',
+        material_desc: 'Vos dons matériels font la différence sur le terrain.',
+        material_items: [
+          'Fournitures scolaires',
+          'Vêtements et chaussures',
+          'Équipements médicaux'
+        ],
+        
+        btn_participate: 'Participer',
+        
+        // Section express
+        express_title: 'Faites un don express',
+        tax_info: 'Déduction fiscale • Jusqu\'à 66%',
+        
+        // IBAN Section
+        iban_label: 'IBAN',
+        transfer_title: 'Virement Bancaire',
+        transfer_desc: 'Effectuez un virement directement sur notre compte bancaire.',
+        iban: 'IBAN',
+        hide: 'Masquer',
+        show: 'Afficher',
+        click_to_copy: 'Cliquer pour copier',
+        copied: 'IBAN copié dans le presse-papier !',
+        secure_iban: 'Données bancaires sécurisées',
+        transparency_title: 'Transparence Financière',
+        transparency_text: 'Tous les dons sont utilisés à 100% pour nos missions sur le terrain.',
+        
+        // PayPal Section
+        paypal_title: 'PayPal',
+        paypal_desc: 'Envoyez votre don via PayPal, rapide et sécurisé.',
+        paypal_email: 'Adresse PayPal',
+        copied_paypal: 'Adresse PayPal copiée !',
+        secure_paypal: 'Paiement sécurisé PayPal',
+        
+        // QR Code
+        qr_info: 'Scannez notre QR code pour un don rapide',
+        
+        // Boutons
+        btn_donate: 'Donner {amount}€',
+        
+        // Traductions pour les tiers de dons
+        tiers: {
+          tier1: 'Solidarité',
+          tier2: 'Engagement',
+          tier3: 'Impact',
+          tier4: 'Visionnaire'
+        }
+      },
           contact: {
             title: "Envoyez-nous un message",
             subtitle: "Nous vous répondrons dans les plus brefs délais",

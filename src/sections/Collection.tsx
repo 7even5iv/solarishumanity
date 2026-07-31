@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import {
   Truck, CreditCard, Package, Heart, CheckCircle2,
   Shield, Gift, Target, Copy, Check, Sparkles, ArrowLeft,
-  Lock, Loader2, Eye, EyeOff
+  Lock, Loader2, Eye, EyeOff, Send, QrCode
 } from 'lucide-react';
 
 import { SectionTitle } from '../components/SectionTitle';
@@ -18,15 +18,65 @@ const HELLO_ASSO_URL = "https://www.helloasso.com/associations/solaris-humanity/
 const Collection: React.FC = () => {
   const { t } = useTranslation();
   const [selectedTier, setSelectedTier] = useState<number>(50);
-  const [copied, setCopied] = useState<boolean>(false);
+  const [copiedIban, setCopiedIban] = useState<boolean>(false);
+  const [copiedPaypal, setCopiedPaypal] = useState<boolean>(false);
   const [isRedirecting, setIsRedirecting] = useState<boolean>(false);
   const [showIban, setShowIban] = useState<boolean>(false);
+  const [showPaypal, setShowPaypal] = useState<boolean>(false);
 
   // L'IBAN complet
   const IBAN_FULL = "FR76 1234 5678 9012 3456 7890 123";
-
-  // IBAN masqué (affiche seulement les 4 premiers et 4 derniers caractères)
+  // IBAN masqué
   const IBAN_MASKED = "FR76 **** **** **** **** 7890 123";
+
+  // Adresse PayPal
+  const PAYPAL_EMAIL = "contact@solaris-humanity.org";
+  // PayPal masqué
+  const PAYPAL_MASKED = "c****t@solaris-humanity.org";
+
+  // Fonction pour copier l'IBAN
+  const copyIban = useCallback(async () => {
+    try {
+      await navigator.clipboard.writeText(IBAN_FULL);
+      setCopiedIban(true);
+      const timer = setTimeout(() => setCopiedIban(false), 2000);
+      return () => clearTimeout(timer);
+    } catch (error) {
+      console.error('Erreur de copie IBAN:', error);
+    }
+  }, []);
+
+  // Fonction pour copier l'adresse PayPal
+  const copyPaypal = useCallback(async () => {
+    try {
+      await navigator.clipboard.writeText(PAYPAL_EMAIL);
+      setCopiedPaypal(true);
+      const timer = setTimeout(() => setCopiedPaypal(false), 2000);
+      return () => clearTimeout(timer);
+    } catch (error) {
+      console.error('Erreur de copie PayPal:', error);
+    }
+  }, []);
+
+  // Fonction pour basculer l'affichage de l'IBAN
+  const toggleIbanVisibility = useCallback(() => {
+    setShowIban(!showIban);
+  }, [showIban]);
+
+  // Fonction pour basculer l'affichage de PayPal
+  const togglePaypalVisibility = useCallback(() => {
+    setShowPaypal(!showPaypal);
+  }, [showPaypal]);
+
+  // Fonction pour gérer le clic sur l'IBAN (copie automatique)
+  const handleIbanClick = useCallback(() => {
+    copyIban();
+  }, [copyIban]);
+
+  // Fonction pour gérer le clic sur PayPal (copie automatique)
+  const handlePaypalClick = useCallback(() => {
+    copyPaypal();
+  }, [copyPaypal]);
 
   const collectionMethods = useMemo(() => [
     {
@@ -71,28 +121,6 @@ const Collection: React.FC = () => {
 
     return () => clearTimeout(timer);
   }, []);
-
-  // Fonction pour copier l'IBAN
-  const copyIban = useCallback(async () => {
-    try {
-      await navigator.clipboard.writeText(IBAN_FULL);
-      setCopied(true);
-      const timer = setTimeout(() => setCopied(false), 2000);
-      return () => clearTimeout(timer);
-    } catch (error) {
-      console.error('Erreur de copie:', error);
-    }
-  }, []);
-
-  // Fonction pour basculer l'affichage de l'IBAN
-  const toggleIbanVisibility = useCallback(() => {
-    setShowIban(!showIban);
-  }, [showIban]);
-
-  // Fonction pour gérer le clic sur l'IBAN (copie automatique)
-  const handleIbanClick = useCallback(() => {
-    copyIban();
-  }, [copyIban]);
 
   return (
     <section id="collecte" className="relative py-12 bg-white overflow-hidden min-h-screen">
@@ -182,110 +210,260 @@ const Collection: React.FC = () => {
         </motion.div>
 
         {/* ==========================================
-            SECTION IBAN - MASQUÉ AVEC CLIC POUR COPIER
+            SECTION IBAN + PAYPAL - DOUBLE LIGNE DE DONS
             ========================================== */}
-        <motion.div
-          initial={{ opacity: 0, y: 40 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          className="bg-blue-900 rounded-[3rem] p-10 md:p-20 text-white relative overflow-hidden shadow-2xl"
-        >
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8">
+
+          {/* ==========================================
+              CARTE IBAN
+              ========================================== */}
           <motion.div
-            animate={{ scale: [1, 1.2, 1], opacity: [0.1, 0.2, 0.1] }}
-            transition={{ duration: 8, repeat: Infinity }}
-            className="absolute top-0 right-0 w-96 h-96 bg-yellow-500 rounded-full blur-[120px] -mr-48 -mt-48"
-          />
-          <SectionTitle dark subtitle={t('collection.iban_label')} title={t('collection.transparency_title')} description={t('collection.transparency_text')} />
-          <div className="max-w-2xl mx-auto mt-12 bg-white/5 p-8 rounded-2xl border border-white/10 backdrop-blur-md">
-            <div className="flex items-center justify-between mb-4">
-              <h4 className="text-sm font-black uppercase tracking-widest flex items-center gap-3 text-yellow-400">
-                <CreditCard size={18} /> {t('collection.iban_label')}
-              </h4>
-              <button
-                onClick={toggleIbanVisibility}
-                className="text-white/60 hover:text-white transition-colors text-xs flex items-center gap-1.5"
-              >
-                {showIban ? (
-                  <>
-                    <EyeOff size={16} /> {t('collection.hide') || 'Masquer'}
-                  </>
-                ) : (
-                  <>
-                    <Eye size={16} /> {t('collection.show') || 'Afficher'}
-                  </>
-                )}
-              </button>
-            </div>
-
-            <div className="flex flex-col sm:flex-row items-center gap-4">
-              {/* IBAN masqué ou affiché - Clic pour copier */}
-              <motion.div
-                whileTap={{ scale: 0.98 }}
-                onClick={handleIbanClick}
-                className="flex-1 w-full p-4 bg-black/40 rounded-xl font-mono text-sm sm:text-base border border-white/5 cursor-pointer hover:bg-black/60 transition-all group relative"
-              >
-                <code className="text-blue-100 break-all">
-                  {showIban ? IBAN_FULL : IBAN_MASKED}
-                </code>
-
-                {/* Tooltip au survol */}
-                <div className="absolute -top-10 left-1/2 -translate-x-1/2 bg-gray-800 text-white text-[10px] font-bold px-3 py-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
-                  {t('collection.click_to_copy') || 'Cliquez pour copier'}
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.1 }}
+            className="bg-blue-900 rounded-[3rem] p-8 md:p-12 text-white relative overflow-hidden shadow-2xl"
+          >
+            <motion.div
+              animate={{ scale: [1, 1.2, 1], opacity: [0.1, 0.2, 0.1] }}
+              transition={{ duration: 8, repeat: Infinity }}
+              className="absolute top-0 right-0 w-64 h-64 bg-yellow-500 rounded-full blur-[100px] -mr-32 -mt-32"
+            />
+            <div className="relative z-10">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="p-2 bg-yellow-500/20 rounded-xl">
+                  <CreditCard size={24} className="text-yellow-400" />
                 </div>
-              </motion.div>
+                <Badge variant="orange" className="bg-yellow-500/20 text-yellow-300 border-yellow-400/30">
+                  {t('collection.iban_label') || 'IBAN'}
+                </Badge>
+              </div>
+              <h4 className="text-2xl font-black uppercase tracking-tighter mb-2">
+                {t('collection.transfer_title') || 'Virement bancaire'}
+              </h4>
+              <p className="text-blue-200 text-sm mb-6">
+                {t('collection.transfer_desc') || 'Effectuez un virement directement sur notre compte bancaire.'}
+              </p>
 
-              {/* Bouton Copier */}
-              <motion.button
-                whileTap={{ scale: 0.9 }}
-                onClick={copyIban}
-                className={`p-4 rounded-xl transition-all shadow-lg flex items-center justify-center min-w-[56px] ${copied ? 'bg-green-500' : 'bg-blue-500 hover:bg-blue-600'}`}
-              >
-                <AnimatePresence mode="wait" initial={false}>
-                  {copied ? (
+              <div className="bg-white/5 p-6 rounded-2xl border border-white/10 backdrop-blur-md">
+                <div className="flex items-center justify-between mb-3">
+                  <span className="text-xs font-bold uppercase tracking-widest text-blue-300">
+                    {t('collection.iban') || 'IBAN'}
+                  </span>
+                  <button
+                    onClick={toggleIbanVisibility}
+                    className="text-white/40 hover:text-white transition-colors text-xs flex items-center gap-1.5"
+                  >
+                    {showIban ? (
+                      <>
+                        <EyeOff size={14} /> {t('collection.hide') || 'Masquer'}
+                      </>
+                    ) : (
+                      <>
+                        <Eye size={14} /> {t('collection.show') || 'Afficher'}
+                      </>
+                    )}
+                  </button>
+                </div>
+
+                <div className="flex flex-col sm:flex-row items-center gap-3">
+                  <motion.div
+                    whileTap={{ scale: 0.98 }}
+                    onClick={handleIbanClick}
+                    className="flex-1 w-full p-3 bg-black/40 rounded-xl font-mono text-sm border border-white/5 cursor-pointer hover:bg-black/60 transition-all group relative"
+                  >
+                    <code className="text-blue-100 break-all text-xs sm:text-sm">
+                      {showIban ? IBAN_FULL : IBAN_MASKED}
+                    </code>
+                    <div className="absolute -top-9 left-1/2 -translate-x-1/2 bg-gray-800 text-white text-[9px] font-bold px-2 py-0.5 rounded-full opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
+                      {t('collection.click_to_copy') || 'Cliquer pour copier'}
+                    </div>
+                  </motion.div>
+
+                  <motion.button
+                    whileTap={{ scale: 0.9 }}
+                    onClick={copyIban}
+                    className={`p-3 rounded-xl transition-all shadow-lg flex items-center justify-center min-w-[48px] ${copiedIban ? 'bg-green-500' : 'bg-blue-500 hover:bg-blue-600'}`}
+                  >
+                    <AnimatePresence mode="wait" initial={false}>
+                      {copiedIban ? (
+                        <motion.div
+                          key="check-iban"
+                          initial={{ scale: 0, opacity: 0 }}
+                          animate={{ scale: 1, opacity: 1 }}
+                          exit={{ scale: 0, opacity: 0 }}
+                          transition={{ duration: 0.2 }}
+                        >
+                          <Check size={20} />
+                        </motion.div>
+                      ) : (
+                        <motion.div
+                          key="copy-iban"
+                          initial={{ scale: 0, opacity: 0 }}
+                          animate={{ scale: 1, opacity: 1 }}
+                          exit={{ scale: 0, opacity: 0 }}
+                          transition={{ duration: 0.2 }}
+                        >
+                          <Copy size={20} />
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </motion.button>
+                </div>
+
+                <AnimatePresence>
+                  {copiedIban && (
                     <motion.div
-                      key="check"
-                      initial={{ scale: 0, opacity: 0 }}
-                      animate={{ scale: 1, opacity: 1 }}
-                      exit={{ scale: 0, opacity: 0 }}
-                      transition={{ duration: 0.2 }}
+                      initial={{ opacity: 0, y: -5 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -5 }}
+                      className="mt-3 text-center text-green-400 text-xs font-bold flex items-center justify-center gap-2"
                     >
-                      <Check size={24} />
-                    </motion.div>
-                  ) : (
-                    <motion.div
-                      key="copy"
-                      initial={{ scale: 0, opacity: 0 }}
-                      animate={{ scale: 1, opacity: 1 }}
-                      exit={{ scale: 0, opacity: 0 }}
-                      transition={{ duration: 0.2 }}
-                    >
-                      <Copy size={24} />
+                      <Check size={14} />
+                      {t('collection.copied') || 'IBAN copié !'}
                     </motion.div>
                   )}
                 </AnimatePresence>
-              </motion.button>
-            </div>
+              </div>
 
-            {/* Message de confirmation de copie */}
-            <AnimatePresence>
-              {copied && (
-                <motion.div
-                  initial={{ opacity: 0, y: -10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -10 }}
-                  className="mt-4 text-center text-green-400 text-sm font-bold flex items-center justify-center gap-2"
-                >
-                  <Check size={18} />
-                  {t('collection.copied') || 'IBAN copié dans le presse-papier !'}
-                </motion.div>
-              )}
-            </AnimatePresence>
-
-            {/* Sécurité */}
-            <div className="mt-6 flex items-center justify-center gap-2 text-white/30 text-[10px] uppercase tracking-widest font-bold">
-              <Lock size={12} />
-              {t('collection.secure_iban') || 'Données bancaires sécurisées'}
+              <div className="mt-4 flex items-center justify-center gap-2 text-white/20 text-[8px] uppercase tracking-widest font-bold">
+                <Lock size={10} />
+                {t('collection.secure_iban') || 'Données bancaires sécurisées'}
+              </div>
             </div>
-          </div>
+          </motion.div>
+
+          {/* ==========================================
+              CARTE PAYPAL
+              ========================================== */}
+          <motion.div
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 }}
+            className="bg-gradient-to-br from-[#003087] to-[#009cde] rounded-[3rem] p-8 md:p-12 text-white relative overflow-hidden shadow-2xl"
+          >
+            <motion.div
+              animate={{ scale: [1, 1.2, 1], opacity: [0.1, 0.2, 0.1] }}
+              transition={{ duration: 10, repeat: Infinity }}
+              className="absolute bottom-0 left-0 w-64 h-64 bg-[#ffc439] rounded-full blur-[100px] -ml-32 -mb-32"
+            />
+            <div className="relative z-10">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="p-2 bg-[#ffc439]/20 rounded-xl">
+                  <Send size={24} className="text-[#ffc439]" />
+                </div>
+                <Badge variant="orange" className="bg-[#ffc439]/20 text-[#ffc439] border-[#ffc439]/30">
+                  PayPal
+                </Badge>
+              </div>
+              <h4 className="text-2xl font-black uppercase tracking-tighter mb-2">
+                {t('collection.paypal_title') || 'PayPal'}
+              </h4>
+              <p className="text-blue-200 text-sm mb-6">
+                {t('collection.paypal_desc') || 'Envoyez votre don via PayPal, rapide et sécurisé.'}
+              </p>
+
+              <div className="bg-white/5 p-6 rounded-2xl border border-white/10 backdrop-blur-md">
+                <div className="flex items-center justify-between mb-3">
+                  <span className="text-xs font-bold uppercase tracking-widest text-blue-300">
+                    {t('collection.paypal_email') || 'Adresse PayPal'}
+                  </span>
+                  <button
+                    onClick={togglePaypalVisibility}
+                    className="text-white/40 hover:text-white transition-colors text-xs flex items-center gap-1.5"
+                  >
+                    {showPaypal ? (
+                      <>
+                        <EyeOff size={14} /> {t('collection.hide') || 'Masquer'}
+                      </>
+                    ) : (
+                      <>
+                        <Eye size={14} /> {t('collection.show') || 'Afficher'}
+                      </>
+                    )}
+                  </button>
+                </div>
+
+                <div className="flex flex-col sm:flex-row items-center gap-3">
+                  <motion.div
+                    whileTap={{ scale: 0.98 }}
+                    onClick={handlePaypalClick}
+                    className="flex-1 w-full p-3 bg-black/40 rounded-xl font-mono text-sm border border-white/5 cursor-pointer hover:bg-black/60 transition-all group relative"
+                  >
+                    <code className="text-blue-100 break-all text-xs sm:text-sm">
+                      {showPaypal ? PAYPAL_EMAIL : PAYPAL_MASKED}
+                    </code>
+                    <div className="absolute -top-9 left-1/2 -translate-x-1/2 bg-gray-800 text-white text-[9px] font-bold px-2 py-0.5 rounded-full opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
+                      {t('collection.click_to_copy') || 'Cliquer pour copier'}
+                    </div>
+                  </motion.div>
+
+                  <motion.button
+                    whileTap={{ scale: 0.9 }}
+                    onClick={copyPaypal}
+                    className={`p-3 rounded-xl transition-all shadow-lg flex items-center justify-center min-w-[48px] ${copiedPaypal ? 'bg-green-500' : 'bg-[#ffc439] hover:bg-[#ffd966] text-[#003087]'}`}
+                  >
+                    <AnimatePresence mode="wait" initial={false}>
+                      {copiedPaypal ? (
+                        <motion.div
+                          key="check-paypal"
+                          initial={{ scale: 0, opacity: 0 }}
+                          animate={{ scale: 1, opacity: 1 }}
+                          exit={{ scale: 0, opacity: 0 }}
+                          transition={{ duration: 0.2 }}
+                        >
+                          <Check size={20} className="text-white" />
+                        </motion.div>
+                      ) : (
+                        <motion.div
+                          key="copy-paypal"
+                          initial={{ scale: 0, opacity: 0 }}
+                          animate={{ scale: 1, opacity: 1 }}
+                          exit={{ scale: 0, opacity: 0 }}
+                          transition={{ duration: 0.2 }}
+                        >
+                          <Copy size={20} />
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </motion.button>
+                </div>
+
+                <AnimatePresence>
+                  {copiedPaypal && (
+                    <motion.div
+                      initial={{ opacity: 0, y: -5 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -5 }}
+                      className="mt-3 text-center text-[#ffc439] text-xs font-bold flex items-center justify-center gap-2"
+                    >
+                      <Check size={14} />
+                      {t('collection.copied_paypal') || 'Adresse PayPal copiée !'}
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+
+              <div className="mt-4 flex items-center justify-center gap-2 text-white/20 text-[8px] uppercase tracking-widest font-bold">
+                <Shield size={10} />
+                {t('collection.secure_paypal') || 'Paiement sécurisé PayPal'}
+              </div>
+            </div>
+          </motion.div>
+        </div>
+
+        {/* ==========================================
+            QR CODE - OPTIONNEL
+            ========================================== */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3 }}
+          className="mt-8 text-center"
+        >
+          <p className="text-gray-400 text-[10px] font-bold uppercase tracking-widest flex items-center justify-center gap-2">
+            <QrCode size={14} />
+            {t('collection.qr_info') || 'Scannez notre QR code pour un don rapide'}
+          </p>
         </motion.div>
       </div>
     </section>
