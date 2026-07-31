@@ -68,6 +68,7 @@ i18n
             cta_contact: "CONTACTER L'ONG"
           },
             gallery: {
+            badge: "GALERIE",
             title: "LA PREUVE DE VOTRE IMPACT",
             description: "Nos équipes sont présentes sur le terrain à chaque étape de nos projets. Chaque don est collecté, acheminé, distribué et documenté afin de garantir une transparence totale à nos donateurs.",
             loading: "Chargement de la médiathèque...",
@@ -262,6 +263,7 @@ i18n
             cta_contact: "CONTACT THE NGO"
           },
             gallery: {
+            badge: "GALLERY",
             title: "THE PROOF OF YOUR IMPACT",
             description: "Our teams are present in the field at every stage of our projects. Every donation is collected, transported, delivered and documented to ensure complete transparency for our donors. ",
             loading: "Loading media library...",
