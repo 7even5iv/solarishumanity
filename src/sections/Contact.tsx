@@ -54,7 +54,7 @@ const Contact: React.FC = () => {
     {
       icon: <Globe size={24} />,
       title: "Web",
-      content: "www.solarishumanity.fr",
+      content: "www.solarishumanity.org",
       link: "https://www.solarishumanity.org",
       gradient: "from-yellow-500 to-amber-600"
     }
