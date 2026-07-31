@@ -126,45 +126,6 @@ const Hero: React.FC = () => {
                 {t('hero.cta_missions')}
               </Button>
             </div>
-
-            {/* TÉMOIGNAGES - Ajouté */}
-            <div className={`mt-8 xs:mt-10 sm:mt-12 transition-all duration-700 delay-800 ${isVisible ? 'animate-fadeInUp' : 'opacity-0'}`}>
-              <div className="bg-gray-50/50 backdrop-blur-sm rounded-2xl xs:rounded-3xl p-4 xs:p-5 sm:p-6 border border-gray-100 shadow-sm">
-                <div className="flex items-start gap-2 xs:gap-3">
-                  <Quote className="text-blue-500 flex-shrink-0" size={isMobile ? 16 : 20} />
-                  <div className="flex-1 min-w-0">
-                    <AnimatePresence mode="wait">
-                      <motion.p
-                        key={activeTestimonial}
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: -10 }}
-                        transition={{ duration: 0.5 }}
-                        className="text-gray-700 text-xs xs:text-sm sm:text-base italic leading-relaxed"
-                      >
-                        "{testimonials[activeTestimonial]?.text}"
-                      </motion.p>
-                    </AnimatePresence>
-                    <p className="text-[8px] xs:text-[9px] sm:text-[10px] font-black text-blue-600 uppercase tracking-widest mt-1 xs:mt-2">
-                      — {testimonials[activeTestimonial]?.author}
-                    </p>
-                    <div className="flex gap-1.5 xs:gap-2 mt-2 xs:mt-3">
-                      {testimonials.map((_, idx) => (
-                        <button
-                          key={idx}
-                          onClick={() => setActiveTestimonial(idx)}
-                          className={`h-1.5 xs:h-2 rounded-full transition-all duration-300 ${idx === activeTestimonial
-                              ? 'w-6 xs:w-8 bg-blue-600'
-                              : 'w-1.5 xs:w-2 bg-gray-300 hover:bg-gray-400'
-                            }`}
-                          aria-label={`Témoignage ${idx + 1}`}
-                        />
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
           </div>
 
           {/* IMAGE - DROITE - Responsive */}
@@ -197,7 +158,7 @@ const Hero: React.FC = () => {
         </div>
       </div>
 
-      {/* Ajout des styles globaux si nécessaire */}
+      {/* Styles globaux - Optimisés */}
       <style>{`
         @keyframes fadeInUp {
           from {
@@ -264,6 +225,24 @@ const Hero: React.FC = () => {
 
         .animation-delay-500 {
           animation-delay: 500ms;
+        }
+
+        /* Support mobile pour les animations */
+        @media (max-width: 640px) {
+          .animate-fadeInUp {
+            animation-duration: 0.6s;
+          }
+          
+          .animate-fadeInRight {
+            animation-duration: 0.6s;
+          }
+        }
+
+        /* Support navigateurs anciens */
+        @supports not (backdrop-filter: blur(10px)) {
+          .backdrop-blur-sm {
+            background-color: rgba(255, 255, 255, 0.9);
+          }
         }
       `}</style>
     </section>

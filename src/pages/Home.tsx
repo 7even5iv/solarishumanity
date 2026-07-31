@@ -1094,24 +1094,21 @@ const Home: React.FC = () => {
 
   const missionsTeaser = useMemo(() => [
     {
-      icon: <Droplets size={isMobile ? 24 : 32} />,
+      icon: <Droplets size={isMobile ? 28 : 36} />,
       title: t('missions.p1.title'),
       desc: t('missions.p1.desc'),
-      // Image personnalisée pour la mission Eau
       bgImage: eauImage
     },
     {
-      icon: <HeartPulse size={isMobile ? 24 : 32} />,
+      icon: <HeartPulse size={isMobile ? 28 : 36} />,
       title: t('missions.p2.title'),
       desc: t('missions.p2.desc'),
-      // Image personnalisée pour la mission Santé
       bgImage: santeImage
     },
     {
-      icon: <GraduationCap size={isMobile ? 24 : 32} />,
+      icon: <GraduationCap size={isMobile ? 28 : 36} />,
       title: t('missions.p3.title'),
       desc: t('missions.p3.desc'),
-      // Image personnalisée pour la mission Éducation
       bgImage: educationImage
     }
   ], [t, isMobile]);
@@ -1150,7 +1147,7 @@ const Home: React.FC = () => {
       </section>
 
       {/* ==========================================
-          SECTION MISSIONS - AVEC IMAGES PERSONNALISÉES
+          SECTION MISSIONS - IMAGES EN PLEIN ÉCRAN
           ========================================== */}
       <section className="py-14 xs:py-16 sm:py-20 md:py-24 lg:py-28 xl:py-32 bg-gradient-to-b from-gray-50/50 to-white">
         <div className="max-w-7xl mx-auto px-3 xs:px-4 sm:px-6">
@@ -1164,34 +1161,37 @@ const Home: React.FC = () => {
               <Card
                 key={i}
                 variant="glass"
-                className="relative text-center flex flex-col h-full border-b-4 border-b-transparent hover:border-b-yellow-400 transition-all p-4 xs:p-5 sm:p-6 md:p-7 lg:p-8 group overflow-hidden min-h-[320px] xs:min-h-[340px] sm:min-h-[360px]"
+                className="relative text-center flex flex-col h-full border-b-4 border-b-transparent hover:border-b-yellow-400 transition-all p-6 xs:p-7 sm:p-8 md:p-10 group overflow-hidden min-h-[400px] xs:min-h-[420px] sm:min-h-[440px] md:min-h-[480px] rounded-2xl shadow-xl"
               >
-                {/* Image de fond personnalisée */}
+                {/* Image de fond en plein écran */}
                 <div
                   className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-110"
                   style={{
                     backgroundImage: `url(${item.bgImage})`,
+                    backgroundSize: 'cover',
+                    backgroundPosition: 'center',
+                    backgroundRepeat: 'no-repeat'
                   }}
                 />
 
                 {/* Overlay sombre pour lisibilité */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/50 to-black/40 group-hover:from-black/70 group-hover:via-black/40 group-hover:to-black/30 transition-all duration-500" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/55 to-black/40 group-hover:from-black/75 group-hover:via-black/45 group-hover:to-black/35 transition-all duration-500" />
 
                 {/* Contenu au-dessus de l'image */}
                 <div className="relative z-10 flex flex-col items-center justify-center h-full">
-                  <div className="w-12 h-12 xs:w-13 xs:h-13 sm:w-14 sm:h-14 md:w-15 md:h-15 lg:w-16 lg:h-16 mx-auto mb-3 xs:mb-4 sm:mb-5 md:mb-6 lg:mb-8 bg-white/20 backdrop-blur-sm text-white rounded-lg xs:rounded-xl sm:rounded-2xl flex items-center justify-center group-hover:bg-yellow-400 group-hover:text-white group-hover:shadow-lg transition-all border border-white/20">
+                  <div className="w-16 h-16 xs:w-18 xs:h-18 sm:w-20 sm:h-20 md:w-24 md:h-24 mx-auto mb-4 xs:mb-5 sm:mb-6 bg-white/20 backdrop-blur-sm text-white rounded-2xl flex items-center justify-center group-hover:bg-yellow-400 group-hover:text-white group-hover:shadow-2xl transition-all border-2 border-white/30 group-hover:border-yellow-400">
                     {item.icon}
                   </div>
-                  <h4 className="text-white text-sm xs:text-base sm:text-lg md:text-xl font-black mb-1.5 xs:mb-2 sm:mb-3 md:mb-4 uppercase tracking-tighter">
+                  <h4 className="text-white text-base xs:text-lg sm:text-xl md:text-2xl lg:text-3xl font-black mb-2 xs:mb-3 sm:mb-4 uppercase tracking-tighter">
                     {item.title}
                   </h4>
-                  <p className="text-white/90 text-[10px] xs:text-xs sm:text-sm leading-relaxed mb-4 xs:mb-5 sm:mb-6 md:mb-8 lg:mb-10 flex-grow italic">
+                  <p className="text-white/90 text-xs xs:text-sm sm:text-base leading-relaxed mb-5 xs:mb-6 sm:mb-8 max-w-xs mx-auto flex-grow italic">
                     {item.desc}
                   </p>
                   <Button
                     variant="outline"
-                    size="sm"
-                    className="w-full text-[10px] xs:text-xs sm:text-sm border-white/50 text-white hover:bg-white/20 hover:border-white bg-white/10 backdrop-blur-sm"
+                    size="lg"
+                    className="w-full max-w-[220px] text-xs xs:text-sm sm:text-base border-white/50 text-white hover:bg-white/20 hover:border-white bg-white/10 backdrop-blur-sm font-bold uppercase tracking-wider py-3"
                     onClick={() => navigate('/Missions')}
                   >
                     {t('missions.btn_support')}
