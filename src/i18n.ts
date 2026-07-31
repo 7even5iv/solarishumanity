@@ -196,7 +196,7 @@ i18n
             quote: "« Solaris Humanity agit directement sur le terrain afin de transformer chaque don en une action concrète, durable et transparente.  »",
             contact_title: "NOUS CONTACTER",
             contact_locations: "France (Île-de-France) • Cameroun ",
-            contact_response: "Réponse sous 48h ouvrées",
+            contact_response: "Réponse sous 48h",
             newsletter_title: "NEWSLETTER",
             newsletter_desc: "Recevez nos actualités, nos projets et les résultats de nos actions directement par e-mail. ",
             newsletter_placeholder: "votre@email.com",
