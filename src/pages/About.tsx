@@ -274,20 +274,7 @@ const About: React.FC = () => {
                   }}
                 />
               </div>
-
-              {/* Badge flottant - Responsive */}
-              <motion.div
-                animate={{ y: [0, -10, 0] }}
-                transition={{ duration: 4, repeat: Infinity }}
-                className="absolute -bottom-3 xs:-bottom-4 sm:-bottom-5 md:-bottom-6 -left-3 xs:-left-4 sm:-left-5 md:-left-6 bg-gray-900 text-white p-4 xs:p-5 sm:p-6 md:p-8 rounded-2xl xs:rounded-3xl sm:rounded-[2.5rem] shadow-2xl max-w-[180px] xs:max-w-[200px] sm:max-w-[220px] md:max-w-xs border border-white/10"
-              >
-                <p className="text-[8px] xs:text-[9px] sm:text-[10px] font-black text-blue-400 uppercase tracking-widest mb-1 xs:mb-2">
-                  {t('about.founder_label')}
-                </p>
-                <p className="text-sm xs:text-base sm:text-lg font-black leading-tight uppercase tracking-tighter">
-                  Nelly NDOH NGUELET
-                </p>
-              </motion.div>
+              
             </motion.div>
           </div>
         </div>

@@ -4,7 +4,7 @@ interface CardProps {
   children: React.ReactNode;
   className?: string;
   hoverEffect?: boolean;
-  variant?: 'default' | 'outline' | 'glass' | 'gradient' | 'dark';
+  variant?: 'default' | 'outline' | 'glass' | 'gradient' | 'dark' | 'transparent'; // <-- AJOUT DE LA VARIANTE
   padding?: 'none' | 'sm' | 'md' | 'lg' | 'xl';
   rounded?: 'none' | 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl';
   elevation?: 'none' | 'sm' | 'md' | 'lg' | 'xl';
@@ -45,13 +45,14 @@ const elevationMap = {
   xl: 'shadow-xl'
 };
 
-// Variantes de cartes - Changées en bleu
+// Variantes de cartes
 const variantClasses = {
   default: 'bg-white border border-gray-100',
   outline: 'bg-transparent border-2 border-gray-200 hover:border-blue-300',
   glass: 'bg-white/80 backdrop-blur-md border border-white/20',
   gradient: 'bg-gradient-to-br from-white to-gray-50 border border-gray-100',
-  dark: 'bg-gradient-to-br from-gray-900 to-gray-800 text-white border border-gray-700'
+  dark: 'bg-gradient-to-br from-gray-900 to-gray-800 text-white border border-gray-700',
+  transparent: 'bg-transparent border-transparent' // <-- NOUVELLE VARIANTE TRANSPARENTE
 };
 
 export const Card: React.FC<CardProps> = ({
@@ -71,7 +72,7 @@ export const Card: React.FC<CardProps> = ({
 }) => {
   const [isHovered, setIsHovered] = useState(false);
 
-  // Classes de hover - Changées en bleu
+  // Classes de hover
   const hoverClasses = hoverEffect ? `
     transition-all duration-500 ease-out
     ${animateOnHover ? 'hover:-translate-y-2 hover:shadow-2xl hover:shadow-blue-100/50' : ''}
@@ -119,7 +120,7 @@ export const Card: React.FC<CardProps> = ({
         </div>
       )}
 
-      {/* Badge décoratif optionnel pour les cartes interactives - Changé en bleu */}
+      {/* Badge décoratif optionnel pour les cartes interactives */}
       {interactive && (
         <div className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
           <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse" />
@@ -131,7 +132,7 @@ export const Card: React.FC<CardProps> = ({
         {children}
       </div>
 
-      {/* Effet de bordure au survol - Changé en bleu */}
+      {/* Effet de bordure au survol */}
       {hoverEffect && variant === 'outline' && (
         <div className={`
           absolute inset-0 rounded-[inherit] border-2 border-blue-400
@@ -143,7 +144,9 @@ export const Card: React.FC<CardProps> = ({
   );
 };
 
-// Sous-composant pour les en-têtes de carte - Changé en bleu
+// [Tous vos sous-composants (CardHeader, CardContent, etc.) restent strictement identiques ci-dessous...]
+
+// Sous-composant pour les en-têtes de carte
 interface CardHeaderProps {
   children: React.ReactNode;
   className?: string;
@@ -253,7 +256,7 @@ export const ClickableCard: React.FC<ClickableCardProps> = ({
   );
 };
 
-// Carte avec statistiques - Changée en bleu
+// Carte avec statistiques
 interface StatCardProps {
   value: string | number;
   label: string;
