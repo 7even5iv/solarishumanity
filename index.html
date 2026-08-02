@@ -1,35 +1,48 @@
 <!doctype html>
 <html lang="fr">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/png" href="/logo-solaris.png" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <!-- SEO Standard -->
-    <title>Solaris Humanity | Un soleil pour chaque vie</title>
-    <meta name="description" content="Association humanitaire apportant lumière, espoir et autonomie aux populations isolées à travers l'énergie solaire, l'eau et l'éducation." />
-    <meta name="author" content="Solaris Humanity" />
+<head>
+  <meta charset="UTF-8" />
 
-    <!-- Open Graph / Facebook (Pour WhatsApp/FB) -->
-    <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://solarishumanity.org/" />
-    <meta property="og:title" content="Solaris Humanity | Un soleil pour chaque vie" />
-    <meta property="og:description" content="Soutenez nos actions pour l'autonomie des populations rurales en Afrique." />
-    <meta property="og:image" content="https://solarishumanity.org/logo-solaris.png" />
+  <!-- FAVICONS : On multiplie les formats pour aider Google Search -->
+  <link rel="icon" type="image/png" href="/logo-solaris.png" sizes="32x32" />
+  <link rel="icon" type="image/png" href="/logo-solaris.png" sizes="192x192" />
+  <link rel="apple-touch-icon" href="/logo-solaris.png" />
+  <link rel="shortcut icon" href="/logo-solaris.png" />
 
-    <!-- Twitter -->
-    <meta property="twitter:card" content="summary_large_image" />
-    <meta property="twitter:url" content="https://solarishumanity.org/" />
-    <meta property="twitter:title" content="Solaris Humanity | Un soleil pour chaque vie" />
-    <meta property="twitter:description" content="Apporter la lumière là où règne l'obscurité." />
-    <meta property="twitter:image" content="https://solarishumanity.org/logo-solaris.png" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <!-- Couleur de la barre d'adresse sur mobile -->
-    <meta name="theme-color" content="#FF6600" />
-  </head>
-  <body>
-    <div id="root"></div>
-    <!-- Chemin relatif correct pour Vite sur Vercel -->
-    <script type="module" src="src/main.tsx"></script>
-  </body>
+  <!-- SEO Standard -->
+  <title>Solaris Humanity | Un soleil pour chaque vie</title>
+  <meta name="description"
+    content="Solaris Humanity est une association humanitaire française qui transforme la solidarité en actions concrètes. Nous agissons pour améliorer durablement l'accès à l'éducation, à la santé, à l'eau potable, à l'énergie propre et à l'inclusion numérique des communautés les plus vulnérables en Afrique." />
+  <meta name="author" content="Solaris Humanity" />
+  <link rel="canonical" href="https://solarishumanity.org/" />
+
+  <!-- Open Graph / Facebook (Pour WhatsApp/FB) -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://solarishumanity.org/" />
+  <meta property="og:title" content="Solaris Humanity | Un soleil pour chaque vie" />
+  <meta property="og:description" content="Soutenez nos actions pour l'autonomie des populations rurales en Afrique." />
+  <meta property="og:image" content="https://solarishumanity.org/logo-solaris.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+
+  <!-- Twitter -->
+  <meta property="twitter:card" content="summary_large_image" />
+  <meta property="twitter:url" content="https://solarishumanity.org/" />
+  <meta property="twitter:title" content="Solaris Humanity | Un soleil pour chaque vie" />
+  <meta property="twitter:description" content="Apporter la lumière là où règne l'obscurité." />
+  <meta property="twitter:image" content="https://solarishumanity.org/logo-solaris.png" />
+
+  <!-- Couleur de la barre d'adresse sur mobile (Chrome, Safari, Samsung) -->
+  <meta name="theme-color" content="#FF6600" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+</head>
+
+<body>
+  <div id="root"></div>
+  <script type="module" src="/src/main.tsx"></script>
+</body>
+
 </html>
