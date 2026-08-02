@@ -40,8 +40,8 @@ const LegalNotice: React.FC = () => {
         <div className="space-y-4">
           <p className="text-gray-600 leading-relaxed">
             {i18n.language.startsWith('fr')
-              ? "Le site www.solarishumanity.fr est édité par l'association Solaris Humanity, régie par la loi 1901."
-              : "The website www.solarishumanity.fr is published by the Solaris Humanity association, governed by the 1901 law."}
+              ? "Le site www.solarishumanity.org est édité par l'association Solaris Humanity, régie par la loi 1901."
+              : "The website www.solarishumanity.org is published by the Solaris Humanity association, governed by the 1901 law."}
           </p>
           <div className="grid sm:grid-cols-2 gap-4">
             <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-xl border border-gray-100">
@@ -85,15 +85,6 @@ const LegalNotice: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-white pt-24 pb-20 overflow-hidden">
-      <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} className="max-w-4xl mx-auto px-4 pt-8">
-        <Link to="/" className="inline-flex items-center gap-3 text-[10px] font-black text-gray-500 hover:text-blue-500 transition-all uppercase tracking-[0.2em] group">
-          <div className="p-2.5 bg-gray-100 rounded-full group-hover:bg-blue-50 transition-colors shadow-sm">
-            <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" />
-          </div>
-          {t('nav.back')}
-        </Link>
-      </motion.div>
-
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 mt-12">
         <motion.div initial="hidden" animate="visible" variants={fadeInUp} className="mb-16">
           <Badge variant="blue" className="mb-6 uppercase" icon={<Shield size={12} />}>
