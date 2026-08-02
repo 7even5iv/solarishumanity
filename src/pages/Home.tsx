@@ -400,7 +400,7 @@ const GalleryPro: React.FC<{
               {t('gallery.badge') || 'Notre Galerie'}
             </Badge>
             <h3 className="text-lg xs:text-xl sm:text-2xl md:text-3xl font-black text-gray-900 uppercase tracking-tighter">
-              {isFr ? 'Nos Réalisations' : 'Our Work'}
+              {isFr ? 'Nos Réalisations' : 'Our Works'}
             </h3>
             <p className="text-gray-400 text-[10px] xs:text-xs sm:text-sm mt-0.5 xs:mt-1">
               {filteredMedia.length} {isFr ? 'médias' : 'media'}
@@ -1207,8 +1207,8 @@ const Home: React.FC = () => {
       <section className="py-14 xs:py-16 sm:py-20 md:py-24 lg:py-28 xl:py-32 bg-white border-b border-gray-50">
         <div className="max-w-7xl mx-auto px-3 xs:px-4 sm:px-6">
           <SectionTitle
-            subtitle={t('blog.badge', { defaultValue: 'Actualités' })}
-            title={t('blog.title', { defaultValue: 'Derniers Articles' })}
+            subtitle={t('blog.badge')}
+            title={t('blog.title')}
             description={t('blog.description', { defaultValue: 'Découvrez nos dernières actualités et histoires inspirantes' })}
           />
 

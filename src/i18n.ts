@@ -44,6 +44,7 @@ i18n
           },
           blog: {
             title: "ACTUALITES ET HISTOIRES",
+            badge: "ACTUALITES ET HISTOIRES",
             description: "Suivez nos avancées et les témoignages de ceux que nous accompagnons.",
             search_placeholder: "Rechercher un article...",
             no_results: "Aucun article trouvé pour cette recherche",
@@ -289,6 +290,7 @@ collection: {
           },
           blog: {
             title: "NEWS AND STORIES",
+            badge: "NEWS AND STORIES",
             description: "Follow our progress and stories from the field.",
             search_placeholder: "Search articles...",
             no_results: "No articles found for this search",

@@ -95,7 +95,7 @@ const PrivacyPolicy: React.FC = () => {
         <div className="space-y-4">
           <p className="text-gray-600 text-sm">Vous disposez d'un droit d'accès, de rectification et de suppression de vos données.</p>
           <div className="p-4 bg-blue-50 rounded-xl border border-blue-100 flex items-center justify-between">
-            <span className="text-xs font-bold text-blue-700">Contact DPO : contact@solarishumanity.fr</span>
+            <span className="text-xs font-bold text-blue-700">Contact DPO : Contact@solarishumanity.org</span>
             <Mail size={16} className="text-blue-500" />
           </div>
         </div>
