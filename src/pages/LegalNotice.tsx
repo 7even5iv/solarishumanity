@@ -50,7 +50,7 @@ const LegalNotice: React.FC = () => {
             </div>
             <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-xl border border-gray-100">
               <Mail size={16} className="text-blue-500" />
-              <span className="text-[10px] font-black text-gray-700 uppercase tracking-widest">contact@solarishumanity.fr</span>
+              <span className="text-[10px] font-black text-gray-700 uppercase tracking-widest">Contact@solarishumanity.org</span>
             </div>
           </div>
         </div>
