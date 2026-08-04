@@ -147,7 +147,7 @@ i18n
             btn_support: "Soutenir cette mission",
             btn_all: "DÉCOUVRIR TOUTES NOS MISSIONS",
             solutions_label: "Nos actions",
-            p1: { title: "Accès à l'eau", desc: "articipe au financement de projets d'accès à l'eau potable et au développement durable des communautés. " },
+            p1: { title: "Accès à l'eau", desc: "participe au financement de projets d'accès à l'eau potable et au développement durable des communautés. " },
             p2: { title: "Soins Médicaux", desc: "Contribue à l'achat de matériel médical essentiel et au soutien des centres de santé " },
             p3: { title: "Éducation", desc: "Finance des fournitures scolaires, du matériel éducatif et des ressources numériques pour les enfants." },
             p4: { title: "Solidarité", desc: "Chaque contribution compte et permet de soutenir nos actions sur le terrain. " }
