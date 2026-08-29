@@ -222,7 +222,7 @@ const Donate: React.FC = () => {
               </div>
               <h4 className="font-black text-gray-900 uppercase text-xs tracking-widest mb-4">{t('donate.help_title')}</h4>
               <p className="text-xs text-gray-500 mb-6 px-4 leading-relaxed">{t('donate.help_text')}</p>
-              <p className="font-black text-blue-600 text-sm tracking-widest uppercase underline decoration-blue-200 underline-offset-8">CONTACT@SOLARISHUMANITY.ORG</p>
+              <p className="font-black text-blue-600 text-sm tracking-widest uppercase underline decoration-blue-200 underline-offset-8">Cont</p>
             </Card>
           </div>
 

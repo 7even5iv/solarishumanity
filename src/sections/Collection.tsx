@@ -15,6 +15,10 @@ import { Badge } from '../components/Badge';
 
 const HELLO_ASSO_URL = "https://www.helloasso.com/associations/solaris-humanity/formulaires/1";
 
+// ⚠️ REMPLACEZ PAR VOTRE CLIENT ID PAYPAL
+// Récupérez-le ici : https://developer.paypal.com/dashboard/
+const PAYPAL_CLIENT_ID = "YOUR_PAYPAL_CLIENT_ID";
+
 const Collection: React.FC = () => {
   const { t } = useTranslation();
   const [selectedTier, setSelectedTier] = useState<number>(50);
@@ -23,11 +27,13 @@ const Collection: React.FC = () => {
   const [isRedirecting, setIsRedirecting] = useState<boolean>(false);
   const [showIban, setShowIban] = useState<boolean>(false);
   const [showPaypal, setShowPaypal] = useState<boolean>(false);
+  const [paypalLoaded, setPaypalLoaded] = useState<boolean>(false);
 
   // Références pour les timers (pour éviter les fuites mémoire)
   const ibanTimerRef = useRef<NodeJS.Timeout | null>(null);
   const paypalTimerRef = useRef<NodeJS.Timeout | null>(null);
   const redirectTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const paypalRenderedRef = useRef<boolean>(false);
 
   // L'IBAN complet
   const IBAN_FULL = "FR76 1234 5678 9012 3456 7890 123";
@@ -41,7 +47,6 @@ const Collection: React.FC = () => {
 
   // Fonction pour copier l'IBAN
   const copyIban = useCallback(async () => {
-    // Nettoyer le timer précédent s'il existe
     if (ibanTimerRef.current) clearTimeout(ibanTimerRef.current);
 
     try {
@@ -55,7 +60,6 @@ const Collection: React.FC = () => {
 
   // Fonction pour copier l'adresse PayPal
   const copyPaypal = useCallback(async () => {
-    // Nettoyer le timer précédent s'il existe
     if (paypalTimerRef.current) clearTimeout(paypalTimerRef.current);
 
     try {
@@ -79,12 +83,8 @@ const Collection: React.FC = () => {
 
   // Gestionnaire de clic/clavier pour l'IBAN (Accessibilité)
   const handleIbanClick = useCallback((e: React.MouseEvent | React.KeyboardEvent) => {
-    // Si c'est un événement clavier, vérifier que c'est Entrée ou Espace
     if ('key' in e && e.key !== 'Enter' && e.key !== ' ') return;
-
-    // Empêcher le comportement par défaut pour la touche Entrée (évite le scroll)
     if ('key' in e && e.key === 'Enter') e.preventDefault();
-
     copyIban();
   }, [copyIban]);
 
@@ -92,7 +92,6 @@ const Collection: React.FC = () => {
   const handlePaypalClick = useCallback((e: React.MouseEvent | React.KeyboardEvent) => {
     if ('key' in e && e.key !== 'Enter' && e.key !== ' ') return;
     if ('key' in e && e.key === 'Enter') e.preventDefault();
-
     copyPaypal();
   }, [copyPaypal]);
 
@@ -140,6 +139,103 @@ const Collection: React.FC = () => {
       setIsRedirecting(false);
     }, 800);
   }, []);
+
+  // ==========================================
+  // CHARGEMENT DU SDK PAYPAL
+  // ==========================================
+  useEffect(() => {
+    // Éviter de charger le script plusieurs fois
+    if (document.querySelector('#paypal-sdk-script')) {
+      // Si le script est déjà chargé, vérifier si paypal est disponible
+      if (window.paypal) {
+        setPaypalLoaded(true);
+      }
+      return;
+    }
+
+    const script = document.createElement('script');
+    script.id = 'paypal-sdk-script';
+    script.src = `https://www.paypal.com/sdk/js?client-id=${PAYPAL_CLIENT_ID}&currency=EUR&intent=capture&locale=fr_FR`;
+    script.async = true;
+
+    script.onload = () => {
+      console.log('✅ PayPal SDK chargé avec succès');
+      setPaypalLoaded(true);
+    };
+
+    script.onerror = () => {
+      console.error('❌ Erreur lors du chargement de PayPal SDK');
+    };
+
+    document.body.appendChild(script);
+
+    // Nettoyage
+    return () => {
+      // Ne pas supprimer le script pour éviter de le recharger
+    };
+  }, []);
+
+  // ==========================================
+  // RENDU DU BOUTON PAYPAL
+  // ==========================================
+  useEffect(() => {
+    if (!paypalLoaded || !window.paypal || paypalRenderedRef.current) return;
+
+    const container = document.getElementById('paypal-button-container');
+    if (!container) return;
+
+    // Marquer comme rendu pour éviter les doublons
+    paypalRenderedRef.current = true;
+
+    try {
+      window.paypal.Buttons({
+        style: {
+          layout: 'vertical',
+          color: 'blue',
+          shape: 'rect',
+          label: 'paypal',
+          height: 48,
+          tagline: false,
+        },
+        createOrder: (_data, actions) => {
+          return actions.order.create({
+            purchase_units: [{
+              amount: {
+                value: selectedTier.toString(),
+                currency_code: 'EUR',
+              },
+              description: `Don à Solaris Humanity - ${selectedTier}€`,
+              custom_id: `donation_${Date.now()}`,
+            }],
+            application_context: {
+              shipping_preference: 'NO_SHIPPING',
+            },
+          });
+        },
+        onApprove: (_data, actions) => {
+          return actions.order.capture().then((details) => {
+            console.log('✅ Paiement PayPal réussi :', details);
+            // 🔔 ICI : vous pouvez rediriger vers une page de remerciement
+            // ou envoyer les données à votre backend
+            alert(`Merci pour votre don de ${selectedTier}€ ! 🎉`);
+          });
+        },
+        onCancel: () => {
+          console.log('❌ Paiement PayPal annulé');
+        },
+        onError: (err) => {
+          console.error('❌ Erreur PayPal :', err);
+          alert('Une erreur est survenue. Veuillez réessayer ou utiliser un autre moyen de paiement.');
+        },
+      }).render(container).catch((err) => {
+        console.error('❌ Erreur lors du rendu PayPal :', err);
+        paypalRenderedRef.current = false;
+      });
+    } catch (error) {
+      console.error('❌ Erreur PayPal :', error);
+      paypalRenderedRef.current = false;
+    }
+  }, [paypalLoaded, selectedTier]);
 
   // Nettoyage des timers au démontage du composant
   useEffect(() => {
@@ -295,7 +391,6 @@ const Collection: React.FC = () => {
                 </div>
 
                 <div className="flex flex-col sm:flex-row items-center gap-3">
-                  {/* Le conteneur est maintenant un bouton pour l'accessibilité */}
                   <motion.button
                     whileTap={{ scale: 0.98 }}
                     onClick={handleIbanClick}
@@ -489,12 +584,84 @@ const Collection: React.FC = () => {
         </div>
 
         {/* ==========================================
+            🆕 NOUVEAU : BOUTON PAYPAL HÉBERGÉ
+            ========================================== */}
+        <motion.div
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3 }}
+          className="mt-12 max-w-2xl mx-auto"
+        >
+          <div className="bg-gradient-to-br from-[#003087] via-[#009cde] to-[#0070ba] rounded-[3rem] p-8 md:p-12 text-white relative overflow-hidden shadow-2xl">
+            {/* Effet de fond animé */}
+            <motion.div
+              animate={{ scale: [1, 1.3, 1], opacity: [0.1, 0.2, 0.1] }}
+              transition={{ duration: 12, repeat: Infinity }}
+              className="absolute top-0 right-0 w-96 h-96 bg-[#ffc439] rounded-full blur-[120px] -mr-48 -mt-48"
+            />
+
+            <div className="relative z-10">
+              <div className="flex items-center justify-center gap-3 mb-4">
+                <div className="p-3 bg-[#ffc439]/20 rounded-2xl">
+                  <CreditCard size={32} className="text-[#ffc439]" />
+                </div>
+                <Badge variant="orange" className="bg-[#ffc439]/20 text-[#ffc439] border-[#ffc439]/30 text-sm px-4 py-1">
+                  {t('collection.paypal_badge') || 'PAIEMENT SÉCURISÉ'}
+                </Badge>
+              </div>
+
+              <h4 className="text-3xl font-black uppercase tracking-tighter text-center mb-2">
+                {t('collection.paypal_hosted_title') || 'Payez en toute sécurité avec PayPal'}
+              </h4>
+              <p className="text-blue-200 text-center text-sm mb-8 max-w-lg mx-auto">
+                {t('collection.paypal_hosted_desc') || 'Cliquez sur le bouton ci-dessous pour effectuer votre don via PayPal. Aucune information bancaire n\'est partagée.'}
+              </p>
+
+              {/* Conteneur du bouton PayPal */}
+              <div
+                id="paypal-button-container"
+                className="bg-white/10 backdrop-blur-sm p-4 rounded-2xl border border-white/10 min-h-[180px] flex items-center justify-center"
+              >
+                {!paypalLoaded && (
+                  <div className="flex flex-col items-center gap-3 text-white/60">
+                    <Loader2 size={32} className="animate-spin" />
+                    <span className="text-xs font-bold uppercase tracking-widest">
+                      {t('collection.paypal_loading') || 'Chargement PayPal...'}
+                    </span>
+                  </div>
+                )}
+              </div>
+
+              <div className="mt-6 flex items-center justify-center gap-6 text-white/40 text-[9px] uppercase tracking-widest font-bold">
+                <span className="flex items-center gap-1.5">
+                  <Lock size={12} /> {t('collection.secure') || 'Sécurisé'}
+                </span>
+                <span>•</span>
+                <span className="flex items-center gap-1.5">
+                  <Shield size={12} /> SSL
+                </span>
+                <span>•</span>
+                <span className="flex items-center gap-1.5">
+                  <CreditCard size={12} /> {t('collection.cards') || 'CB / PayPal'}
+                </span>
+              </div>
+
+              <div className="mt-4 flex justify-center gap-3 opacity-40">
+                <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/visa.svg" alt="Visa" className="h-5 filter brightness-0 invert" />
+                <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/mastercard.svg" alt="Mastercard" className="h-7 filter brightness-0 invert" />
+                <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/amex.svg" alt="Amex" className="h-5 filter brightness-0 invert" />
+              </div>
+            </div>
+          </div>
+        </motion.div>
+
+        {/* ==========================================
             QR CODE - OPTIONNEL
             ========================================== */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3 }}
+          transition={{ delay: 0.4 }}
           className="mt-8 text-center"
         >
           <p className="text-gray-400 text-[10px] font-bold uppercase tracking-widest flex items-center justify-center gap-2">
