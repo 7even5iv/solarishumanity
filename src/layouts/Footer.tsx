@@ -133,7 +133,7 @@ const Footer: React.FC = () => {
                   href="mailto:contact@solarishumanity.org"
                   className="text-[10px] xs:text-xs sm:text-sm text-gray-600 hover:text-blue-600 transition-colors break-all"
                 >
-                  Contact@solarishumanity.org
+                  contact@solarishumanity.org
                 </a>
               </li>
               <li className="flex items-center gap-1.5 xs:gap-2 sm:gap-3 group">
