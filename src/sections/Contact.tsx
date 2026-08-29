@@ -46,8 +46,8 @@ const Contact: React.FC = () => {
     {
       icon: <Mail size={24} />,
       title: t('contact.email_label'),
-      content: "Direction@solarishumanity.org",
-      link: "mailto:Direction@solarishumanity.org",
+      content: "direction@solarishumanity.org",
+      link: "mailto:direction@solarishumanity.org",
       gradient: "from-blue-500 to-blue-600"
     },
     {
